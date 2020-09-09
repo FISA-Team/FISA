@@ -1,0 +1,14 @@
+{
+  "expandButton": "Alle ausklappen",
+  "collapseButton": "Alle einklappen",
+  "searchLabel": "Suchen",
+  "cloneButton": "Das Objekt klonen",
+  "linkButton": "Das Objekt verlinken",
+  "doYouWantToRemove1": "Möchten Sie",
+  "doYouWantToRemove2": "wirklich entfernen?",
+  "goToObject": "Zum Objekt gehen",
+  "getPositionFromCard": "Position von Karte",
+  "getPositionsFromCard": "Positionen von Karte",
+  "contendDowntMatch": "Der Inhalt matcht nicht",
+  "notPossibleToAddMoreMessage": "Es ist nicht möglich mehr dieser Objekte zu erstellen"
+}

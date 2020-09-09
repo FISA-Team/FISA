@@ -1,0 +1,133 @@
+stages:
+  - code-quality
+  - build
+  - unit-test
+  - integration-test
+  - deploy
+
+.base: &base
+  tags:
+    - ILT
+
+.maven-unit-template: &maven-unit-template
+  <<: *base
+  image: maven:3.6-openjdk-11
+  before_script:
+    - cd fisa-backend
+
+.node-unit-template: &node-unit-template
+  <<: *base
+  image: node:14
+  before_script:
+    - cd fisa-frontend
+    - npm i --cache .npm --prefer-offline
+    - npm cache verify
+  cache:
+    key:
+      files:
+        - fisa-frontend/package.json
+    paths:
+      - .npm/
+
+.deploy-template: &deploy-template
+  <<: *base
+  stage: deploy
+  image: docker:latest
+  services:
+    - docker:dind
+  variables:
+    DOCKER_HOST: tcp://localhost:2375
+    DOCKER_TLS_CERTDIR: ""
+  only:
+    - master
+  needs:
+    - integration-test
+
+backend-checkstyle:
+  <<: *maven-unit-template
+  stage: code-quality
+  script:
+    - mvn checkstyle:check
+
+backend-build:
+  <<: *maven-unit-template
+  stage: build
+  script:
+    - mvn compile
+  needs:
+    - backend-checkstyle
+
+backend-unit-test:
+  <<: *maven-unit-template
+  stage: unit-test
+  script:
+    - mvn test
+  needs:
+    - backend-build
+
+frontend-lint:
+  <<: *node-unit-template
+  stage: code-quality
+  script:
+    - npm run lint
+
+frontend-build:
+  <<: *node-unit-template
+  stage: build
+  script:
+    - npm run build
+  needs:
+    - frontend-lint
+
+frontend-unit-test:
+  <<: *node-unit-template
+  stage: unit-test
+  script:
+    - npm run test
+  needs:
+    - frontend-build
+
+
+integration-test:
+  <<: *base
+  stage: integration-test
+  image: openkbs/webstorm-vnc-docker
+  services:
+    - docker:dind
+  variables:
+    DOCKER_HOST: tcp://localhost:2375
+    DOCKER_TLS_CERTDIR: ""
+  needs:
+    - frontend-unit-test
+    - backend-unit-test
+  script:
+    - sudo apt-get update
+    - sudo pip install docker-compose==1.23.2 selenium nose2 mock
+    - sudo apt-get install firefox -y -qq
+
+    - wget https://github.com/mozilla/geckodriver/releases/download/v0.27.0/geckodriver-v0.27.0-linux64.tar.gz
+    - sudo tar -zxf geckodriver-v0.27.0-linux64.tar.gz -C /usr/bin
+
+    - docker-compose -f docker-compose.ci.yml up -d
+    - cd integration-tests
+    - mkdir screenshots
+    - nose2 -v
+  artifacts:
+    paths:
+      - integration-tests/screenshots
+    expire_in: 1 days
+
+frontend-deploy:
+  <<: *deploy-template
+  script:
+    - cd fisa-frontend
+    - docker build -t $CI_REGISTRY_IMAGE:frontend .
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+    - docker push $CI_REGISTRY_IMAGE:frontend
+backend-deploy:
+  <<: *deploy-template
+  script:
+    - cd fisa-backend
+    - docker build -t $CI_REGISTRY_IMAGE:backend .
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+    - docker push $CI_REGISTRY_IMAGE:backend

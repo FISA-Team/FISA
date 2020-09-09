@@ -1,0 +1,9 @@
+{
+  "cta": "Pick a location and submit",
+  "polyCta": "Click to add a new location to the polygon. You can drag and delete existing ones.",
+  "currentLocation": "Current location: ",
+  "cancel": "Cancel",
+  "confirm": "Ok",
+  "userLocationSign": "You are here",
+  "clearPolygons": "Clear polygon"
+}

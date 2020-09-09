@@ -1,0 +1,14 @@
+{
+  "expandButton": "Expand all",
+  "collapseButton": "Collapse all",
+  "searchLabel": "Search",
+  "cloneButton": "Clone Object",
+  "linkButton": "Link Object",
+  "doYouWantToRemove1": "Do you really want to delete",
+  "doYouWantToRemove2": "?",
+  "goToObject": "Go to object",
+  "getPositionFromCard": "Position from Card",
+  "getPositionsFromCard": "get Positions from Card",
+  "contendDowntMatch": "The content doesn't match",
+  "notPossibleToAddMoreMessage": "It is not possible to add more of these objects"
+}

@@ -1,0 +1,419 @@
+{
+  "fisaDocument": {
+    "name": "SmartHome",
+    "objectDefinitions": [
+      {
+        "name": "Raum",
+        "infoText": "Ein Raum in dem sich Sensoren befinden.",
+        "isTopLayer": true,
+        "mapsTo": "STA.Thing",
+        "attributes": [
+          {
+            "name": "Name",
+            "infoText": "Der Name des Raums",
+            "valueType": "string",
+            "value": null,
+            "isPredefined": false,
+            "dropDownValues": null,
+            "mapsTo": "STA.Thing.name",
+            "validationRule": "[^A-Za-zäöüÄÖÜß]+",
+            "isNotReusable": false
+          },
+          {
+            "name": "Beschreibung",
+            "infoText": "Weitere Informationen",
+            "valueType": "string",
+            "value": null,
+            "isPredefined": false,
+            "dropDownValues": null,
+            "mapsTo": "STA.Thing.description",
+            "validationRule": null,
+            "isNotReusable": false
+          },
+          {
+            "name": "Raumtyp",
+            "infoText": "Der Typ des Raumes",
+            "valueType": "dropdown",
+            "value": null,
+            "isPredefined": false,
+            "dropDownValues": [
+              "Küche",
+              "Wohnzimmer",
+              "Schlafzimmer",
+              "Badezimmer",
+              "Keller"
+            ],
+            "mapsTo": "STA.Thing.properties[roomtype]",
+            "validationRule": null,
+            "isNotReusable": false
+          },
+          {
+            "name": "Ist Weiss",
+            "infoText": "Ob das Zimmer weß ist.",
+            "valueType": "boolean",
+            "value": null,
+            "isPredefined": false,
+            "dropDownValues": null,
+            "mapsTo": "STA.Thing.properties[isWhite]",
+            "validationRule": null,
+            "isNotReusable": false
+          }
+        ],
+        "exampleData": null,
+        "children": [
+          { "objectName": "Ort", "quantity": 1, "infoText": null },
+          { "objectName": "Datenstrom", "quantity": -1, "infoText": null }
+        ],
+        "positionAttributes": null,
+        "caption": "Räume"
+      },
+      {
+        "name": "Datenstrom",
+        "infoText": null,
+        "isTopLayer": false,
+        "mapsTo": "STA.Datastream",
+        "attributes": [
+          {
+            "name": "Name",
+            "infoText": "Der Name des Datenstroms",
+            "valueType": "string",
+            "value": null,
+            "isPredefined": false,
+            "dropDownValues": null,
+            "mapsTo": "STA.Datastream.name",
+            "validationRule": "[^A-Za-zäöüÄÖÜß]+",
+            "isNotReusable": false
+          },
+          {
+            "name": "Beschreibung",
+            "infoText": null,
+            "valueType": "string",
+            "value": null,
+            "isPredefined": false,
+            "dropDownValues": null,
+            "mapsTo": "STA.Datastream.description",
+            "validationRule": null,
+            "isNotReusable": false
+          },
+          {
+            "name": "Beobachtungstyp",
+            "infoText": null,
+            "valueType": "string",
+            "value": null,
+            "isPredefined": false,
+            "dropDownValues": null,
+            "mapsTo": "STA.Datastream.observationType",
+            "validationRule": null,
+            "isNotReusable": false
+          },
+          {
+            "name": "Einheits-Name",
+            "infoText": null,
+            "valueType": "string",
+            "value": null,
+            "isPredefined": false,
+            "dropDownValues": null,
+            "mapsTo": "STA.Datastream.unitOfMeasurement.name",
+            "validationRule": null,
+            "isNotReusable": false
+          },
+          {
+            "name": "Einheits-Definition",
+            "infoText": null,
+            "valueType": "string",
+            "value": null,
+            "isPredefined": false,
+            "dropDownValues": null,
+            "mapsTo": "STA.Datastream.unitOfMeasurement.definition",
+            "validationRule": null,
+            "isNotReusable": false
+          },
+          {
+            "name": "Einheits-Symbol",
+            "infoText": null,
+            "valueType": "string",
+            "value": null,
+            "isPredefined": false,
+            "dropDownValues": null,
+            "mapsTo": "STA.Datastream.unitOfMeasurement.symbol",
+            "validationRule": null,
+            "isNotReusable": false
+          }
+        ],
+        "exampleData": null,
+        "children": [
+          { "objectName": "Sensor", "quantity": 1, "infoText": null },
+          { "objectName": "Sensortyp", "quantity": -1, "infoText": null }
+        ],
+        "positionAttributes": null,
+        "caption": "Datenströme"
+      },
+      {
+        "name": "Sensor",
+        "infoText": null,
+        "isTopLayer": false,
+        "mapsTo": "STA.Sensor",
+        "attributes": [
+          {
+            "name": "Name",
+            "infoText": "Der Name des Sensors",
+            "valueType": "string",
+            "value": null,
+            "isPredefined": false,
+            "dropDownValues": null,
+            "mapsTo": "STA.Sensor.name",
+            "validationRule": null,
+            "isNotReusable": false
+          },
+          {
+            "name": "Beschreibung",
+            "infoText": "Weitere Informationen",
+            "valueType": "string",
+            "value": null,
+            "isPredefined": false,
+            "dropDownValues": null,
+            "mapsTo": "STA.Sensor.description",
+            "validationRule": null,
+            "isNotReusable": false
+          },
+          {
+            "name": "Codierungstyp",
+            "infoText": null,
+            "valueType": "string",
+            "value": "application/pdf",
+            "isPredefined": true,
+            "dropDownValues": null,
+            "mapsTo": "STA.Sensor.encodingType",
+            "validationRule": null,
+            "isNotReusable": false
+          },
+          {
+            "name": "Metadaten",
+            "infoText": null,
+            "valueType": "string",
+            "value": null,
+            "isPredefined": false,
+            "dropDownValues": null,
+            "mapsTo": "STA.Sensor.metadata",
+            "validationRule": null,
+            "isNotReusable": false
+          }
+        ],
+        "exampleData": null,
+        "children": [],
+        "positionAttributes": null,
+        "caption": "Sensoren"
+      },
+      {
+        "name": "Sensortyp",
+        "infoText": null,
+        "isTopLayer": false,
+        "mapsTo": "STA.ObservedProperty",
+        "attributes": [
+          {
+            "name": "Name",
+            "infoText": "Die Spezifizierung des Sensortyps",
+            "valueType": "string",
+            "value": null,
+            "isPredefined": false,
+            "dropDownValues": null,
+            "mapsTo": "STA.ObservedProperty.name",
+            "validationRule": null,
+            "isNotReusable": false
+          },
+          {
+            "name": "Beschreibung",
+            "infoText": null,
+            "valueType": "string",
+            "value": null,
+            "isPredefined": false,
+            "dropDownValues": null,
+            "mapsTo": "STA.ObservedProperty.description",
+            "validationRule": null,
+            "isNotReusable": false
+          },
+          {
+            "name": "Definition",
+            "infoText": null,
+            "valueType": "string",
+            "value": null,
+            "isPredefined": false,
+            "dropDownValues": null,
+            "mapsTo": "STA.ObservedProperty.definition",
+            "validationRule": null,
+            "isNotReusable": false
+          }
+        ],
+        "exampleData": null,
+        "children": [],
+        "positionAttributes": null,
+        "caption": "Sensortypen"
+      },
+      {
+        "name": "Ort",
+        "infoText": null,
+        "isTopLayer": false,
+        "mapsTo": "STA.Location",
+        "attributes": [
+          {
+            "name": "Name",
+            "infoText": "Name der Position",
+            "valueType": "string",
+            "value": null,
+            "isPredefined": false,
+            "dropDownValues": null,
+            "mapsTo": "STA.Location.name",
+            "validationRule": null,
+            "isNotReusable": false
+          },
+          {
+            "name": "Beschreibung",
+            "infoText": null,
+            "valueType": "string",
+            "value": null,
+            "isPredefined": false,
+            "dropDownValues": null,
+            "mapsTo": "STA.Location.description",
+            "validationRule": null,
+            "isNotReusable": false
+          },
+          {
+            "name": "Codierungstyp",
+            "infoText": null,
+            "valueType": "string",
+            "value": "point",
+            "isPredefined": true,
+            "dropDownValues": null,
+            "mapsTo": "STA.Location.encodingType",
+            "validationRule": null,
+            "isNotReusable": false
+          },
+          {
+            "name": "Typ",
+            "infoText": null,
+            "valueType": "string",
+            "value": "Point",
+            "isPredefined": true,
+            "dropDownValues": null,
+            "mapsTo": "STA.Location.location[type]",
+            "validationRule": null,
+            "isNotReusable": false
+          },
+          {
+            "name": "Längengrad",
+            "infoText": "Der Längengrad des Positionspunktes",
+            "valueType": "number",
+            "value": null,
+            "isPredefined": false,
+            "dropDownValues": null,
+            "mapsTo": "STA.Location.location[coordinates][0]",
+            "validationRule": null,
+            "isNotReusable": false
+          },
+          {
+            "name": "Breitengrad",
+            "infoText": "Der Breitengrad des Positionpunktes",
+            "valueType": "number",
+            "value": null,
+            "isPredefined": false,
+            "dropDownValues": null,
+            "mapsTo": "STA.Location.location[coordinates][1]",
+            "validationRule": null,
+            "isNotReusable": false
+          }
+        ],
+        "exampleData": null,
+        "children": [],
+        "positionAttributes": ["Längengrad", "Breitengrad"],
+        "caption": "Orte"
+      }
+    ],
+    "fisaTemplate": []
+  },
+  "name": "Mein Projekt",
+  "fisaObjects": [
+    {
+      "id": 1,
+      "definitionName": "Raum",
+      "attributes": [
+        { "definitionName": "Name", "value": "Küche" },
+        {
+          "definitionName": "Beschreibung",
+          "value": "Die Küche, in der alles gekocht wird"
+        },
+        { "definitionName": "Raumtyp", "value": "Küche" },
+        { "definitionName": "Ist Weiss", "value": "false" }
+      ],
+      "children": [2, 7]
+    },
+    {
+      "id": 2,
+      "definitionName": "Datenstrom",
+      "attributes": [
+        { "definitionName": "Name", "value": "Küchentemperatur" },
+        {
+          "definitionName": "Beschreibung",
+          "value": "Die Temperatur in der Küche"
+        },
+        {
+          "definitionName": "Beobachtungstyp",
+          "value": "http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_Measurement"
+        },
+        { "definitionName": "Einheits-Name", "value": "Celsius" },
+        { "definitionName": "Einheits-Definition", "value": "Celsius" },
+        { "definitionName": "Einheits-Symbol", "value": "°C" }
+      ],
+      "children": [5, 6]
+    },
+    {
+      "id": 5,
+      "definitionName": "Sensor",
+      "attributes": [
+        { "definitionName": "Name", "value": "Temperatursensor" },
+        {
+          "definitionName": "Beschreibung",
+          "value": "Temperatur in der Küche Sensor"
+        },
+        {
+          "definitionName": "Metadaten",
+          "value": "https://www.sparkfun.com/datasheets/Sensors/Temperature/DHT22.pdf"
+        },
+        { "definitionName": "Codierungstyp", "value": "application/pdf" }
+      ],
+      "children": []
+    },
+    {
+      "id": 6,
+      "definitionName": "Sensortyp",
+      "attributes": [
+        { "definitionName": "Name", "value": "Temperatur" },
+        {
+          "definitionName": "Beschreibung",
+          "value": "Die Temperatur in der Küche"
+        },
+        {
+          "definitionName": "Definition",
+          "value": "http://www.qudt.org/qudt/owl/1.0.0/quantity/Instances.html#ThermodynamicTemperature"
+        }
+      ],
+      "children": []
+    },
+    {
+      "id": 7,
+      "definitionName": "Ort",
+      "attributes": [
+        { "definitionName": "Name", "value": "Erdgeschoss" },
+        {
+          "definitionName": "Beschreibung",
+          "value": "Ein Zimmer im Erdgeschoss"
+        },
+        { "definitionName": "Längengrad", "value": 50.1054 },
+        { "definitionName": "Breitengrad", "value": 8.762 },
+        { "definitionName": "Codierungstyp", "value": "point" },
+        { "definitionName": "Typ", "value": "Point" }
+      ],
+      "children": []
+    }
+  ],
+  "generateExampleData": false
+}

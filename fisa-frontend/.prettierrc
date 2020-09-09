@@ -1,0 +1,6 @@
+{
+  "printWidth": 80,
+  "singleQuote": true,
+  "jsx-bracket-same-line": true,
+  "prettier.tslintIntegration": true
+}

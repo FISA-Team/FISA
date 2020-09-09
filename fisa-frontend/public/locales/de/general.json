@@ -1,0 +1,19 @@
+{
+  "pageNotFoundMessage": "404 not found!",
+  "pleaseEnterProjectName": "Bitte geben Sie einen Projektnahmen ein",
+  "leafProjectPageWarning": "Möchten Sie die Seite wirklich ohne speichern verlassen?",
+  "pageNotFoundHeading": "Ups :/",
+  "projectName": "FISA",
+  "themeHeading": "Themen:",
+  "langugesHeading": "Sprachen:",
+  "cancel": "Abbrechen",
+  "next": "Weiter",
+  "create": "Erstellen",
+  "back": "Zurück",
+  "save": "Speichern",
+  "no": "Nein",
+  "yes": "Ja",
+  "close": "Schließen",
+  "upload": "Hochladen",
+  "tryAgain": "Erneut versuchen"
+}

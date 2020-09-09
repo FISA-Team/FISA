@@ -1,0 +1,296 @@
+{
+  "name": "BRGM Water Quality",
+  "objectDefinitions": [
+    {
+      "name": "Environmental Monitoring Facility",
+      "caption": "Environmental Monitoring Facilities",
+      "infoText": "Facilities for Environmental Monitoring.",
+      "isTopLayer": true,
+      "mapsTo": "STA.Thing",
+      "attributes": [
+        {
+          "name": "Name",
+          "infoText": "The name of the facility",
+          "valueType": "string",
+          "value": null,
+          "isPredefined": false,
+          "dropDownValues": null,
+          "mapsTo": "STA.Thing.name",
+          "validationRule": "[^A-Za-zäöüÄÖÜß]+"
+        },
+        {
+          "name": "Description",
+          "infoText": "Additional information about the facility",
+          "valueType": "string",
+          "value": null,
+          "isPredefined": false,
+          "dropDownValues": null,
+          "mapsTo": "STA.Thing.description",
+          "validationRule": null
+        },
+        {
+          "name": "Yearly Budget",
+          "infoText": "The yearly budget of this facility",
+          "valueType": "number",
+          "value": null,
+          "isPredefined": false,
+          "dropDownValues": null,
+          "mapsTo": "STA.Thing.properties[budget]",
+          "validationRule": null
+        }
+      ],
+      "children": [
+        {
+          "objectName": "County",
+          "quantity": 1,
+          "infoText": null
+        },
+        {
+          "objectName": "Water quality sample",
+          "quantity": -1,
+          "infoText": null
+        }
+      ]
+    },
+    {
+      "name": "Water quality sample",
+      "infoText": null,
+      "isTopLayer": false,
+      "mapsTo": "STA.Datastream",
+      "exampleData": {
+        "count": 10,
+        "valueMin": 0,
+        "valueMax": 14,
+        "timeMin": "2020-01-01T01:00:00",
+        "timeMax": "2020-01-01T23:59:59"
+      },
+      "attributes": [
+        {
+          "name": "Name",
+          "infoText": "The name of the sample type",
+          "valueType": "string",
+          "value": null,
+          "isPredefined": false,
+          "dropDownValues": null,
+          "mapsTo": "STA.Datastream.name",
+          "validationRule": "[^A-Za-zäöüÄÖÜß]+"
+        },
+        {
+          "name": "Description",
+          "infoText": null,
+          "valueType": "string",
+          "value": null,
+          "isPredefined": false,
+          "dropDownValues": null,
+          "mapsTo": "STA.Datastream.description",
+          "validationRule": null
+        },
+        {
+          "name": "The sample type",
+          "infoText": null,
+          "valueType": "string",
+          "value": null,
+          "isPredefined": false,
+          "dropDownValues": null,
+          "mapsTo": "STA.Datastream.observationType",
+          "validationRule": null
+        },
+        {
+          "name": "Unit name",
+          "infoText": null,
+          "valueType": "string",
+          "value": "pH",
+          "isPredefined": true,
+          "dropDownValues": null,
+          "mapsTo": "STA.Datastream.unitOfMeasurement.name",
+          "validationRule": null
+        },
+        {
+          "name": "Unit definition",
+          "infoText": null,
+          "valueType": "string",
+          "value": "power of hydrogen",
+          "isPredefined": true,
+          "dropDownValues": null,
+          "mapsTo": "STA.Datastream.unitOfMeasurement.definition",
+          "validationRule": null
+        },
+        {
+          "name": "Unit symbol",
+          "infoText": null,
+          "valueType": "string",
+          "value": "pH",
+          "isPredefined": true,
+          "dropDownValues": null,
+          "mapsTo": "STA.Datastream.unitOfMeasurement.symbol",
+          "validationRule": null
+        }
+      ],
+      "children": [
+        {
+          "objectName": "Sensor",
+          "quantity": 1,
+          "infoText": null
+        },
+        {
+          "objectName": "Sensor type",
+          "quantity": -1,
+          "infoText": null
+        }
+      ]
+    },
+    {
+      "name": "Sensor",
+      "caption": "Sensors",
+      "infoText": null,
+      "isTopLayer": false,
+      "mapsTo": "STA.Sensor",
+      "attributes": [
+        {
+          "name": "Name",
+          "infoText": "The name of the sensor",
+          "valueType": "string",
+          "value": null,
+          "isPredefined": false,
+          "dropDownValues": null,
+          "mapsTo": "STA.Sensor.name",
+          "validationRule": null
+        },
+        {
+          "name": "Description",
+          "infoText": null,
+          "valueType": "string",
+          "value": null,
+          "isPredefined": false,
+          "dropDownValues": null,
+          "mapsTo": "STA.Sensor.description",
+          "validationRule": null
+        },
+        {
+          "name": "Encoding type",
+          "infoText": null,
+          "valueType": "string",
+          "value": "application/pdf",
+          "isPredefined": true,
+          "dropDownValues": null,
+          "mapsTo": "STA.Sensor.encodingType",
+          "validationRule": null
+        },
+        {
+          "name": "Metadata",
+          "infoText": null,
+          "valueType": "string",
+          "value": null,
+          "isPredefined": false,
+          "dropDownValues": null,
+          "mapsTo": "STA.Sensor.metadata",
+          "validationRule": null
+        }
+      ],
+      "children": []
+    },
+    {
+      "name": "Sensor type",
+      "caption": "Sensor types",
+      "infoText": null,
+      "isTopLayer": false,
+      "mapsTo": "STA.ObservedProperty",
+      "attributes": [
+        {
+          "name": "Name",
+          "infoText": "The specification of the sensor type",
+          "valueType": "string",
+          "value": null,
+          "isPredefined": false,
+          "dropDownValues": null,
+          "mapsTo": "STA.ObservedProperty.name",
+          "validationRule": null
+        },
+        {
+          "name": "Description",
+          "infoText": null,
+          "valueType": "string",
+          "value": null,
+          "isPredefined": false,
+          "dropDownValues": null,
+          "mapsTo": "STA.ObservedProperty.description",
+          "validationRule": null
+        },
+        {
+          "name": "Definition",
+          "infoText": null,
+          "valueType": "string",
+          "value": null,
+          "isPredefined": false,
+          "dropDownValues": null,
+          "mapsTo": "STA.ObservedProperty.definition",
+          "validationRule": null
+        }
+      ],
+      "exampleData": null,
+      "children": []
+    },
+    {
+      "name": "County",
+      "caption": "Counties",
+      "infoText": null,
+      "isTopLayer": false,
+      "mapsTo": "STA.Location",
+      "positionAttributes": ["Longitude", "Latitude"],
+      "attributes": [
+        {
+          "name": "Name",
+          "infoText": "Name of the location",
+          "valueType": "string",
+          "value": null,
+          "isPredefined": false,
+          "dropDownValues": null,
+          "mapsTo": "STA.Location.name",
+          "validationRule": null
+        },
+        {
+          "name": "Description",
+          "infoText": null,
+          "valueType": "string",
+          "value": null,
+          "isPredefined": false,
+          "dropDownValues": null,
+          "mapsTo": "STA.Location.description",
+          "validationRule": null
+        },
+        {
+          "name": "Encoding type",
+          "infoText": null,
+          "valueType": "string",
+          "value": "point",
+          "isPredefined": true,
+          "dropDownValues": null,
+          "mapsTo": "STA.Location.encodingType",
+          "validationRule": null
+        },
+        {
+          "name": "Longitude",
+          "infoText": "The longitude of the point",
+          "valueType": "number",
+          "value": null,
+          "isPredefined": false,
+          "dropDownValues": null,
+          "mapsTo": "STA.Location.location.point.longitude",
+          "validationRule": null
+        },
+        {
+          "name": "Latitude",
+          "infoText": "The latitude of the point",
+          "valueType": "number",
+          "value": null,
+          "isPredefined": false,
+          "dropDownValues": null,
+          "mapsTo": "STA.Location.location.point.latitude",
+          "validationRule": null
+        }
+      ],
+      "children": []
+    }
+  ],
+  "fisaTemplate": []
+}

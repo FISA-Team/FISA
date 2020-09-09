@@ -1,0 +1,29 @@
+import {
+  NEW_OBJECT_FROM_OBJECT_DEFINITION,
+  ADD_OBJECT_FROM_EXISTING,
+  LINK_OBJECT,
+  REMOVE_OBJECT,
+  CHANGE_OBJECT_VALUE,
+  LOAD_PROJECT_FROM_FISA,
+  EXTRACT_FROM_CSV,
+  CHANGE_PROJECT_NAME,
+} from './projectAction';
+import { GO_TO_OBJECT } from './pageActions';
+
+export const RESET_STATE = 'resetState';
+
+export const OBJECT_CHANGING_TYPES = [
+  NEW_OBJECT_FROM_OBJECT_DEFINITION,
+  ADD_OBJECT_FROM_EXISTING,
+  LINK_OBJECT,
+  REMOVE_OBJECT,
+  GO_TO_OBJECT,
+  CHANGE_OBJECT_VALUE,
+  LOAD_PROJECT_FROM_FISA,
+  EXTRACT_FROM_CSV,
+  CHANGE_PROJECT_NAME,
+];
+
+export * from './communicationActions';
+export * from './pageActions';
+export * from './projectAction';

@@ -1,0 +1,9 @@
+{
+  "cta": "Wähle eine Stelle auf der Karte",
+  "polyCta": "Klicke auf die Karte um eine neue Position anzulegen. Positionen können verschoben und wieder gelöscht werden.",
+  "currentLocation": "Jetzige Position: ",
+  "cancel": "Abbrechen",
+  "confirm": "Ok",
+  "userLocationSign": "Sie sind hier",
+  "clearPolygons": "Polygon löschen"
+}
