@@ -14,15 +14,15 @@ After uploading a use-case you can create a new project on main page of the appl
 The backend ist based on Spring-Boot and can be build via the maven-goal `package`. To execute the tests, run the maven goal `test`.
 
 Configuration options for the backend:
-  - Root-Path of the API: server.servlet.context-path
-  - Path to save the use-case and project files: app.filesDirectory
+- Root-Path of the API: server.servlet.context-path
+- Path to save the use-case and project files: app.filesDirectory
 
 ## Frontend
 
 The frontend uses react and is created via `create-react-app`. To execute it, run `npm i` to install the dependencies and `npm run start` to run only the frontend. To execute frontend-tests, run `npm run test`
 
 Configuration options for the frontend:
-  - Location of the Backend: API_URL
+- Location of the Backend: API_URL
 
 ## FisaDoc specification
 

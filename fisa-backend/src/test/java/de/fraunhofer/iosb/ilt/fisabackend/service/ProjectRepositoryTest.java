@@ -253,7 +253,7 @@ import static org.junit.jupiter.api.Assertions.*;
                 repo.getProject(uuid);
                 fail("File should be deleted and repository should throw error when try to access uuid matching file");
             } catch (Exception e) {
-                if(e.getMessage().compareTo("Specified UUID does not exist in database") != 0){
+                if (e.getMessage().compareTo("Specified UUID does not exist in database") != 0){
                     System.out.print(e.getMessage());
                     fail("wrong exception thrown");
                 }
