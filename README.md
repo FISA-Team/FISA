@@ -1,6 +1,6 @@
-<img src="https://raw.githubusercontent.com/FISA-Team/FISA/addetLogoToReadme/fisa-logo.svg" height="144">
-
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/05beb4ff562945958b40411f84017a31)](https://app.codacy.com/gh/FISA-Team/FISA?utm_source=github.com&utm_medium=referral&utm_content=FISA-Team/FISA&utm_campaign=Badge_Grade_Dashboard)
+
+<img src="https://raw.githubusercontent.com/FISA-Team/FISA/addetLogoToReadme/fisa-logo.svg" height="144">
 
 A tool to setup a SensorThings-Datamodel on a visual basis.
 
