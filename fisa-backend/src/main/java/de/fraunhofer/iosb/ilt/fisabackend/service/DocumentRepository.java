@@ -17,7 +17,7 @@ import java.util.UUID;
 /**
  * The repository managing use-cases in form of fisa documents stored as JSON.
  */
- class DocumentRepository {
+  class DocumentRepository {
     private String path; //path to folder containing Documents
 
     /**

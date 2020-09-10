@@ -1,0 +1,19 @@
+matrix:
+  include:
+    - language: java
+      java: 11
+      before_script:
+        - cd fisa-backend
+      script:
+        - mvn checkstyle:check
+        - mvn compile
+        - mvn test
+    - language: node_js
+      node_js: 14
+      before_script:
+        - cd fisa-frontend
+      script:
+        - npm i
+        - npm run lint
+        - npm run build
+        - npm t

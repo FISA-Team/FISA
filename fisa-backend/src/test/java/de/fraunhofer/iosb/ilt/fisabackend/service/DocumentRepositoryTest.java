@@ -1,19 +1,13 @@
 package de.fraunhofer.iosb.ilt.fisabackend.service;
 
-
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sun.source.tree.AssertTree;
 import de.fraunhofer.iosb.ilt.fisabackend.model.definitions.FisaDocument;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
 
-import javax.swing.text.Document;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.*;
-import java.util.Comparator;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.UUID;
@@ -195,12 +189,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
             String fakename = "bluegreenisnotacolor";
             UUID uuid = UUID.nameUUIDFromBytes(fakename.getBytes());
-            FisaDocument repoDoc = null;
             try {
-                repoDoc = repo.getFisaDocument(uuid);
+                repo.getFisaDocument(uuid);
                 fail("should throw exception");
-            } catch (Exception e){
-                if (e.getMessage().compareTo("Specified UUID does not exist in database")==0) return;
+            } catch (Exception e) {
+                if (e.getMessage().compareTo("Specified UUID does not exist in database") == 0) return;
                 System.out.print(e.getMessage());
                 fail("wrong exception thrown");
             }
@@ -208,7 +201,7 @@ import static org.junit.jupiter.api.Assertions.*;
     }
 
     /**
-     * testing if list request of repository returns a list with all saved use-cases and their corresponding uuid
+     * Testing if list request of repository returns a list with all saved use-cases and their corresponding uuid
      * correctly
      */
     @Test
@@ -262,7 +255,7 @@ import static org.junit.jupiter.api.Assertions.*;
             try {
                 repo.getFisaDocument(uuid);
                 fail("File should be deleted and repository should throw error when try to access uuid matching file");
-            }catch (Exception e) {
+            } catch (Exception e) {
                 if(e.getMessage().compareTo("Specified UUID does not exist in database")!=0){
                     System.out.print(e.getMessage());
                     fail("wrong exception thrown");
@@ -315,9 +308,17 @@ import static org.junit.jupiter.api.Assertions.*;
     FisaDocument[] getTestDocuments() {
         Path currentRelativePath = Paths.get("");
 
-        String dir = currentRelativePath.toAbsolutePath().toString() + File.separator + "fisa-backend"
+        // preparing testfolder path
+        String projectDir = currentRelativePath.toAbsolutePath().toString();
+        if (projectDir.contains("fisa-backend")) {
+            int index = projectDir.indexOf("fisa-backend");
+            projectDir = projectDir.substring(0, index - 1);
+            System.out.println(projectDir);
+        }
+        String dir = projectDir + File.separator + "fisa-backend"
                      + File.separator + "src" + File.separator + "test" + File.separator + "resources" + File.separator
                      + "Use-Cases";
+
         File folder = new File(dir);
         File[] listOfFiles = folder.listFiles();
         if (listOfFiles == null) return null;

@@ -33,5 +33,7 @@ COPY --from=build ${DEPENDENCY}/BOOT-INF/lib /app/lib
 COPY --from=build ${DEPENDENCY}/META-INF /app/META-INF
 COPY --from=build ${DEPENDENCY}/BOOT-INF/classes /app
 RUN mkdir /fisa
+RUN mkdir /fisa/DocumentRepository
+COPY example-fisa-doc.json /fisa/DocumentRepository/ea31ff5ec-f2d6-3403-80a1-4129787d7d5a.json
 
 ENTRYPOINT ["java","-cp","app:app/lib/*","de.fraunhofer.iosb.ilt.fisabackend.FisaBackendApplication"]
