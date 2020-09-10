@@ -1,4 +1,4 @@
-<img src="https://raw.github.com/FISA-Team/FISA/fisa-logo.svg" width="100%" height="144">
+<img src="https://raw.githubusercontent.com/FISA-Team/FISA/addetLogoToReadme/fisa-logo.svg" width="100%" height="144">
 # FISA - FROST IoT Setup Assistant
 
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/05beb4ff562945958b40411f84017a31)](https://app.codacy.com/gh/FISA-Team/FISA?utm_source=github.com&utm_medium=referral&utm_content=FISA-Team/FISA&utm_campaign=Badge_Grade_Dashboard)
