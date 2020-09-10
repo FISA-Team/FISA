@@ -39,7 +39,7 @@ import static org.junit.jupiter.api.Assertions.*;
      * java classes as the project that had to be saved
      */
     @Test //done
-    void saveFisaProjectInRepo(){
+    void saveFisaProjectInRepo() {
         //read fisa Project. Fisa Project has to be testet to be a usable Fisa Project
 
         Path currentRelativePath = Paths.get("");
@@ -191,8 +191,8 @@ import static org.junit.jupiter.api.Assertions.*;
         try {
             repo.getProject(uuid);
             fail("should throw exception");
-        } catch (Exception e){
-            if (e.getMessage().compareTo("Specified UUID does not exist in database")==0) return;
+        } catch (Exception e) {
+            if (e.getMessage().compareTo("Specified UUID does not exist in database") == 0) return;
             System.out.print(e.getMessage());
             fail("wrong exception thrown");
         }
@@ -252,8 +252,8 @@ import static org.junit.jupiter.api.Assertions.*;
             try {
                 repo.getProject(uuid);
                 fail("File should be deleted and repository should throw error when try to access uuid matching file");
-            }catch (Exception e) {
-                if(e.getMessage().compareTo("Specified UUID does not exist in database")!=0){
+            } catch (Exception e) {
+                if(e.getMessage().compareTo("Specified UUID does not exist in database") != 0){
                     System.out.print(e.getMessage());
                     fail("wrong exception thrown");
                 }
@@ -274,7 +274,7 @@ import static org.junit.jupiter.api.Assertions.*;
         if(file.exists()){
             try {
                 deleteDirectoryRecursion(Paths.get(dir));
-            }catch (Exception e){
+            } catch (Exception e) {
                 System.out.print(e.toString());
                 fail("could not delete generated path of DocumentRepository");
             }
@@ -307,12 +307,12 @@ import static org.junit.jupiter.api.Assertions.*;
 
         // preparing testfolder path
         String projectDir = currentRelativePath.toAbsolutePath().toString();
-        if(projectDir.contains("fisa-backend")) {
+        if (projectDir.contains("fisa-backend")) {
             int index = projectDir.indexOf("fisa-backend");
-            projectDir = projectDir.substring(0,index-1);
+            projectDir = projectDir.substring(0, index - 1);
             System.out.println(projectDir);
         }
-        String dir = projectDir + File.separator +"fisa-backend"+ File.separator
+        String dir = projectDir + File.separator + "fisa-backend" + File.separator
                      + "src" + File.separator + "test" + File.separator + "resources" + File.separator
                      + "Projects";
         File folder = new File(dir);
@@ -320,7 +320,7 @@ import static org.junit.jupiter.api.Assertions.*;
         if (listOfFiles == null) return null;
 
         FisaProject[] fisaDocList = new FisaProject[listOfFiles.length];
-        int i=0;
+        int i = 0;
         for (File fisaJSON : listOfFiles) {
             ObjectMapper objectMapper = new ObjectMapper();
             FisaProject fisaDoc = null;

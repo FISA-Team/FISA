@@ -1,6 +1,5 @@
 package de.fraunhofer.iosb.ilt.fisabackend.service;
 
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.fraunhofer.iosb.ilt.fisabackend.model.definitions.FisaDocument;
 import org.junit.jupiter.api.AfterEach;
@@ -193,8 +192,8 @@ import static org.junit.jupiter.api.Assertions.*;
             try {
                 repo.getFisaDocument(uuid);
                 fail("should throw exception");
-            } catch (Exception e){
-                if (e.getMessage().compareTo("Specified UUID does not exist in database")==0) return;
+            } catch (Exception e) {
+                if (e.getMessage().compareTo("Specified UUID does not exist in database") == 0) return;
                 System.out.print(e.getMessage());
                 fail("wrong exception thrown");
             }
@@ -202,7 +201,7 @@ import static org.junit.jupiter.api.Assertions.*;
     }
 
     /**
-     * testing if list request of repository returns a list with all saved use-cases and their corresponding uuid
+     * Testing if list request of repository returns a list with all saved use-cases and their corresponding uuid
      * correctly
      */
     @Test
@@ -256,7 +255,7 @@ import static org.junit.jupiter.api.Assertions.*;
             try {
                 repo.getFisaDocument(uuid);
                 fail("File should be deleted and repository should throw error when try to access uuid matching file");
-            }catch (Exception e) {
+            } catch (Exception e) {
                 if(e.getMessage().compareTo("Specified UUID does not exist in database")!=0){
                     System.out.print(e.getMessage());
                     fail("wrong exception thrown");
@@ -311,9 +310,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
         // preparing testfolder path
         String projectDir = currentRelativePath.toAbsolutePath().toString();
-        if(projectDir.contains("fisa-backend")) {
+        if (projectDir.contains("fisa-backend")) {
             int index = projectDir.indexOf("fisa-backend");
-            projectDir = projectDir.substring(0,index-1);
+            projectDir = projectDir.substring(0, index - 1);
             System.out.println(projectDir);
         }
         String dir = projectDir + File.separator + "fisa-backend"
