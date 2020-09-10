@@ -188,9 +188,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
         String fakename = "bluegreenisnotacolor";
         UUID uuid = UUID.nameUUIDFromBytes(fakename.getBytes());
-        FisaProject repoDoc = null;
         try {
-            repoDoc = repo.getProject(uuid);
+            repo.getProject(uuid);
             fail("should throw exception");
         } catch (Exception e){
             if (e.getMessage().compareTo("Specified UUID does not exist in database")==0) return;
@@ -306,7 +305,14 @@ import static org.junit.jupiter.api.Assertions.*;
     FisaProject[] getTestDocuments() {
         Path currentRelativePath = Paths.get("");
 
-        String dir = currentRelativePath.toAbsolutePath().toString() + File.separator +"fisa-backend"+ File.separator
+        // preparing testfolder path
+        String projectDir = currentRelativePath.toAbsolutePath().toString();
+        if(projectDir.contains("fisa-backend")) {
+            int index = projectDir.indexOf("fisa-backend");
+            projectDir = projectDir.substring(0,index-1);
+            System.out.println(projectDir);
+        }
+        String dir = projectDir + File.separator +"fisa-backend"+ File.separator
                      + "src" + File.separator + "test" + File.separator + "resources" + File.separator
                      + "Projects";
         File folder = new File(dir);

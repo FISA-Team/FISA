@@ -60,6 +60,7 @@ function ThemeMenu() {
     <>
       <Tooltip title={`${t('settingsTooltip')}`}>
         <IconButton
+          id="themeLanguageMenu"
           key="themeMenu"
           color="inherit"
           onClick={handleThemeMenuClick}

@@ -15,5 +15,5 @@ matrix:
       script:
         - npm i
         - npm run lint
-        - mpm run build
+        - npm run build
         - npm t
