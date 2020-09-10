@@ -1,6 +1,7 @@
 # FISA - FROST IoT Setup Assistant
 
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/05beb4ff562945958b40411f84017a31)](https://app.codacy.com/gh/FISA-Team/FISA?utm_source=github.com&utm_medium=referral&utm_content=FISA-Team/FISA&utm_campaign=Badge_Grade_Dashboard)
+[![Build Status](https://travis-ci.org/FISA-Team/FISA.svg?branch=master)](https://travis-ci.org/FISA-Team/FISA)
 
 A tool to setup a SensorThings-Datamodel on a visual basis.
 
