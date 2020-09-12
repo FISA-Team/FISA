@@ -680,6 +680,8 @@ export const initState: () => FrontendReduxStateI = () => ({
     projects: [],
     documentsFetched: false,
     documents: [],
+    datastreamConnectData: undefined,
+    chosenDocumentUuid: undefined,
   },
   serverCommunication: {
     active: false,

@@ -8,7 +8,7 @@ const initState: () => ServerCommunicationStateI = () => ({
   error: undefined,
 });
 
-test('CommunicationPending', () => {
+test('communicationPending', () => {
   const expected = {
     ...initState(),
     active: true,
@@ -21,12 +21,38 @@ test('CommunicationPending', () => {
   expect(ServerCommunicationReducer(initState(), action)).toEqual(expected);
 });
 
-test('CommunicationSuccess', () => {
+test('communicationSuccess', () => {
   const expected = {
     ...initState(),
   };
   const action = {
     type: actionTypes.COMMUNICATION_SUCCESS,
+    payload: undefined,
+  };
+  expect(ServerCommunicationReducer(initState(), action)).toEqual(expected);
+});
+
+test('setErrorMessage', () => {
+  const expected = {
+    ...initState(),
+    error: 'error',
+    active: true,
+  };
+  const action = {
+    type: actionTypes.SET_ERROR_MESSAGE,
+    payload: {
+      error: 'error',
+    },
+  };
+  expect(ServerCommunicationReducer(initState(), action)).toEqual(expected);
+});
+
+test('stopCommunication', () => {
+  const expected = {
+    ...initState(),
+  };
+  const action = {
+    type: actionTypes.STOP_COMMUNICATION_PENDING,
     payload: undefined,
   };
   expect(ServerCommunicationReducer(initState(), action)).toEqual(expected);

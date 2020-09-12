@@ -147,47 +147,45 @@ export const getAllActiveObjectBundles = (
   state: FrontendReduxStateI
 ): ObjectBundleI[] => {
   const activeObject = getActiveObjectFromState(state);
-  const childsOfActiveObjectDefinition =
-      state.fisaProject.constantParts.objectDefinitions.find(
-        (definition) => {
-          if (!activeObject) {
-            return false;
-          }
-          return definition.name === activeObject.definitionName;
-        }
-      )?.children;
+  const childsOfActiveObjectDefinition = state.fisaProject.constantParts.objectDefinitions.find(
+    (definition) => {
+      if (!activeObject) {
+        return false;
+      }
+      return definition.name === activeObject.definitionName;
+    }
+  )?.children;
 
-  const objectsInCategories: ObjectBundleI[] =
-      state.fisaProject.constantParts.objectDefinitions
-        .filter(
-          (definition) =>
-            definition.name !== state.fisaProject.constantParts.fisaProjectName
-        )
-        .map((definition) =>
-          createBundle(
-            state,
-            childsOfActiveObjectDefinition,
-            definition,
-            activeObject
-          )
-        )
-        .filter(
-          (objectBundle) =>
-            objectBundle.definitionName !==
-            state.fisaProject.constantParts.fisaDocumentName
-        )
-        .sort((a, b) => {
-          if (a.definitionToAdd && b.definitionToAdd) {
-            return a.definitionName > b.definitionName ? 1 : -1;
-          }
-          if (a.definitionToAdd && !b.definitionToAdd) {
-            return -1;
-          }
-          if (!a.definitionToAdd && b.definitionToAdd) {
-            return 1;
-          }
-          return a.definitionName > b.definitionName ? 1 : -1;
-        });
+  const objectsInCategories: ObjectBundleI[] = state.fisaProject.constantParts.objectDefinitions
+    .filter(
+      (definition) =>
+        definition.name !== state.fisaProject.constantParts.fisaProjectName
+    )
+    .map((definition) =>
+      createBundle(
+        state,
+        childsOfActiveObjectDefinition,
+        definition,
+        activeObject
+      )
+    )
+    .filter(
+      (objectBundle) =>
+        objectBundle.definitionName !==
+        state.fisaProject.constantParts.fisaDocumentName
+    )
+    .sort((a, b) => {
+      if (a.definitionToAdd && b.definitionToAdd) {
+        return a.definitionName > b.definitionName ? 1 : -1;
+      }
+      if (a.definitionToAdd && !b.definitionToAdd) {
+        return -1;
+      }
+      if (!a.definitionToAdd && b.definitionToAdd) {
+        return 1;
+      }
+      return a.definitionName > b.definitionName ? 1 : -1;
+    });
 
   return objectsInCategories;
 };
@@ -369,7 +367,8 @@ export const getProjectName = (state: FrontendReduxStateI): string =>
  */
 export const getChosenDocumentUuid = (
   state: FrontendReduxStateI
-): string | undefined => state.fetch.chosenDocumentUuid;
+): string | undefined =>
+  state.availableFisaDocumentsProjects.chosenDocumentUuid;
 
 /**
  * @param state The redux FrontendReduxStateI of the program
