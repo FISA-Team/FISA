@@ -100,7 +100,6 @@ class TestProjectPage(BaseTest):
         # Check Number of childrens after removed
         grid = self.driver.find_element_by_xpath('/html/body/div[1]/div/div/div/div[2]/div/div[2]/div/div[1]/div[2]/div/div/div/div/div')
        
-
         allChildren = grid.find_elements_by_xpath(".//*")
         assert len(allChildren) == 7
         

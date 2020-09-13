@@ -2,9 +2,9 @@ import time
 from baseTest import BaseTest
 
 class TestMainPage(BaseTest):
+
     def test_MainPageHeading(self):
         self.navigate("")
-
         assert "FISA" in self.driver.title
         self.driver.find_element_by_id('projectHeading')
     
