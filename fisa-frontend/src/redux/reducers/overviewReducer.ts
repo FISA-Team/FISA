@@ -3,6 +3,7 @@ import {
   ADD_PROJECTS_FROM_SERVER,
   RESET_STATE,
   ADD_DATASTREAM_DATA,
+  SET_CHOSEN_DOCUMENT_UUID,
 } from '../actionTypes';
 import { ActionI, DocumentProjectOverviewReducerI } from '../interfaces';
 
@@ -12,6 +13,7 @@ const defaultState: () => DocumentProjectOverviewReducerI = () => ({
   projectsFetched: false,
   projects: [],
   datastreamConnectData: undefined,
+  chosenDocumentUuid: undefined,
 });
 
 export default function availableFisaDocumentsReducer(
@@ -35,6 +37,11 @@ export default function availableFisaDocumentsReducer(
       return {
         ...state,
         datastreamConnectData: action.payload.data,
+      };
+    case SET_CHOSEN_DOCUMENT_UUID:
+      return {
+        ...state,
+        chosenDocumentUuid: action.payload.uuid,
       };
     case RESET_STATE:
       return defaultState();

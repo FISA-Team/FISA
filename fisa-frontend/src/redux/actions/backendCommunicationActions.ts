@@ -20,7 +20,7 @@ export const loadProjectFromServer = (uuid: string) => (
   dispatch: Dispatch<ActionI>
 ) => {
   dispatch(setCommunicationPending());
-  axios
+  return axios
     .get(`${BackendUrl}/projects/${uuid}`)
     .then((response) => {
       dispatch(loadSavedProject(response.data));
@@ -34,7 +34,7 @@ export const loadProjectFromServer = (uuid: string) => (
 
 export const fetchAvailableProjects = () => (dispatch: Dispatch<ActionI>) => {
   dispatch(setCommunicationPending());
-  axios
+  return axios
     .get(`${BackendUrl}/projects/`)
     .then((response) => {
       dispatch(setAvailableProjects(response.data));
@@ -57,7 +57,7 @@ const setAvailableProjects = (availableProjects: AvailableProjectI[]) => ({
 
 export const fetchAvailableDocuments = () => (dispatch: Dispatch<ActionI>) => {
   dispatch(setCommunicationPending());
-  axios
+  return axios
     .get(`${BackendUrl}/documents/`)
     .then((response) => {
       dispatch(setAvailableDocuments(response.data));
@@ -79,7 +79,7 @@ const setAvailableDocuments = (
 export function deleteDocument(documentUUID: string) {
   return (dispatch: any) => {
     dispatch(setCommunicationPending());
-    axios
+    return axios
       .delete(`${BackendUrl}/documents/${documentUUID}`)
       .then((response) => {
         dispatch(fetchAvailableDocuments());
@@ -94,7 +94,7 @@ export function deleteDocument(documentUUID: string) {
 
 export const addDocument = (document: FisaDocumentI) => (dispatch: any) => {
   dispatch(setCommunicationPending());
-  axios
+  return axios
     .post(`${BackendUrl}/documents/`, JSON.stringify(document), {
       headers: {
         'Content-Type': 'application/json',
@@ -114,7 +114,7 @@ export const addProject = (project: FisaProjectI) => (
   dispatch: Dispatch<ActionI>
 ) => {
   dispatch(setCommunicationPending());
-  axios
+  return axios
     .post(`${BackendUrl}/projects/`, JSON.stringify(project), {
       headers: {
         'Content-Type': 'application/json',
@@ -138,7 +138,7 @@ export const updateProject = (project: FisaProjectI) => (
   dispatch: Dispatch<ActionI>
 ) => {
   dispatch(setCommunicationPending());
-  axios
+  return axios
     .put(`${BackendUrl}/projects/`, JSON.stringify(project), {
       headers: {
         'Content-Type': 'application/json',
@@ -192,7 +192,7 @@ export const uploadProjectToFrost = (
 ) => (dispatch: Dispatch<ActionI>) => {
   dispatch(setCommunicationPending());
   const encodetUrl = encodeURIComponent(frostUrl);
-  axios
+  return axios
     .post(
       `${BackendUrl}/frostServer/upload/?url=${encodetUrl}`,
       JSON.stringify(project),
@@ -216,7 +216,7 @@ export const uploadProjectToFrost = (
 
 export const deleteProjectFromBackend = (uuid: string) => (dispatch: any) => {
   dispatch(setCommunicationPending());
-  axios
+  return axios
     .delete(`${BackendUrl}/projects/${uuid}`)
     .then(() => {
       dispatch(setCommunicationSuccess());
@@ -242,7 +242,7 @@ export const fetchProject = (documentUuid: string) => (
   dispatch: Dispatch<ActionI>
 ) => {
   dispatch(setCommunicationPending());
-  axios
+  return axios
     .get(`${BackendUrl}/documents/${documentUuid}`)
     .then((data) => {
       dispatch(loadProjectFromFisa(data.data));
