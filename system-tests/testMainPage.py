@@ -7,7 +7,6 @@ class TestMainPage(BaseTest):
         self.navigate("")
         assert "FISA" in self.driver.title
         self.driver.find_element_by_id('projectHeading')
-    
     def test_ChangeThemes(self):
         # Light theme to dark theme
         self.navigate("")
