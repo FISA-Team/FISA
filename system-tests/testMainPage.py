@@ -1,5 +1,4 @@
 import time
-import unittest
 from baseTest import BaseTest
 
 class TestMainPage(BaseTest):
