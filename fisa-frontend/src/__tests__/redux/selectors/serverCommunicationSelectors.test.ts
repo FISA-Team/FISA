@@ -6,12 +6,12 @@ test('getServerCommunicationActive', () => {
   expect(selectors.getServerCommunicationActive(testState())).toBe(expected);
 });
 
-test('getServerCommunicationActive', () => {
+test('getServerCommunicationPending', () => {
   const expected = testState().serverCommunication.pending;
   expect(selectors.getServerCommunicationPending(testState())).toBe(expected);
 });
 
-test('getServerCommunicationActive', () => {
+test('getServerCommunicationError', () => {
   const expected = testState().serverCommunication.error;
   expect(selectors.getServerCommunicationError(testState())).toEqual(expected);
 });
