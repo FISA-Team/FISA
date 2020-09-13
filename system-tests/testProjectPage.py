@@ -101,7 +101,7 @@ class TestProjectPage(BaseTest):
         grid = self.driver.find_element_by_xpath('/html/body/div[1]/div/div/div/div[2]/div/div[2]/div/div[1]/div[2]/div/div/div/div/div')
         allChildren = grid.find_elements_by_xpath(".//*")
         assert len(allChildren) == 7
-        
+
         # click on add button
         self.driver.find_element_by_xpath('/html/body/div[1]/div/div/div/div[2]/div/div[2]/div/div[1]/div[2]/div/div/div/div/div/div/div/button').click()
         time.sleep(0.2)
@@ -138,8 +138,3 @@ class TestProjectPage(BaseTest):
         # confirme
         self.driver.find_element_by_xpath('/html/body/div[2]/div[3]/div/div[2]/button[2]').click()
         time.sleep(0.2)
-
-    
-
-
-

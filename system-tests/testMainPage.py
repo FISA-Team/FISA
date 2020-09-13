@@ -7,6 +7,7 @@ class TestMainPage(BaseTest):
         self.navigate("")
         assert "FISA" in self.driver.title
         self.driver.find_element_by_id('projectHeading')
+
     def test_ChangeThemes(self):
         # Light theme to dark theme
         self.navigate("")
@@ -35,7 +36,7 @@ class TestMainPage(BaseTest):
         time.sleep(0.2)
         self.driver.find_element_by_xpath('/html/body/div[2]/div[3]/ul/fieldset/div[2]/label[2]/span[1]/span[1]/input').click()
         time.sleep(0.2)
-        
+
         manageUsecases = self.driver.find_element_by_xpath('/html/body/div/div/div/div/div[2]/h4').text
         assert manageUsecases == 'Verwalte Anwendungszenarien'
 
@@ -44,7 +45,7 @@ class TestMainPage(BaseTest):
         time.sleep(0.2)
         self.driver.find_element_by_xpath('/html/body/div[2]/div[3]/ul/fieldset/div[2]/label[1]/span[1]/span[1]/input').click()
         time.sleep(0.2)
-        
+
         manageUsecases = self.driver.find_element_by_xpath('/html/body/div/div/div/div/div[2]/h4').text
         assert manageUsecases == 'Manage Use-Cases'
 
