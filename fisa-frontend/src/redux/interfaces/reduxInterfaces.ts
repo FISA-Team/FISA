@@ -9,7 +9,6 @@ export interface ActionI {
 }
 
 export interface FrontendReduxStateI {
-  fetch: FetchProjectI;
   fisaProject: ProjectStateI;
   projectPage: ProjectPageStateI;
   availableFisaDocumentsProjects: DocumentProjectOverviewReducerI;
@@ -25,10 +24,6 @@ export interface ProjectPageStateI {
   highlightedObject: number;
   scrollingActive: boolean;
   projectExistsOnBackend: boolean;
-}
-
-export interface FetchProjectI {
-  chosenDocumentUuid: string | undefined;
 }
 
 export interface NecessaryProjectStateI {
@@ -64,6 +59,7 @@ export interface DocumentProjectOverviewReducerI {
   documentsFetched: boolean;
   documents: AvailableFisaDocumentI[];
   datastreamConnectData: DatastreamData[] | undefined;
+  chosenDocumentUuid: string | undefined;
 }
 
 export interface DatastreamData {

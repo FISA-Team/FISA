@@ -324,11 +324,6 @@ export const testState: () => FrontendReduxStateI = () => ({
     undoHistory: [],
     redoHistory: [],
   },
-  fetch: {
-    pending: false,
-    error: undefined,
-    chosenDocumentUuid: '',
-  },
   projectPage: {
     dontShowObjectRemoveWarning: false,
     theme: darkTheme,
@@ -343,11 +338,19 @@ export const testState: () => FrontendReduxStateI = () => ({
     projects: [],
     documentsFetched: false,
     documents: [],
+    datastreamConnectData: undefined,
+    chosenDocumentUuid: undefined,
   },
   serverCommunication: {
     active: false,
     pending: false,
-    error: undefined,
+    error: {
+      name: 'Error',
+      message: 'Not found',
+      longMessage: undefined,
+      rawMessage: undefined,
+      code: 404,
+    },
   },
 });
 
@@ -616,11 +619,6 @@ export const baseState: () => FrontendReduxStateI = () => ({
     undoHistory: [],
     redoHistory: [],
   },
-  fetch: {
-    pending: false,
-    error: undefined,
-    chosenDocumentUuid: undefined,
-  },
   projectPage: {
     dontShowObjectRemoveWarning: false,
     theme: {
@@ -651,6 +649,8 @@ export const baseState: () => FrontendReduxStateI = () => ({
     projects: [],
     documentsFetched: false,
     documents: [],
+    datastreamConnectData: undefined,
+    chosenDocumentUuid: undefined,
   },
   serverCommunication: {
     active: false,
@@ -661,11 +661,6 @@ export const baseState: () => FrontendReduxStateI = () => ({
 
 export const initState: () => FrontendReduxStateI = () => ({
   fisaProject: emptyProjectState,
-  fetch: {
-    pending: true,
-    error: undefined,
-    chosenDocumentUuid: undefined,
-  },
   projectPage: {
     dontShowObjectRemoveWarning: false,
     theme: lightTheme,
@@ -680,6 +675,8 @@ export const initState: () => FrontendReduxStateI = () => ({
     projects: [],
     documentsFetched: false,
     documents: [],
+    datastreamConnectData: undefined,
+    chosenDocumentUuid: undefined,
   },
   serverCommunication: {
     active: false,

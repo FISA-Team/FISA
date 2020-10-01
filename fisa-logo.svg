@@ -16,15 +16,21 @@
    viewBox="0 0 121 79"
    version="1.1"
    id="svg407"
-   inkscape:version="1.0 (4035a4fb49, 2020-05-01)"
-   sodipodi:docname="Fisa_v3.svg">
+   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)"
+   sodipodi:docname="fisa-logo.svg">
   <defs
      id="defs401">
     <rect
+       x="1.1837834"
+       y="55.701693"
+       width="103.19996"
+       height="14.826007"
+       id="rect864" />
+    <rect
        x="37.310852"
        y="126.31868"
-       width="121.48911"
-       height="15.828713"
+       width="137.23265"
+       height="15.309151"
        id="rect1330" />
     <rect
        x="26.170792"
@@ -42,9 +48,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.7071068"
-     inkscape:cx="178.50742"
-     inkscape:cy="150.11061"
+     inkscape:zoom="1.4142136"
+     inkscape:cx="173.08167"
+     inkscape:cy="277.46964"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      inkscape:document-rotation="0"
@@ -53,9 +59,9 @@
      inkscape:snap-nodes="false"
      showguides="false"
      inkscape:window-width="1920"
-     inkscape:window-height="1055"
+     inkscape:window-height="1080"
      inkscape:window-x="1920"
-     inkscape:window-y="25"
+     inkscape:window-y="0"
      inkscape:window-maximized="0" />
   <metadata
      id="metadata404">
@@ -133,11 +139,11 @@
     <text
        xml:space="preserve"
        id="text1328"
-       style="font-size:4.58611px;line-height:1.25;font-family:sans-serif;white-space:pre;shape-inside:url(#rect1330);"
+       style="font-size:9.17222px;line-height:1.25;font-family:sans-serif;white-space:pre;shape-inside:url(#rect1330);"
        transform="rotate(-1.8183825,-1805.1123,1212.8523)"><tspan
          x="37.310547"
-         y="134.79237"><tspan
-           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:9.87778px;font-family:'Comic Sans MS';-inkscape-font-specification:'Comic Sans MS'">Frost IoT setup assistant</tspan></tspan></text>
+         y="134.43362"><tspan
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:9.17222px;font-family:'Comic Sans MS';-inkscape-font-specification:'Comic Sans MS'">FROST IoT setup assistant</tspan></tspan></text>
     <path
        style="opacity:0.999;fill:none;stroke:#000000;stroke-width:0.693716;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:normal"
        id="path1336"
