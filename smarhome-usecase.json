@@ -20,7 +20,7 @@
         },
         {
           "name": "Description",
-          "infoText": "More information's about the room",
+          "infoText": "More information about the room",
           "valueType": "string",
           "value": null,
           "isPredefined": false,
@@ -45,8 +45,8 @@
           "validationRule": null
         },
         {
-          "name": "Is blue",
-          "infoText": "If the room is blue",
+          "name": "Is Locked",
+          "infoText": "If the doors to the room are locked",
           "valueType": "boolean",
           "value": null,
           "isPredefined": false,
@@ -76,6 +76,13 @@
       "isTopLayer": false,
       "mapsTo": "STA.Datastream",
       "isNotReusable": true,
+      "exampleData": {
+        "count": 10,
+        "valueMin": 0,
+        "valueMax": 14,
+        "timeMin": "2020-01-01T01:00:00",
+        "timeMax": "2020-01-01T23:59:59"
+      },
       "attributes": [
         {
           "name": "Name",
@@ -118,7 +125,7 @@
           "validationRule": null
         },
         {
-          "name": "Unite definition",
+          "name": "Unit definition",
           "infoText": null,
           "valueType": "string",
           "value": null,
@@ -138,7 +145,6 @@
           "validationRule": null
         }
       ],
-      "exampleData": null,
       "children": [
         {
           "objectName": "Sensor",
@@ -161,7 +167,7 @@
       "attributes": [
         {
           "name": "Name",
-          "infoText": "The name of the Sensor",
+          "infoText": "The name of the sensor",
           "valueType": "string",
           "value": null,
           "isPredefined": false,
@@ -171,7 +177,7 @@
         },
         {
           "name": "Description",
-          "infoText": "More information's about the sensor",
+          "infoText": "More information about the sensor",
           "valueType": "string",
           "value": null,
           "isPredefined": false,
@@ -205,7 +211,7 @@
     },
     {
       "name": "Observed property",
-      "caption": "Observed property's",
+      "caption": "Observed properties",
       "infoText": null,
       "isTopLayer": false,
       "mapsTo": "STA.ObservedProperty",
@@ -258,7 +264,7 @@
       "attributes": [
         {
           "name": "Name",
-          "infoText": "Name der Position",
+          "infoText": "Name of the location",
           "valueType": "string",
           "value": null,
           "isPredefined": false,
@@ -314,22 +320,22 @@
     {
       "id": 1,
       "definitionName": "Room",
-      "children": [2, 3],
+      "children": [2, 3, 12],
       "attributes": [
         {
           "definitionName": "Name",
-          "value": "Basement"
+          "value": "Living room"
         },
         {
           "definitionName": "Description",
-          "value": "The basement of my home"
+          "value": "The living room of my home"
         },
         {
           "definitionName": "Room type",
-          "value": "Basement"
+          "value": "Living room"
         },
         {
-          "definitionName": "Is blue",
+          "definitionName": "Is Locked",
           "value": "false"
         }
       ]
@@ -341,11 +347,11 @@
       "attributes": [
         {
           "definitionName": "Name",
-          "value": "Temperature"
+          "value": "Temperature in the living room"
         },
         {
           "definitionName": "Description",
-          "value": "The temperature in the basement"
+          "value": "This datastream contains the measurements of the living room"
         },
         {
           "definitionName": "Observation type",
@@ -353,11 +359,11 @@
         },
         {
           "definitionName": "Unit name",
-          "value": "Celsius"
+          "value": "Degrees Celsius"
         },
         {
-          "definitionName": "Unite definition",
-          "value": "Celsius"
+          "definitionName": "Unit definition",
+          "value": "https://en.wikipedia.org/wiki/Celsius"
         },
         {
           "definitionName": "Unit symbol",
@@ -399,11 +405,11 @@
       "attributes": [
         {
           "definitionName": "Name",
-          "value": "Basement temperature"
+          "value": "Temperature (°C)"
         },
         {
           "definitionName": "Description",
-          "value": "The temperature in the basement"
+          "value": "https://www.wikidata.org/wiki/Q25267"
         },
         {
           "definitionName": "Definition",
@@ -427,6 +433,79 @@
         {
           "definitionName": "Metadata",
           "value": "https://www.sparkfun.com/datasheets/Sensors/Temperature/DHT22.pdf"
+        },
+        {
+          "definitionName": "Encoding type",
+          "value": "application/pdf"
+        }
+      ]
+    },
+    {
+      "id": 12,
+      "definitionName": "Datastream",
+      "children": [13, 14],
+      "attributes": [
+        {
+          "definitionName": "Name",
+          "value": "Light value on the living room window"
+        },
+        {
+          "definitionName": "Description",
+          "value": "The datastream contains the light value mesurenments on the window Shutters"
+        },
+        {
+          "definitionName": "Observation type",
+          "value": "http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_Measurement"
+        },
+        {
+          "definitionName": "Unit name",
+          "value": "Lumen"
+        },
+        {
+          "definitionName": "Unit definition",
+          "value": "https://en.wikipedia.org/wiki/Lumen_%28unit%29"
+        },
+        {
+          "definitionName": "Unit symbol",
+          "value": "ln"
+        }
+      ]
+    },
+    {
+      "id": 13,
+      "definitionName": "Observed property",
+      "children": [],
+      "attributes": [
+        {
+          "definitionName": "Name",
+          "value": "Light value (ln)"
+        },
+        {
+          "definitionName": "Description",
+          "value": "https://en.wikipedia.org/wiki/Light_value"
+        },
+        {
+          "definitionName": "Definition",
+          "value": "http://www.qudt.org/qudt/owl/1.0.0/quantity/Instances.html#TimeTemperature"
+        }
+      ]
+    },
+    {
+      "id": 14,
+      "definitionName": "Sensor",
+      "children": [],
+      "attributes": [
+        {
+          "definitionName": "Name",
+          "value": "MAX30101"
+        },
+        {
+          "definitionName": "Description",
+          "value": "Photodetector to detect light"
+        },
+        {
+          "definitionName": "Metadata",
+          "value": "https://cdn.sparkfun.com/assets/8/1/c/9/0/MAX30101_Datasheet.pdf"
         },
         {
           "definitionName": "Encoding type",
