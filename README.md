@@ -40,7 +40,7 @@ Configuration options for the frontend:
 
 - Location of the Backend: API_URL
 
-## Features of FISA
+## Features
 
 <img src="readme-imgs/FISA-usage.gif" width="100%">
 
