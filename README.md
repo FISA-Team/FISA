@@ -47,7 +47,7 @@ Configuration options for the frontend:
 -   Define Usecases with the help of a FISA-Document
 -   Clone already defined Entities
 -   Link already defined Entities
--   Pick a Location-Point ore Polygon with the help of a Card-Function
+-   Pick a Location-Point or Polygon with the help of a Card-Function
 -   Upload the finished Project to your FROST-Server (create the Entities)
 -   Save the Project to reuse it later
 
