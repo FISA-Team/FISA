@@ -6,8 +6,9 @@
 A tool to setup a SensorThings-Datamodel on a visual basis.
 
 ## Usage
+You need to have ![docker](https://docs.docker.com/get-docker/) and ![docker-compose](https://docs.docker.com/compose/install/) installed on your machine
 
-Download the docke-compose.yml file with `wget https://raw.githubusercontent.com/FISA-Team/FISA/master/docker-compose.yml` or download it directly from
+Download the docke-compose.yml file with `wget https://raw.githubusercontent.com/FISA-Team/FISA/master/docker-compose.yml` (Linux) or download it directly from
 <a href="https://raw.githubusercontent.com/FISA-Team/FISA/master/docker-compose.yml" download="docker-compose.yml">docker-compose.yml</a>
 
 Open the terminal and navigate to the location of the docker-compose.yml file
@@ -96,9 +97,14 @@ You can find example FISA-Documents in the example folder.
     <img src="readme-imgs/FISA-usage.gif" width="100%">
 </p>
 
--  Define Usecases with the help of a FISA-Document
--  Clone already defined Entities
--  Link already defined Entities
--  Pick a Lokation-Point ore Polygon with the help of a Card-Function
--  Upload the finished Project to your FROST-Server
--  Save the Project to reuse it later
+- Define Usecases with the help of a FISA-Document
+
+- Clone already defined Entities
+
+- Link already defined Entities
+
+- Pick a Lokation-Point ore Polygon with the help of a Card-Function
+
+- Upload the finished Project to your FROST-Server
+
+- Save the Project to reuse it later
