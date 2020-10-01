@@ -6,6 +6,7 @@
 A tool to setup a SensorThings-Datamodel on a visual basis.
 
 ## Usage
+
 You need to have [docker](https://docs.docker.com/get-docker/) and [docker-compose](https://docs.docker.com/compose/install/) installed on your machine
 
 Download the docke-compose.yml file with `wget https://raw.githubusercontent.com/FISA-Team/FISA/master/docker-compose.yml` (Linux) or directly from
@@ -14,12 +15,12 @@ Download the docke-compose.yml file with `wget https://raw.githubusercontent.com
 Download the docke-compose.extended.yml file with `wget https://raw.githubusercontent.com/FISA-Team/FISA/master/docker-compose.extended.yml` (Linux) or directly from
 <a href="https://raw.githubusercontent.com/FISA-Team/FISA/master/docker-compose.extendet.yml" download="docker-compose.extended.yml">docker-compose.extended.yml</a> if you want the FROST-Server inside a docker-container as well.
 
-
 Open the terminal and navigate to the location of the docker-compose.yml / docker-compose.extended.yml file
 
-Start the application and a [FROST-Server](https://github.com/FraunhoferIOSB/FROST-Server) with `docker-compose up -d`. The frontend is accessible on port 3000, the backend on 8081 and the FROST-Server on 8080.
+If you use the `decker-compose.extended.yml` rename it to `docker-compose.yml` and start the application with `docker-compose up -d`. The frontend is accessible on port 3000, the backend on 8081 and the FROST-Server on 8080.
 
 To use the application, you need a FISA-Document that describes a abstract use-case that is the base for your project. Examples can be found in the examples-folder.
+
 After uploading a use-case you can create a new project on the main page of the application.
 
 ## Backend
@@ -97,18 +98,11 @@ You can find example FISA-Documents in the example folder.
 
 ## Features of FISA
 
-<p align="center">
-    <img src="readme-imgs/FISA-usage.gif" width="100%">
-</p>
+<img src="readme-imgs/FISA-usage.gif" width="100%">
 
 - Define Usecases with the help of a FISA-Document
-
 - Clone already defined Entities
-
 - Link already defined Entities
-
-- Pick a Lokation-Point ore Polygon with the help of a Card-Function
-
+- Pick a Location-Point ore Polygon with the help of a Card-Function
 - Upload the finished Project to your FROST-Server
-
 - Save the Project to reuse it later
