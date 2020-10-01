@@ -16,7 +16,7 @@ Open the terminal and navigate to the location of the docker-compose.yml file
 Start the application and a [FROST-Server](https://github.com/FraunhoferIOSB/FROST-Server) with `docker-compose up -d`. The frontend is accessible on port 3000, the backend on 8081 and the FROST-Server on 8080.
 
 To use the application, you need a FISA-Document that describes a abstract use-case that is the base for your project. Examples can be found in the examples-folder.
-After uploading a use-case you can create a new project on main page of the application.
+After uploading a use-case you can create a new project on the main page of the application.
 
 ## Backend
 
