@@ -89,4 +89,4 @@ interface ChildDefinition {
 ```
 ## Usage of the User-Interface
 
-![](readme-imgs/FISA-usage.gif)
+![](readme-imgs/FISA-usage.gif){width=100%}
