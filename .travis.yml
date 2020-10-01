@@ -27,24 +27,6 @@ jobs:
         - npm run lint
         - npm run build
         - npm t
-    - stage: deploy
-      if: branch = master
-      name: "Build and upload image for Backend"
-      before_script:
-        - cd fisa-backend
-      script:
-        - docker build -t fisa:backend .
-        - docker login -u "$user" -p "$token" https://docker.pkg.github.com
-        - docker push fisa:backend
-    - stage: deploy
-      if: branch = master
-      name: "Build and upload image for Frontend"
-      before_script:
-        - cd fisa-frontend
-      script:
-        - docker build -t fisa:frontend .
-        - docker login -u "$user" -p "$token" https://docker.pkg.github.com
-        - docker push fisa:frontend
 
 services:
 - docker
