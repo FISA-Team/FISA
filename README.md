@@ -40,6 +40,17 @@ Configuration options for the frontend:
 
 - Location of the Backend: API_URL
 
+## Features of FISA
+
+<img src="readme-imgs/FISA-usage.gif" width="100%">
+
+-   Define Usecases with the help of a FISA-Document
+-   Clone already defined Entities
+-   Link already defined Entities
+-   Pick a Location-Point ore Polygon with the help of a Card-Function
+-   Upload the finished Project to your FROST-Server (create the Entities)
+-   Save the Project to reuse it later
+
 ## FisaDoc specification
 
 The specification of the FisaDoc in typescript notation
@@ -95,14 +106,3 @@ interface ChildDefinition {
 ```
 
 You can find example FISA-Documents in the example folder.
-
-## Features of FISA
-
-<img src="readme-imgs/FISA-usage.gif" width="100%">
-
--   Define Usecases with the help of a FISA-Document
--   Clone already defined Entities
--   Link already defined Entities
--   Pick a Location-Point ore Polygon with the help of a Card-Function
--   Upload the finished Project to your FROST-Server (create the Entities)
--   Save the Project to reuse it later
