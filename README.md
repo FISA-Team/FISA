@@ -8,10 +8,13 @@ A tool to setup a SensorThings-Datamodel on a visual basis.
 ## Usage
 You need to have [docker](https://docs.docker.com/get-docker/) and [docker-compose](https://docs.docker.com/compose/install/) installed on your machine
 
-Download the docke-compose.yml file with `wget https://raw.githubusercontent.com/FISA-Team/FISA/master/docker-compose.yml` (Linux) or download it directly from
-<a href="https://raw.githubusercontent.com/FISA-Team/FISA/master/docker-compose.yml" download="docker-compose.yml">docker-compose.yml</a>
+Download the docke-compose.yml file with `wget https://raw.githubusercontent.com/FISA-Team/FISA/master/docker-compose.yml` (Linux) or directly from
+<a href="https://raw.githubusercontent.com/FISA-Team/FISA/master/docker-compose.yml" download="docker-compose.yml">docker-compose.yml</a> if you want just the FISA-Application.
+Download the docke-compose.extended.yml file with `wget https://raw.githubusercontent.com/FISA-Team/FISA/master/docker-compose.extended.yml` (Linux) or directly from
+<a href="https://raw.githubusercontent.com/FISA-Team/FISA/master/docker-compose.extendet.yml" download="docker-compose.yml">docker-compose.yml</a> if you want a the FROST-Server inside a docker-container as well.
 
-Open the terminal and navigate to the location of the docker-compose.yml file
+
+Open the terminal and navigate to the location of the docker-compose.yml / docker-compose.extended.yml file
 
 Start the application and a [FROST-Server](https://github.com/FraunhoferIOSB/FROST-Server) with `docker-compose up -d`. The frontend is accessible on port 3000, the backend on 8081 and the FROST-Server on 8080.
 
