@@ -10,6 +10,7 @@ You need to have [docker](https://docs.docker.com/get-docker/) and [docker-compo
 
 Download the docke-compose.yml file with `wget https://raw.githubusercontent.com/FISA-Team/FISA/master/docker-compose.yml` (Linux) or directly from
 <a href="https://raw.githubusercontent.com/FISA-Team/FISA/master/docker-compose.yml" download="docker-compose.yml">docker-compose.yml</a> if you want just the FISA-Application.
+
 Download the docke-compose.extended.yml file with `wget https://raw.githubusercontent.com/FISA-Team/FISA/master/docker-compose.extended.yml` (Linux) or directly from
 <a href="https://raw.githubusercontent.com/FISA-Team/FISA/master/docker-compose.extendet.yml" download="docker-compose.yml">docker-compose.yml</a> if you want a the FROST-Server inside a docker-container as well.
 
