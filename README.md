@@ -100,9 +100,9 @@ You can find example FISA-Documents in the example folder.
 
 <img src="readme-imgs/FISA-usage.gif" width="100%">
 
-1. Define Usecases with the help of a FISA-Document
-2. Clone already defined Entities
-3. Link already defined Entities
-4. Pick a Location-Point ore Polygon with the help of a Card-Function
-5. Upload the finished Project to your FROST-Server (create the Entities)
-6. Save the Project to reuse it later
+-   Define Usecases with the help of a FISA-Document
+-   Clone already defined Entities
+-   Link already defined Entities
+-   Pick a Location-Point ore Polygon with the help of a Card-Function
+-   Upload the finished Project to your FROST-Server (create the Entities)
+-   Save the Project to reuse it later
