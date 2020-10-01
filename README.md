@@ -12,7 +12,7 @@ Download the docke-compose.yml file with `wget https://raw.githubusercontent.com
 <a href="https://raw.githubusercontent.com/FISA-Team/FISA/master/docker-compose.yml" download="docker-compose.yml">docker-compose.yml</a> if you want just the FISA-Application.
 
 Download the docke-compose.extended.yml file with `wget https://raw.githubusercontent.com/FISA-Team/FISA/master/docker-compose.extended.yml` (Linux) or directly from
-<a href="https://raw.githubusercontent.com/FISA-Team/FISA/master/docker-compose.extendet.yml" download="docker-compose.yml">docker-compose.yml</a> if you want a the FROST-Server inside a docker-container as well.
+<a href="https://raw.githubusercontent.com/FISA-Team/FISA/master/docker-compose.extendet.yml" download="docker-compose.extended.yml">docker-compose.extended.yml</a> if you want a the FROST-Server inside a docker-container as well.
 
 
 Open the terminal and navigate to the location of the docker-compose.yml / docker-compose.extended.yml file
