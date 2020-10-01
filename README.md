@@ -7,8 +7,8 @@ A tool to setup a SensorThings-Datamodel on a visual basis.
 
 ## Usage
 
-Download the docke-compose file with `wget https://raw.githubusercontent.com/FISA-Team/FISA/master/docker-compose.yml` ore get it directly from
-<a href="docker-compose.yml">docker-compose.yml</a>
+Download the docke-compose.yml file with `wget https://raw.githubusercontent.com/FISA-Team/FISA/master/docker-compose.yml` or download it directly from
+<a href="https://raw.githubusercontent.com/FISA-Team/FISA/master/docker-compose.yml" download="docker-compose.yml">docker-compose.yml</a>
 
 Open the terminal and navigate to the location of the docker-compose.yml file
 
