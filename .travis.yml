@@ -1,6 +1,14 @@
-matrix:
+os: linux
+
+stages:
+  - compile
+  - deploy
+
+jobs:
   include:
-    - language: java
+    - stage: compile
+      name: "Build and test Backend"
+      language: java
       java: 11
       before_script:
         - cd fisa-backend
@@ -8,7 +16,9 @@ matrix:
         - mvn checkstyle:check
         - mvn compile
         - mvn test
-    - language: node_js
+    - stage: compile
+      name: "Build and test Frontend"
+      language: node_js
       node_js: 14
       before_script:
         - cd fisa-frontend
@@ -17,3 +27,6 @@ matrix:
         - npm run lint
         - npm run build
         - npm t
+
+services:
+- docker
