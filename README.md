@@ -87,8 +87,18 @@ interface ChildDefinition {
     infoText: string;
 }
 ```
-## Usage of the User-Interface
+
+You can find example FISA-Documents in the example folder.
+
+## Features of FISA
 
 <p align="center">
     <img src="readme-imgs/FISA-usage.gif" width="100%">
 </p>
+
+* Define Usecases with the help of a FISA-Document
+* Clone already defined Entities
+* Link already defined Entities
+* Pick a Lokation-Point ore Polygons with the help of a Card-Function
+* Upload the finished Project to your FROST-Server
+* Save the Project to reuse it later
