@@ -12,7 +12,7 @@ class BaseTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         options = Options()
-        options.headless = True
+#        options.headless = True
         cls.driver = webdriver.Firefox(options=options)
 
         print("in setUpClass")

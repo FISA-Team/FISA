@@ -2,15 +2,15 @@
   "name": "SmartHome",
   "objectDefinitions": [
     {
-      "name": "Raum",
-      "caption": "Räume",
-      "infoText": "Ein Raum in dem sich Sensoren befinden.",
+      "name": "Room",
+      "caption": "Rooms",
+      "infoText": "A room inside a house.",
       "isTopLayer": true,
       "mapsTo": "STA.Thing",
       "attributes": [
         {
           "name": "Name",
-          "infoText": "Der Name des Raums",
+          "infoText": "The name of the room",
           "valueType": "string",
           "value": null,
           "isPredefined": false,
@@ -19,8 +19,8 @@
           "validationRule": "[^A-Za-zäöüÄÖÜß]+"
         },
         {
-          "name": "Beschreibung",
-          "infoText": "Weitere Informationen",
+          "name": "Description",
+          "infoText": "More information about the room",
           "valueType": "string",
           "value": null,
           "isPredefined": false,
@@ -29,24 +29,24 @@
           "validationRule": null
         },
         {
-          "name": "Raumtyp",
-          "infoText": "Der Typ des Raumes",
+          "name": "Room type",
+          "infoText": "The type of the room",
           "valueType": "dropdown",
           "value": null,
           "isPredefined": false,
           "dropDownValues": [
-            "Küche",
-            "Wohnzimmer",
-            "Schlafzimmer",
-            "Badezimmer",
-            "Keller"
+            "Kitchen",
+            "Living room",
+            "Bedroom",
+            "Bathroom",
+            "Basement"
           ],
           "mapsTo": "STA.Thing.properties[roomtype]",
           "validationRule": null
         },
         {
-          "name": "Ist Blau",
-          "infoText": "Ob das Zimmer blau ist.",
+          "name": "Is Locked",
+          "infoText": "If the doors to the room are locked",
           "valueType": "boolean",
           "value": null,
           "isPredefined": false,
@@ -58,28 +58,35 @@
       "exampleData": null,
       "children": [
         {
-          "objectName": "Ort",
+          "objectName": "Location",
           "quantity": 1,
           "infoText": null
         },
         {
-          "objectName": "Datenstrom",
+          "objectName": "Datastream",
           "quantity": -1,
           "infoText": null
         }
       ]
     },
     {
-      "name": "Datenstrom",
-      "caption": "Datenströme",
+      "name": "Datastream",
+      "caption": "Datastreams",
       "infoText": null,
       "isTopLayer": false,
       "mapsTo": "STA.Datastream",
       "isNotReusable": true,
+      "exampleData": {
+        "count": 10,
+        "valueMin": 0,
+        "valueMax": 14,
+        "timeMin": "2020-01-01T01:00:00",
+        "timeMax": "2020-01-01T23:59:59"
+      },
       "attributes": [
         {
           "name": "Name",
-          "infoText": "Der Name des Datenstroms",
+          "infoText": "The name of the datastream",
           "valueType": "string",
           "value": null,
           "isPredefined": false,
@@ -88,7 +95,7 @@
           "validationRule": "[^A-Za-zäöüÄÖÜß]+"
         },
         {
-          "name": "Beschreibung",
+          "name": "Description",
           "infoText": null,
           "valueType": "string",
           "value": null,
@@ -98,7 +105,7 @@
           "validationRule": null
         },
         {
-          "name": "Beobachtungstyp",
+          "name": "Observation type",
           "infoText": null,
           "valueType": "string",
           "value": null,
@@ -108,7 +115,7 @@
           "validationRule": null
         },
         {
-          "name": "Einheits-Name",
+          "name": "Unit name",
           "infoText": null,
           "valueType": "string",
           "value": null,
@@ -118,7 +125,7 @@
           "validationRule": null
         },
         {
-          "name": "Einheits-Definition",
+          "name": "Unit definition",
           "infoText": null,
           "valueType": "string",
           "value": null,
@@ -128,7 +135,7 @@
           "validationRule": null
         },
         {
-          "name": "Einheits-Symbol",
+          "name": "Unit symbol",
           "infoText": null,
           "valueType": "string",
           "value": null,
@@ -138,7 +145,6 @@
           "validationRule": null
         }
       ],
-      "exampleData": null,
       "children": [
         {
           "objectName": "Sensor",
@@ -146,7 +152,7 @@
           "infoText": null
         },
         {
-          "objectName": "Sensortyp",
+          "objectName": "Observed property",
           "quantity": -1,
           "infoText": null
         }
@@ -154,14 +160,14 @@
     },
     {
       "name": "Sensor",
-      "caption": "Sensoren",
+      "caption": "Sensor",
       "infoText": null,
       "isTopLayer": false,
       "mapsTo": "STA.Sensor",
       "attributes": [
         {
           "name": "Name",
-          "infoText": "Der Name des Sensors",
+          "infoText": "The name of the sensor",
           "valueType": "string",
           "value": null,
           "isPredefined": false,
@@ -170,8 +176,8 @@
           "validationRule": null
         },
         {
-          "name": "Beschreibung",
-          "infoText": "Weitere Informationen",
+          "name": "Description",
+          "infoText": "More information about the sensor",
           "valueType": "string",
           "value": null,
           "isPredefined": false,
@@ -180,7 +186,7 @@
           "validationRule": null
         },
         {
-          "name": "Codierungstyp",
+          "name": "Encoding type",
           "infoText": null,
           "valueType": "string",
           "value": "application/pdf",
@@ -190,7 +196,7 @@
           "validationRule": null
         },
         {
-          "name": "Metadaten",
+          "name": "Metadata",
           "infoText": null,
           "valueType": "string",
           "value": null,
@@ -204,15 +210,15 @@
       "children": []
     },
     {
-      "name": "Sensortyp",
-      "caption": "Sensortypen",
+      "name": "Observed property",
+      "caption": "Observed properties",
       "infoText": null,
       "isTopLayer": false,
       "mapsTo": "STA.ObservedProperty",
       "attributes": [
         {
           "name": "Name",
-          "infoText": "Die Spezifizierung des Sensortyps",
+          "infoText": "The name of the sensor",
           "valueType": "string",
           "value": null,
           "isPredefined": false,
@@ -221,7 +227,7 @@
           "validationRule": null
         },
         {
-          "name": "Beschreibung",
+          "name": "Description",
           "infoText": null,
           "valueType": "string",
           "value": null,
@@ -233,10 +239,14 @@
         {
           "name": "Definition",
           "infoText": null,
-          "valueType": "string",
+          "valueType": "exampleDropdown",
           "value": null,
           "isPredefined": false,
-          "dropDownValues": null,
+          "dropDownValues": [
+            "http://www.qudt.org/qudt/owl/1.0.0/quantity/Instances.html#ThermodynamicTemperature",
+            "http://www.qudt.org/qudt/owl/1.0.0/quantity/Instances.html#TimeTemperature",
+            "http://www.qudt.org/qudt/owl/1.0.0/quantity/Instances.html#ThermodynamicEntropy"
+          ],
           "mapsTo": "STA.ObservedProperty.definition",
           "validationRule": null
         }
@@ -245,16 +255,16 @@
       "children": []
     },
     {
-      "name": "Ort",
-      "caption": "Orte",
+      "name": "Location",
+      "caption": "Location",
       "infoText": null,
       "isTopLayer": false,
       "mapsTo": "STA.Location",
-      "positionAttributes": ["Längengrad", "Breitengrad"],
+      "positionAttributes": ["Longitude", "Latitude"],
       "attributes": [
         {
           "name": "Name",
-          "infoText": "Name der Position",
+          "infoText": "Name of the location",
           "valueType": "string",
           "value": null,
           "isPredefined": false,
@@ -263,7 +273,7 @@
           "validationRule": null
         },
         {
-          "name": "Beschreibung",
+          "name": "Description",
           "infoText": null,
           "valueType": "string",
           "value": null,
@@ -273,7 +283,7 @@
           "validationRule": null
         },
         {
-          "name": "Codierungstyp",
+          "name": "Encoding type",
           "infoText": null,
           "valueType": "string",
           "value": "application/geo+json",
@@ -283,8 +293,8 @@
           "validationRule": null
         },
         {
-          "name": "Längengrad",
-          "infoText": "Der Längengrad des Positionspunktes",
+          "name": "Longitude",
+          "infoText": "The longitude of the location",
           "valueType": "number",
           "value": 50.102,
           "isPredefined": false,
@@ -293,8 +303,8 @@
           "validationRule": null
         },
         {
-          "name": "Breitengrad",
-          "infoText": "Der Breitengrad des Positionpunktes",
+          "name": "Latitude",
+          "infoText": "The latitude of the location point",
           "valueType": "number",
           "value": 8.6478,
           "isPredefined": false,
@@ -309,99 +319,199 @@
   "fisaTemplate": [
     {
       "id": 1,
-      "definitionName": "Raum",
+      "definitionName": "Room",
+      "children": [2, 3, 12],
       "attributes": [
         {
           "definitionName": "Name",
-          "value": "Küche"
+          "value": "Living room"
         },
         {
-          "definitionName": "Beschreibung",
-          "value": "Die Küche, in der alles gekocht wird"
+          "definitionName": "Description",
+          "value": "The living room of my home"
         },
         {
-          "definitionName": "Raumtyp",
-          "value": "Küche"
+          "definitionName": "Room type",
+          "value": "Living room"
         },
         {
-          "definitionName": "Ist Weiß",
-          "value": false
+          "definitionName": "Is Locked",
+          "value": "false"
         }
-      ],
-      "children": [2]
+      ]
     },
     {
       "id": 2,
-      "definitionName": "Datenstrom",
+      "definitionName": "Datastream",
+      "children": [4, 5],
       "attributes": [
         {
           "definitionName": "Name",
-          "value": "Küchentemperatur"
+          "value": "Temperature in the living room"
         },
         {
-          "definitionName": "Beschreibung",
-          "value": "Die Temperatur in der Küche"
+          "definitionName": "Description",
+          "value": "This datastream contains the measurements of the living room"
         },
         {
-          "definitionName": "Beobachtungstyp",
+          "definitionName": "Observation type",
           "value": "http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_Measurement"
         },
         {
-          "definitionName": "Einheits-Name",
-          "value": "Celsius"
+          "definitionName": "Unit name",
+          "value": "Degrees Celsius"
         },
         {
-          "definitionName": "Einheits-Definition",
-          "value": "Celsius"
+          "definitionName": "Unit definition",
+          "value": "https://en.wikipedia.org/wiki/Celsius"
         },
         {
-          "definitionName": "Einheits-Symbol",
+          "definitionName": "Unit symbol",
           "value": "°C"
         }
-      ],
-      "children": [5, 6]
+      ]
+    },
+    {
+      "id": 3,
+      "definitionName": "Location",
+      "children": [],
+      "attributes": [
+        {
+          "definitionName": "Name",
+          "value": "Location of my home"
+        },
+        {
+          "definitionName": "Description",
+          "value": "The location of my home"
+        },
+        {
+          "definitionName": "Longitude",
+          "value": "50.1054"
+        },
+        {
+          "definitionName": "Latitude",
+          "value": "8.762"
+        },
+        {
+          "definitionName": "Encoding type",
+          "value": "application/geo+json"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "definitionName": "Observed property",
+      "children": [],
+      "attributes": [
+        {
+          "definitionName": "Name",
+          "value": "Temperature (°C)"
+        },
+        {
+          "definitionName": "Description",
+          "value": "https://www.wikidata.org/wiki/Q25267"
+        },
+        {
+          "definitionName": "Definition",
+          "value": "http://www.qudt.org/qudt/owl/1.0.0/quantity/Instances.html#ThermodynamicEntropy"
+        }
+      ]
     },
     {
       "id": 5,
       "definitionName": "Sensor",
+      "children": [],
       "attributes": [
         {
           "definitionName": "Name",
-          "value": "Temperatursensor"
+          "value": "DHT22"
         },
         {
-          "definitionName": "Beschreibung",
-          "value": "Temperatur in der Küche Sensor"
+          "definitionName": "Description",
+          "value": "Digital-output relative humidity & temperature sensor/module"
         },
         {
-          "definitionName": "Metadaten",
+          "definitionName": "Metadata",
           "value": "https://www.sparkfun.com/datasheets/Sensors/Temperature/DHT22.pdf"
         },
         {
-          "definitionName": "Codierungstyp",
+          "definitionName": "Encoding type",
           "value": "application/pdf"
         }
-      ],
-      "children": []
+      ]
     },
     {
-      "id": 6,
-      "definitionName": "Sensortyp",
+      "id": 12,
+      "definitionName": "Datastream",
+      "children": [13, 14],
       "attributes": [
         {
           "definitionName": "Name",
-          "value": "Temperatur"
+          "value": "Light value on the living room window"
         },
         {
-          "definitionName": "Beschreibung",
-          "value": "Die Temperatur in der Küche"
+          "definitionName": "Description",
+          "value": "The datastream contains the light value mesurenments on the window Shutters"
+        },
+        {
+          "definitionName": "Observation type",
+          "value": "http://www.opengis.net/def/observationType/OGC-OM/2.0/OM_Measurement"
+        },
+        {
+          "definitionName": "Unit name",
+          "value": "Lumen"
+        },
+        {
+          "definitionName": "Unit definition",
+          "value": "https://en.wikipedia.org/wiki/Lumen_%28unit%29"
+        },
+        {
+          "definitionName": "Unit symbol",
+          "value": "ln"
+        }
+      ]
+    },
+    {
+      "id": 13,
+      "definitionName": "Observed property",
+      "children": [],
+      "attributes": [
+        {
+          "definitionName": "Name",
+          "value": "Light value (ln)"
+        },
+        {
+          "definitionName": "Description",
+          "value": "https://en.wikipedia.org/wiki/Light_value"
         },
         {
           "definitionName": "Definition",
-          "value": "http://www.qudt.org/qudt/owl/1.0.0/quantity/Instances.html#ThermodynamicTemperature"
+          "value": "http://www.qudt.org/qudt/owl/1.0.0/quantity/Instances.html#TimeTemperature"
         }
-      ],
-      "children": []
+      ]
+    },
+    {
+      "id": 14,
+      "definitionName": "Sensor",
+      "children": [],
+      "attributes": [
+        {
+          "definitionName": "Name",
+          "value": "MAX30101"
+        },
+        {
+          "definitionName": "Description",
+          "value": "Photodetector to detect light"
+        },
+        {
+          "definitionName": "Metadata",
+          "value": "https://cdn.sparkfun.com/assets/8/1/c/9/0/MAX30101_Datasheet.pdf"
+        },
+        {
+          "definitionName": "Encoding type",
+          "value": "application/pdf"
+        }
+      ]
     }
   ]
 }
