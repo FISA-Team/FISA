@@ -14,6 +14,7 @@ import {
 
 import {
   loadSavedProject,
+  setConnectedFrostUrl,
   setFromBackend,
   setFrostIdsOfObjects,
 } from './projectActions';
@@ -213,6 +214,7 @@ export const uploadProjectToFrost = (
       dispatch(
         setDatastreamConnectionData(response.data.datastreamConnectionData)
       );
+      dispatch(setConnectedFrostUrl(frostUrl));
     })
     .catch((error) => {
       dispatch(setErrorToShow(createErrorMessage(error)));

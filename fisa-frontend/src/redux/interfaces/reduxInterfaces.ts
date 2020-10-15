@@ -32,6 +32,7 @@ export interface NecessaryProjectStateI {
 }
 
 export interface ProjectStateI {
+  connectedFrostServer: string | undefined;
   csvExtractionError: ErrorMessageI | undefined;
   activeObject: number;
   latestId: number;

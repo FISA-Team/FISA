@@ -10,5 +10,6 @@
   "getPositionFromCard": "Position von Karte",
   "getPositionsFromCard": "Positionen von Karte",
   "contendDowntMatch": "Der Inhalt matcht nicht",
-  "notPossibleToAddMoreMessage": "Es ist nicht möglich mehr dieser Objekte zu erstellen"
+  "notPossibleToAddMoreMessage": "Es ist nicht möglich mehr dieser Objekte zu erstellen",
+  "removeFrostLinkedObjectMessage": "Dieses Objekt ist mit einer Entität auf einem FROST-Server verlinkt!"
 }

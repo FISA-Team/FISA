@@ -209,7 +209,7 @@ function SaveAtFisa(props: SaveDialogProps) {
 }
 
 const stateToSaveDialogProps = (state: FrontendReduxStateI) => ({
-  fisaProject: getFisaProjectFromState(state, false),
+  fisaProject: getFisaProjectFromState(state, false, false),
   saveError: getServerCommunicationError(state),
   fetchPending: getServerCommunicationPending(state),
   existsOnBackend: getProjectExistsOnBackend(state),

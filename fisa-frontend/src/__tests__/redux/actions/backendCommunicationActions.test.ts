@@ -287,12 +287,13 @@ describe('axios tests success', () => {
 
   it('uploadProjectToFrost', async () => {
     const frostUri = 'https://frost-server.de';
-    const datastreamData = [{ id: 1, name: 'Room' }];
+    const datastreamConnectionData = [{ id: 1, name: 'Room' }];
+    const updatedObjects = [{ id: 1, frostId: 1 }];
 
     // @ts-ignore
     mockAxios.post.mockImplementation(() =>
       Promise.resolve({
-        data: datastreamData,
+        data: { updatedObjects, datastreamConnectionData },
       })
     );
 
@@ -300,8 +301,12 @@ describe('axios tests success', () => {
       { type: actionTypes.COMMUNICATION_PENDING, payload: undefined },
       { type: actionTypes.COMMUNICATION_SUCCESS, payload: undefined },
       {
+        type: actionTypes.SET_FROST_IDS_OF_OBJECTS,
+        payload: { fisaObjects: updatedObjects },
+      },
+      {
         type: actionTypes.ADD_DATASTREAM_DATA,
-        payload: { data: datastreamData },
+        payload: { data: datastreamConnectionData },
       },
       { type: actionTypes.STOP_COMMUNICATION_PENDING, payload: undefined },
     ];

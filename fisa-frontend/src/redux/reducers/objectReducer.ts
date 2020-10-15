@@ -92,6 +92,7 @@ export default function objectReducer(
       // eslint-disable-next-line no-case-declarations
       const newObject: FisaObjectI = {
         ...oldObject,
+        frostId: undefined,
         id: action.payload.newId,
         parent: action.payload.parent,
         children: [],

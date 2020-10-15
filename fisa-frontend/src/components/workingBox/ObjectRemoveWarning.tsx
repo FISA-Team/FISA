@@ -1,19 +1,23 @@
 import React from 'react';
-import { Checkbox, FormControlLabel } from '@material-ui/core';
+import { Checkbox, FormControlLabel, Typography } from '@material-ui/core';
 import { connect } from 'react-redux';
 import { dontShowObjectRemoveWarning } from '../../redux/actions/pageActions';
 import RemoveWarning from '../errorMessages/RemoveWarning';
+import { ObjectWithNameI } from '../../redux/interfaces';
+import { Label } from '@material-ui/icons';
+import { useTranslation } from 'react-i18next';
 
 interface RemoveWarningProps {
   warningOpen: boolean;
   closeWarning: () => void;
   deleteObject: () => void;
   dontShowObjectRemoveWarning: () => void;
-  nameToShow: string;
+  object: ObjectWithNameI;
 }
 
 function ObjectRemoveWarning(props: RemoveWarningProps) {
   const [dontWarn, setDontWarn] = React.useState(false);
+  const { t } = useTranslation('projectPage');
 
   const handleEvent = (toDo: () => void) => {
     if (dontWarn) {
@@ -26,18 +30,23 @@ function ObjectRemoveWarning(props: RemoveWarningProps) {
       open={props.warningOpen}
       onNo={() => handleEvent(props.closeWarning)}
       onYes={() => handleEvent(props.deleteObject)}
-      nameToRemove={props.nameToShow}
+      nameToRemove={props.object.nameToShow}
     >
-      <FormControlLabel
-        style={{ marginRight: 'auto' }}
-        control={
-          <Checkbox
-            checked={dontWarn}
-            onChange={() => setDontWarn(!dontWarn)}
-          />
-        }
-        label="Do not warn again"
-      />
+      {!props.object.frostId && (
+        <FormControlLabel
+          style={{ marginRight: 'auto' }}
+          control={
+            <Checkbox
+              checked={dontWarn}
+              onChange={() => setDontWarn(!dontWarn)}
+            />
+          }
+          label="Do not warn again"
+        />
+      )}
+      {props.object.frostId && (
+        <Typography>{t('removeFrostLinkedObjectMessage')}</Typography>
+      )}
     </RemoveWarning>
   );
 }

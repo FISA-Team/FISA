@@ -55,7 +55,9 @@ function ObjectBox(props: ObjectBoxProps) {
 
   const closeWarning = () => setWarningOpen(false);
   const openWarning = () =>
-    props.dontShowWarning ? deleteObject() : setWarningOpen(true);
+    props.dontShowWarning && !props.object.frostId
+      ? deleteObject()
+      : setWarningOpen(true);
 
   const deleteObject = () => {
     setWarningOpen(false);
@@ -83,6 +85,11 @@ function ObjectBox(props: ObjectBoxProps) {
       className={classes.card}
       onMouseEnter={() => props.dispatch(setHighlightedObject(props.object.id))}
       onClick={checkIfGoToObject}
+      style={
+        props.object.frostId
+          ? { borderStyle: 'solid', borderColor: '#006622' }
+          : {}
+      }
     >
       <CardHeader
         title={
@@ -117,7 +124,8 @@ function ObjectBox(props: ObjectBoxProps) {
                 objectId={props.object.id}
                 attributeDefinitionName={attribute.definitionName}
                 changeObjectProperty={(key: string, value: string) =>
-                  props.changeObjectProperty(props.object.id, key, value)}
+                  props.changeObjectProperty(props.object.id, key, value)
+                }
               />
             </ListItem>
           ))}
@@ -159,7 +167,7 @@ function ObjectBox(props: ObjectBoxProps) {
         warningOpen={warningOpen}
         closeWarning={closeWarning}
         deleteObject={deleteObject}
-        nameToShow={props.object.nameToShow}
+        object={props.object}
       />
       {props.object.positionAttributes && (
         <MapDialog

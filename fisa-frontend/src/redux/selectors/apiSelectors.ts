@@ -19,7 +19,8 @@ import { POLY_POSITION } from '../../variables/valueTypes';
  */
 export const getFisaProjectFromState = (
   state: FrontendReduxStateI,
-  withExampleData: boolean
+  withExampleData: boolean,
+  ignoreFrostIds: boolean
 ): FisaProjectI => {
   const fisaObjects: BackendFisaObjectI[] = state.fisaProject.objects
     .filter((object) => object.id !== 0)
@@ -29,7 +30,8 @@ export const getFisaProjectFromState = (
         getPredefinedAttributes(
           state.fisaProject.constantParts.objectDefinitions,
           object.definitionName
-        )
+        ),
+        ignoreFrostIds
       )
     );
 
@@ -47,6 +49,7 @@ export const getFisaProjectFromState = (
     fisaTemplate: [],
   };
   return {
+    connectedFrostServer: state.fisaProject.connectedFrostServer,
     fisaDocument,
     name: state.fisaProject.constantParts.fisaProjectName,
     fisaObjects,
@@ -74,10 +77,11 @@ function getPredefinedAttributes(
  */
 function objectToBackendObject(
   object: FisaObjectI,
-  predefinedAttributes: AttributesDefinitionI[]
+  predefinedAttributes: AttributesDefinitionI[],
+  ignoreFrostIds: boolean
 ): BackendFisaObjectI {
   return {
-    frostId: object.frostId,
+    frostId: ignoreFrostIds ? undefined : object.frostId,
     id: object.id,
     definitionName: object.definitionName,
     attributes: [

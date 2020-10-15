@@ -571,5 +571,16 @@ export const getAvailableProjects = (state: FrontendReduxStateI) =>
 export const getAvailableFisaDocuments = (state: FrontendReduxStateI) =>
   state.availableFisaDocumentsProjects.documents;
 
+/**
+ * returns the csvExtraction Error
+ * @param state
+ */
 export const getExtractCSVErrorMessage = (state: FrontendReduxStateI) =>
   state.fisaProject.csvExtractionError;
+
+/**
+ * returns the connected Frost-Server url
+ * @param state
+ */
+export const getConnectedFrostServer = (state: FrontendReduxStateI) =>
+  state.fisaProject.connectedFrostServer;

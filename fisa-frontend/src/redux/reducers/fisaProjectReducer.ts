@@ -6,13 +6,14 @@ import {
   ActionI,
   ProjectStateI,
   FisaObjectI,
-  BackendFisaProjectI,
   ErrorMessageI,
   AttributesDefinitionI,
+  FisaProjectI,
 } from '../interfaces';
 import {
   CONSTANT_PARTS,
   FISA_OBJECTS,
+  CONNECTED_FROST_URL,
   LATEST_ID,
   CSV_COL_SEPARATOR,
   CSV_ROW_SEPARATOR,
@@ -23,6 +24,7 @@ import { PROJECT_SAVED } from '../actionTypes';
 const MAX_HISTORY_LENGTH = 20;
 
 const defaultState: () => ProjectStateI = () => ({
+  connectedFrostServer: undefined,
   csvExtractionError: undefined,
   activeObject: 0,
   latestId: 0,
@@ -66,6 +68,10 @@ export default function fisaProjectReducer(
   ) {
     localStorage.setItem(FISA_OBJECTS, JSON.stringify(newState.objects));
     localStorage.setItem(LATEST_ID, JSON.stringify(newState.latestId));
+    localStorage.setItem(
+      CONNECTED_FROST_URL,
+      JSON.stringify(newState.connectedFrostServer)
+    );
   }
   return newState;
 }
@@ -318,6 +324,13 @@ function realFisaProjectReducer(
      */
     case actionTypes.RESET_STATE:
       return defaultState();
+
+    case actionTypes.SET_FROST_URL:
+      return {
+        ...state,
+        connectedFrostServer: action.payload.frostUrl,
+      };
+
     /**
      * if nothing matches return the old state (without updated history)
      */
@@ -331,7 +344,7 @@ function realFisaProjectReducer(
  *
  * @param fisaProject A fisaProject as BackendFisaDoc
  */
-function loadSavedProject(fisaProject: BackendFisaProjectI): ProjectStateI {
+function loadSavedProject(fisaProject: FisaProjectI): ProjectStateI {
   const baseDefinition = getBaseObjectDefinition(
     fisaProject.name,
     fisaProject.fisaDocument.objectDefinitions
@@ -347,6 +360,7 @@ function loadSavedProject(fisaProject: BackendFisaProjectI): ProjectStateI {
 
   return {
     ...defaultState(),
+    connectedFrostServer: fisaProject.connectedFrostServer,
     latestId: getHighestId(objects),
     constantParts: {
       objectDefinitions: [
@@ -579,12 +593,17 @@ function extractProjectFromLocaleStorage(): ProjectStateI {
   const constantParts = localStorage.getItem(CONSTANT_PARTS);
   const objects = localStorage.getItem(FISA_OBJECTS);
   const latestId = localStorage.getItem(LATEST_ID);
+  const connectedFrostServer = localStorage.getItem(CONNECTED_FROST_URL);
 
   if (!constantParts || !objects || !latestId) {
     return defaultState();
   }
   return {
     ...defaultState(),
+    connectedFrostServer:
+      connectedFrostServer === null
+        ? undefined
+        : JSON.parse(connectedFrostServer),
     objects: JSON.parse(objects),
     constantParts: JSON.parse(constantParts),
     latestId: JSON.parse(latestId),

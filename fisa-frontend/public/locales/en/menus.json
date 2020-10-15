@@ -28,5 +28,11 @@
   "cancel": "Cancel",
   "save": "Save",
   "yes": "Yes",
-  "no": "No"
+  "no": "No",
+  "update": "Update",
+  "back": "Back",
+  "uploadToDifferentURLTooltip": "Upload this Project to a different FROST-Server",
+  "uploadToDifferentURLLabel": "Upload to different Server",
+  "areYouShureToUploadTitle": "Warning",
+  "areYouShureToUploadContent": "If you upload this project to a different FROST-Server the Entity-connections with the old Server will be lost!"
 }

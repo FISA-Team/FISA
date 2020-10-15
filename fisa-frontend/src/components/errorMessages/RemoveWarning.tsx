@@ -1,5 +1,12 @@
 import React from 'react';
-import { DialogTitle, Dialog, DialogActions, Button } from '@material-ui/core';
+import {
+  DialogTitle,
+  Dialog,
+  DialogActions,
+  Button,
+  DialogContent,
+} from '@material-ui/core';
+import { useTranslation } from 'react-i18next';
 
 export default function RemoveWarning({
   open,
@@ -15,6 +22,7 @@ export default function RemoveWarning({
   // eslint-disable-next-line react/require-default-props
   children?: React.ReactNode;
 }) {
+  const { t } = useTranslation('general');
   return (
     <Dialog
       open={open}
@@ -22,16 +30,17 @@ export default function RemoveWarning({
       aria-describedby="alert-dialog-description"
     >
       <DialogTitle id="alert-dialog-title">
-        Do you really want to delete "{nameToRemove}" ?
+        {t('removeWarningStart')} "{nameToRemove}" {t('removeWarningEnd')}
       </DialogTitle>
 
+      <DialogContent>{children}</DialogContent>
+
       <DialogActions>
-        {children}
         <Button onClick={onNo} color="primary">
-          No
+          {t('no')}
         </Button>
         <Button onClick={onYes} color="primary" autoFocus>
-          Yes
+          {t('yes')}
         </Button>
       </DialogActions>
     </Dialog>

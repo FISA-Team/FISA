@@ -1,6 +1,7 @@
 export const CONSTANT_PARTS = 'constantParts';
 export const FISA_OBJECTS = 'fisaObjects';
 export const LATEST_ID = 'latestId';
+export const CONNECTED_FROST_URL = 'connectedFrostServerURL';
 
 export const ERROR_MAPS_TO = 'ErrorMapsTo';
 export const OVERRIDE_ERROR_CODE = 400;

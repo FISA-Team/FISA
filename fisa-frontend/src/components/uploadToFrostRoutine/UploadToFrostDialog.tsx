@@ -12,6 +12,7 @@ import {
   Checkbox,
   CircularProgress,
   Tooltip,
+  Typography,
 } from '@material-ui/core';
 import { connect } from 'react-redux';
 import { useTranslation } from 'react-i18next';
@@ -29,9 +30,11 @@ import {
   getServerCommunicationError,
   getServerCommunicationActive,
   getFisaProjectFromState,
+  getConnectedFrostServer,
 } from '../../redux/selectors';
 import ErrorDialogContent from '../errorMessages/ErrorDialogContent';
 import Success from './UploadSuccessMessage';
+import { Warning } from '@material-ui/icons';
 
 const uploadDialogStyle = makeStyles((theme) => ({
   uploadDialRoot: {
@@ -43,17 +46,22 @@ const uploadDialogStyle = makeStyles((theme) => ({
 export interface UploadToFrostDialogProps {
   open: boolean;
   handleClose: () => void;
-  getFisaProject: (withExampleData: boolean) => FisaProjectI;
+  getFisaProject: (
+    withExampleData: boolean,
+    ignoreFrostIds: boolean
+  ) => FisaProjectI;
   communicationActive: boolean;
   communicationPending: boolean;
   communicationError: ErrorMessageI | undefined;
   clearErrorMessage: () => void;
   uploadProjectToFrostServer: (project: FisaProjectI, frostUrl: string) => void;
+  connectedFrostServerURL: string | undefined;
 }
 
 enum UploadStates {
   ENTER_PROPERTIES,
   PENDING,
+  UPLOAD_WARNING,
 }
 
 function UploadToFrostDialog(props: UploadToFrostDialogProps) {
@@ -61,9 +69,12 @@ function UploadToFrostDialog(props: UploadToFrostDialogProps) {
   const [currentUploadState, setCurrentUploadState] = React.useState(
     UploadStates.ENTER_PROPERTIES
   );
+  const [urlTextDisabled, setUrlTextDisabled] = React.useState<boolean>(true);
+  const [generateExampleData, setGenerateExampleData] = React.useState(false);
 
   const [url, setUrl] = React.useState(
-    'http://frost-server:8080/FROST-Server/v1.1'
+    props.connectedFrostServerURL ||
+      'http://frost-server:8080/FROST-Server/v1.1'
   );
 
   const reset = () => {
@@ -76,12 +87,22 @@ function UploadToFrostDialog(props: UploadToFrostDialogProps) {
     setTimeout(() => setCurrentUploadState(UploadStates.ENTER_PROPERTIES), 250);
   };
 
-  const upload = (generateExampleData: boolean) => {
+  const upload = (generateExampleData: boolean, ignoreFrostIds: boolean) => {
+    if (
+      ignoreFrostIds &&
+      props.connectedFrostServerURL &&
+      currentUploadState !== UploadStates.UPLOAD_WARNING
+    ) {
+      setCurrentUploadState(UploadStates.UPLOAD_WARNING);
+      setGenerateExampleData(generateExampleData);
+      setUrlTextDisabled(true);
+      return;
+    }
     setCurrentUploadState(UploadStates.PENDING);
 
     // Upload to frost
     props.uploadProjectToFrostServer(
-      props.getFisaProject(generateExampleData),
+      props.getFisaProject(generateExampleData, ignoreFrostIds),
       url
     );
   };
@@ -90,7 +111,25 @@ function UploadToFrostDialog(props: UploadToFrostDialogProps) {
   switch (currentUploadState) {
     case UploadStates.ENTER_PROPERTIES:
       content = (
-        <UploadDialog url={url} setUrl={setUrl} {...props} upload={upload} />
+        <UploadDialog
+          urlDisabled={urlTextDisabled}
+          setUrlDisabled={setUrlTextDisabled}
+          url={url}
+          setUrl={setUrl}
+          {...props}
+          upload={upload}
+        />
+      );
+      break;
+
+    case UploadStates.UPLOAD_WARNING:
+      content = (
+        <UploadWarning
+          cancel={() => {
+            reset();
+          }}
+          upload={() => upload(generateExampleData, true)}
+        />
       );
       break;
     case UploadStates.PENDING:
@@ -128,9 +167,11 @@ function UploadToFrostDialog(props: UploadToFrostDialogProps) {
 }
 
 interface UploadDialogProps extends UploadToFrostDialogProps {
-  upload: (generateExampleData: boolean) => void;
+  upload: (generateExampleData: boolean, ignoreFrostIds: boolean) => void;
   url: string;
   setUrl: (url: string) => void;
+  urlDisabled: boolean;
+  setUrlDisabled: (disabled: boolean) => void;
 }
 
 function UploadDialog(props: UploadDialogProps) {
@@ -142,14 +183,20 @@ function UploadDialog(props: UploadDialogProps) {
   };
 
   const handleUpload = () => {
-    props.upload(withExampleData);
+    props.upload(
+      withExampleData,
+      !(props.urlDisabled && !!props.connectedFrostServerURL)
+    );
   };
   return (
     <>
       <DialogTitle id="form-dialog-title">{t('toFrostTooltip')}</DialogTitle>
       <DialogContent>
-        <DialogContentText>{t('enterFrostUrl')}</DialogContentText>
+        {(!props.urlDisabled || !props.connectedFrostServerURL) && (
+          <DialogContentText>{t('enterFrostUrl')}</DialogContentText>
+        )}
         <TextField
+          disabled={props.urlDisabled && !!props.connectedFrostServerURL}
           autoFocus
           value={props.url}
           onChange={(e) => props.setUrl(e.target.value)}
@@ -159,25 +206,46 @@ function UploadDialog(props: UploadDialogProps) {
           type="url"
           fullWidth
         />
-        <Tooltip title={t('createExampleDataHelp') as string}>
-          <FormControlLabel
-            style={{ marginRight: 'auto' }}
-            control={
-              <Checkbox
-                checked={withExampleData}
-                onChange={() => setWithExampleData((oldData) => !oldData)}
+        {(!props.urlDisabled || !props.connectedFrostServerURL) && (
+          <Tooltip title={t('createExampleDataHelp') as string}>
+            <FormControlLabel
+              style={{ marginRight: 'auto' }}
+              control={
+                <Checkbox
+                  checked={withExampleData}
+                  onChange={() => setWithExampleData((oldData) => !oldData)}
+                />
+              }
+              label={t('createExampleData')}
+            />
+          </Tooltip>
+        )}
+        {props.connectedFrostServerURL && (
+          <>
+            <br />
+            <Tooltip title={t('uploadToDifferentURLTooltip') as string}>
+              <FormControlLabel
+                style={{ marginRight: 'auto' }}
+                control={
+                  <Checkbox
+                    checked={!props.urlDisabled}
+                    onChange={() => props.setUrlDisabled(!props.urlDisabled)}
+                  />
+                }
+                label={t('uploadToDifferentURLLabel')}
               />
-            }
-            label={t('createExampleData')}
-          />
-        </Tooltip>
+            </Tooltip>
+          </>
+        )}
       </DialogContent>
       <DialogActions>
         <Button type="reset" onClick={handleClose} color="primary">
           {t('cancel')}
         </Button>
         <Button type="submit" onClick={handleUpload} color="primary">
-          {t('upload')}
+          {props.urlDisabled && !!props.connectedFrostServerURL
+            ? t('update')
+            : t('upload')}
         </Button>
       </DialogActions>
     </>
@@ -190,6 +258,31 @@ function Pending() {
       <DialogContent style={{ textAlign: 'center' }}>
         <CircularProgress />
       </DialogContent>
+    </>
+  );
+}
+
+interface UploadWarningProps {
+  upload: () => void;
+  cancel: () => void;
+}
+
+function UploadWarning(props: UploadWarningProps) {
+  const { t } = useTranslation('menus');
+  return (
+    <>
+      <DialogTitle id="form-dialog-title">
+        {t('areYouShureToUploadTitle')}
+      </DialogTitle>
+      <DialogContent>{t('areYouShureToUploadContent')}</DialogContent>
+      <DialogActions>
+        <Button type="reset" onClick={() => props.cancel()} color="primary">
+          {t('back')}
+        </Button>
+        <Button type="submit" onClick={() => props.upload()} color="primary">
+          {t('upload')}
+        </Button>
+      </DialogActions>
     </>
   );
 }
@@ -214,11 +307,12 @@ function Error(props: ErrorProps) {
 }
 
 const stateToProps = (state: FrontendReduxStateI) => ({
-  getFisaProject: (withExampleData: boolean) =>
-    getFisaProjectFromState(state, withExampleData),
+  getFisaProject: (withExampleData: boolean, ignoreFrostIds: boolean) =>
+    getFisaProjectFromState(state, withExampleData, ignoreFrostIds),
   communicationActive: getServerCommunicationActive(state),
   communicationPending: getServerCommunicationPending(state),
   communicationError: getServerCommunicationError(state),
+  connectedFrostServerURL: getConnectedFrostServer(state),
 });
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
