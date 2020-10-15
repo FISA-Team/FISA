@@ -14,14 +14,14 @@ public class SensorThingsApiBundleTest {
 
     private SensorThingsApiBundle actual;
 
-    private List<Datastream> expectedDatastreams;
-    private List<Thing> expectedThings;
-    private List<Sensor> expectedSensors;
-    private List<Location> expectedLocations;
-    private List<HistoricalLocation> expectedHistoricalLocations;
-    private List<ObservedProperty> expectedObservedProperties;
-    private List<Observation> expectedObservations;
-    private List<FeatureOfInterest> expectedFeatureOfInterests;
+    private List<EntityWrapper<Datastream>> expectedDatastreams;
+    private List<EntityWrapper<Thing>> expectedThings;
+    private List<EntityWrapper<Sensor>> expectedSensors;
+    private List<EntityWrapper<Location>> expectedLocations;
+    private List<EntityWrapper<HistoricalLocation>> expectedHistoricalLocations;
+    private List<EntityWrapper<ObservedProperty>> expectedObservedProperties;
+    private List<EntityWrapper<Observation>> expectedObservations;
+    private List<EntityWrapper<FeatureOfInterest>> expectedFeatureOfInterests;
 
 
     @BeforeEach
@@ -42,8 +42,8 @@ public class SensorThingsApiBundleTest {
     void addDatastreamTest() {
         Datastream testStream = new Datastream();
 
-        this.expectedDatastreams.add(testStream);
-        this.actual.addDatastream(testStream);
+        this.expectedDatastreams.add(new EntityWrapper<>(testStream, null));
+        this.actual.addDatastream(testStream, null);
 
         assertIterableEquals(expectedDatastreams, this.actual.getDatastreams());
     }
@@ -52,8 +52,8 @@ public class SensorThingsApiBundleTest {
     void addThingTest() {
         Thing testThing = new Thing();
 
-        this.expectedThings.add(testThing);
-        this.actual.addThing(testThing);
+        this.expectedThings.add(new EntityWrapper<>(testThing, null));
+        this.actual.addThing(testThing, null);
 
         assertIterableEquals(expectedThings, this.actual.getThings());
     }
@@ -62,8 +62,8 @@ public class SensorThingsApiBundleTest {
     void addSensorTest() {
         Sensor testSensor = new Sensor();
 
-        this.expectedSensors.add(testSensor);
-        this.actual.addSensor(testSensor);
+        this.expectedSensors.add(new EntityWrapper<>(testSensor, null));
+        this.actual.addSensor(testSensor, null);
 
         assertIterableEquals(expectedSensors, this.actual.getSensors());
     }
@@ -72,8 +72,8 @@ public class SensorThingsApiBundleTest {
     void addLocationTest() {
         Location testLocation = new Location();
 
-        this.expectedLocations.add(testLocation);
-        this.actual.addLocation(testLocation);
+        this.expectedLocations.add(new EntityWrapper<>(testLocation, null));
+        this.actual.addLocation(testLocation, null);
 
         assertIterableEquals(expectedLocations, this.actual.getLocations());
     }
@@ -82,8 +82,8 @@ public class SensorThingsApiBundleTest {
     void addHistoricalLocationTest() {
         HistoricalLocation testHistoricalLocation = new HistoricalLocation();
 
-        this.expectedHistoricalLocations.add(testHistoricalLocation);
-        this.actual.addHistoricalLocation(testHistoricalLocation);
+        this.expectedHistoricalLocations.add(new EntityWrapper<>(testHistoricalLocation, null));
+        this.actual.addHistoricalLocation(testHistoricalLocation, null);
 
         assertIterableEquals(expectedHistoricalLocations, this.actual.getHistoricalLocations());
     }
@@ -92,8 +92,8 @@ public class SensorThingsApiBundleTest {
     void addObservedPropertyTest() {
         ObservedProperty testObservedProperty = new ObservedProperty();
 
-        this.expectedObservedProperties.add(testObservedProperty);
-        this.actual.addObservedProperty(testObservedProperty);
+        this.expectedObservedProperties.add(new EntityWrapper<>(testObservedProperty, null));
+        this.actual.addObservedProperty(testObservedProperty, null);
 
         assertIterableEquals(expectedObservedProperties, this.actual.getObservedProperties());
     }
@@ -102,8 +102,8 @@ public class SensorThingsApiBundleTest {
     void addObservationTest() {
         Observation testObservation = new Observation();
 
-        this.expectedObservations.add(testObservation);
-        this.actual.addObservation(testObservation);
+        this.expectedObservations.add(new EntityWrapper<>(testObservation, null));
+        this.actual.addObservation(testObservation, null);
 
         assertIterableEquals(expectedObservations, this.actual.getObservations());
     }
@@ -112,11 +112,10 @@ public class SensorThingsApiBundleTest {
     void addFeatureOfInterestTest() {
         FeatureOfInterest testFeatureOfInterest = new FeatureOfInterest();
 
-        this.expectedFeatureOfInterests.add(testFeatureOfInterest);
-        this.actual.addFeatureOfInterest(testFeatureOfInterest);
+        this.expectedFeatureOfInterests.add(new EntityWrapper<>(testFeatureOfInterest, null));
+        this.actual.addFeatureOfInterest(testFeatureOfInterest, null);
 
         assertIterableEquals(expectedFeatureOfInterests, this.actual.getFeatureOfInterests());
     }
-
 
 }

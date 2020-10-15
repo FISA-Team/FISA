@@ -1,5 +1,6 @@
 package de.fraunhofer.iosb.ilt.fisabackend.service.converter;
 
+import de.fraunhofer.iosb.ilt.fisabackend.model.EntityWrapper;
 import de.fraunhofer.iosb.ilt.fisabackend.model.SensorThingsApiBundle;
 import de.fraunhofer.iosb.ilt.fisabackend.model.definitions.ExampleData;
 import de.fraunhofer.iosb.ilt.fisabackend.model.definitions.FisaDocument;
@@ -13,15 +14,7 @@ import de.fraunhofer.iosb.ilt.fisabackend.service.mapper.Mapper;
 import de.fraunhofer.iosb.ilt.fisabackend.service.mapper.MappingResolver;
 import de.fraunhofer.iosb.ilt.fisabackend.service.tree.FisaTree;
 import de.fraunhofer.iosb.ilt.fisabackend.util.StaUtil;
-import de.fraunhofer.iosb.ilt.sta.model.Datastream;
-import de.fraunhofer.iosb.ilt.sta.model.Entity;
-import de.fraunhofer.iosb.ilt.sta.model.FeatureOfInterest;
-import de.fraunhofer.iosb.ilt.sta.model.HistoricalLocation;
-import de.fraunhofer.iosb.ilt.sta.model.Location;
-import de.fraunhofer.iosb.ilt.sta.model.Observation;
-import de.fraunhofer.iosb.ilt.sta.model.ObservedProperty;
-import de.fraunhofer.iosb.ilt.sta.model.Sensor;
-import de.fraunhofer.iosb.ilt.sta.model.Thing;
+import de.fraunhofer.iosb.ilt.sta.model.*;
 import org.geojson.GeoJsonObject;
 
 import java.util.ArrayList;
@@ -148,7 +141,9 @@ public class FisaProjectToBundleConverter {
                         GeoJsonObject observedArea = datastream.getObservedArea();
                         List<Observation> observations = generator.generateObservations(exampleData, observedArea);
                         observations.forEach(observation -> observation.setDatastream(datastream));
-                        bundle.getObservations().addAll(observations);
+                        for(Observation o: observations){
+                            bundle.addObservation(o, null);
+                        }
                     }
                 });
             }
@@ -156,19 +151,21 @@ public class FisaProjectToBundleConverter {
         // create bundle
         for (FisaTree tree : fisaTrees) {
             // collect all entities of tree
-            List<Entity<?>> collected = new ArrayList<>();
+            List<EntityWrapper<Entity<?>>> collected = new ArrayList<>();
             tree.accept(node -> {
                 Entity<?> entity = node.getContext(Entity.class);
+
                 if (entity != null) {
-                    collected.add(entity);
+                    collected.add(new EntityWrapper<>(entity, node.getValue().getId()));
                 }
             });
+
             // create STA relations between collected entities
             for (int outer = 0; outer < collected.size(); outer++) {
-                for (Entity<?> inner : collected) {
-                    Entity<?> from = collected.get(outer);
-                    if (StaUtil.hasRelation(from.getType(), inner.getType())) {
-                        StaUtil.setInRelation(from, inner);
+                for (EntityWrapper<Entity<?>> inner : collected) {
+                    EntityWrapper<Entity<?>> from = collected.get(outer);
+                    if (StaUtil.hasRelation(from.getEntity().getType(), inner.getEntity().getType())) {
+                        StaUtil.setInRelation(from.getEntity(), inner.getEntity());
                     }
                 }
             }
@@ -178,35 +175,35 @@ public class FisaProjectToBundleConverter {
         return bundle;
     }
 
-    private Consumer<Entity<?>> addToBundle(SensorThingsApiBundle bundle) {
-        return entity -> {
-            switch (entity.getType()) {
+    private Consumer<EntityWrapper<Entity<?>>> addToBundle(SensorThingsApiBundle bundle) {
+        return entityWrapper -> {
+            switch (entityWrapper.getEntity().getType()) {
                 case DATASTREAM:
-                    bundle.addDatastream((Datastream) entity);
+                    bundle.addDatastream((Datastream) entityWrapper.getEntity(), entityWrapper.getId());
                     break;
                 case FEATURE_OF_INTEREST:
-                    bundle.addFeatureOfInterest((FeatureOfInterest) entity);
+                    bundle.addFeatureOfInterest((FeatureOfInterest) entityWrapper.getEntity(), entityWrapper.getId());
                     break;
                 case HISTORICAL_LOCATION:
-                    bundle.addHistoricalLocation((HistoricalLocation) entity);
+                    bundle.addHistoricalLocation((HistoricalLocation) entityWrapper.getEntity(), entityWrapper.getId());
                     break;
                 case LOCATION:
-                    bundle.addLocation((Location) entity);
+                    bundle.addLocation((Location) entityWrapper.getEntity(), entityWrapper.getId());
                     break;
                 case OBSERVATION:
-                    bundle.addObservation((Observation) entity);
+                    bundle.addObservation((Observation) entityWrapper.getEntity(), entityWrapper.getId());
                     break;
                 case OBSERVED_PROPERTY:
-                    bundle.addObservedProperty((ObservedProperty) entity);
+                    bundle.addObservedProperty((ObservedProperty) entityWrapper.getEntity(), entityWrapper.getId());
                     break;
                 case SENSOR:
-                    bundle.addSensor((Sensor) entity);
+                    bundle.addSensor((Sensor) entityWrapper.getEntity(), entityWrapper.getId());
                     break;
                 case THING:
-                    bundle.addThing((Thing) entity);
+                    bundle.addThing((Thing) entityWrapper.getEntity(), entityWrapper.getId());
                     break;
                 default:
-                    throw new UnsupportedOperationException(entity.getType() + " is not supported");
+                    throw new UnsupportedOperationException(entityWrapper.getEntity().getType() + " is not supported");
             }
         };
     }

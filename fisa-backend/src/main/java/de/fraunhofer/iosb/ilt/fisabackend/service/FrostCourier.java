@@ -1,5 +1,6 @@
 package de.fraunhofer.iosb.ilt.fisabackend.service;
 
+import de.fraunhofer.iosb.ilt.fisabackend.model.EntityWrapper;
 import de.fraunhofer.iosb.ilt.fisabackend.model.SensorThingsApiBundle;
 import de.fraunhofer.iosb.ilt.fisabackend.model.responseData.DatastreamInfo;
 import de.fraunhofer.iosb.ilt.fisabackend.service.exception.EntityTransferException;
@@ -46,67 +47,67 @@ public class FrostCourier {
 
         // 1:1 relations can be removed after upload
         // no entity should create multiple related entities of the same type
-        for (Datastream dataStream : bundle.getDatastreams()) {
+        for (EntityWrapper<Datastream> dataStream : bundle.getDatastreams()) {
             safeCreate(service, dataStream);
             Datastream loaded = service.datastreams().find(dataStream.getId(), datastreamExpansion());
             // remove entities that are already added
-            if (dataStream.getThing() != null) {
-                dataStream.getThing().setId(loaded.getThing().getId());
+            if (dataStream.getEntity().getThing() != null) {
+                dataStream.getEntity().getThing().setId(loaded.getThing().getId());
             }
-            if (dataStream.getSensor() != null) {
-                dataStream.getSensor().setId(loaded.getSensor().getId());
+            if (dataStream.getEntity().getSensor() != null) {
+                dataStream.getEntity().getSensor().setId(loaded.getSensor().getId());
             }
-            if (dataStream.getObservedProperty() != null) {
-                dataStream.getObservedProperty().setId(loaded.getObservedProperty().getId());
+            if (dataStream.getEntity().getObservedProperty() != null) {
+                dataStream.getEntity().getObservedProperty().setId(loaded.getObservedProperty().getId());
             }
         }
 
-        for (Thing thing : bundle.getThings()) {
+        for (EntityWrapper<Thing> thing : bundle.getThings()) {
             safeCreate(service, thing);
             // bundle.getMultiDatastream().removeAll(thing.getMultiDatastreams()); not implemented
         }
 
-        for (Sensor sensor : bundle.getSensors()) {
+        for (EntityWrapper<Sensor> sensor : bundle.getSensors()) {
             safeCreate(service, sensor);
             // bundle.getMultiDatastreams().removeAll(sensor.getMultiDatastreams()); not implemented
         }
 
-        for (Location location : bundle.getLocations()) {
+        for (EntityWrapper<Location> location : bundle.getLocations()) {
             // workaround for n:m, create things if they don't exist
             // to prevent duplication (one thing may be related to multiple locations)
-            for (Thing thing : location.getThings()) {
+            for (Thing thing : location.getEntity().getThings()) {
                 if (thing.getId() == null) {
-                    safeCreate(service, thing);
+                    safeCreate(service, new EntityWrapper<>(thing));
                 }
             }
             safeCreate(service, location);
         }
 
-        for (HistoricalLocation historicalLocation : bundle.getHistoricalLocations()) {
+        for (EntityWrapper<HistoricalLocation> historicalLocation : bundle.getHistoricalLocations()) {
             safeCreate(service, historicalLocation);
         }
 
-        for (ObservedProperty observedProperty : bundle.getObservedProperties()) {
+        for (EntityWrapper<ObservedProperty> observedProperty : bundle.getObservedProperties()) {
             safeCreate(service, observedProperty);
             // bundle.getMultiDatastreams().removeAll(observedProperty.getMultiDatastreams()); not implemented
         }
 
-        for (Observation observation : bundle.getObservations()) {
+        for (EntityWrapper<Observation> observation : bundle.getObservations()) {
             safeCreate(service, observation);
             // bundle.getDatastreams().remove(observation.getDatastream());
             // bundle.getMultiDatastreams().remove(observation.getMultiDatastream()); not implemented
-            bundle.getFeatureOfInterests().remove(observation.getFeatureOfInterest());
+            // bundle.getFeatureOfInterests().remove(observation.getEntity().getFeatureOfInterest());
         }
 
-        for (FeatureOfInterest featureOfInterest : bundle.getFeatureOfInterests()) {
+        for (EntityWrapper<FeatureOfInterest> featureOfInterest : bundle.getFeatureOfInterests()) {
             safeCreate(service, featureOfInterest);
         }
         LOGGER.info("Uploaded project successfully");
 
         // create upload observedProperty info list.
         List<DatastreamInfo> infoList = new ArrayList<>();
-        for (Datastream datastream: bundle.getDatastreams()) {
-            infoList.add(new DatastreamInfo(datastream));
+        for (EntityWrapper<Datastream> datastream: bundle.getDatastreams()) {
+            infoList.add(new DatastreamInfo(datastream.getEntity()));
         }
         return infoList;
     }
@@ -119,13 +120,22 @@ public class FrostCourier {
      * @param <T>     the type of the entity.
      * @throws EntityTransferException if the entity couldn't be transferred correctly.
      */
-    private static <T extends Entity<T>> void safeCreate(SensorThingsService service, T entity)
+    private static <T extends Entity<T>> void safeCreate(SensorThingsService service, EntityWrapper<T> entity)
             throws ServiceFailureException {
-        if (entity.getId() != null) return; // ignore already created entities
+        if (entity.getEntity().getId() != null) return; // ignore already created entities
+        if(entity.getId() != null){
+            entity.getEntity().setId(entity.getId());
+            try {
+                service.update(entity.getEntity());
+            } catch (StatusCodeException e) {
+                throw new EntityTransferException(entity.getEntity(), e);
+            }
+            return;
+        }
         try {
-            service.create(entity);
+            service.create(entity.getEntity());
         } catch (StatusCodeException e) {
-            throw new EntityTransferException(entity, e);
+            throw new EntityTransferException(entity.getEntity(), e);
         }
     }
 

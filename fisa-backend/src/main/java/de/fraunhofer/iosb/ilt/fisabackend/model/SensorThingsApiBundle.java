@@ -3,14 +3,7 @@ package de.fraunhofer.iosb.ilt.fisabackend.model;
 import java.util.List;
 import java.util.ArrayList;
 
-import de.fraunhofer.iosb.ilt.sta.model.Datastream;
-import de.fraunhofer.iosb.ilt.sta.model.FeatureOfInterest;
-import de.fraunhofer.iosb.ilt.sta.model.HistoricalLocation;
-import de.fraunhofer.iosb.ilt.sta.model.Location;
-import de.fraunhofer.iosb.ilt.sta.model.Observation;
-import de.fraunhofer.iosb.ilt.sta.model.ObservedProperty;
-import de.fraunhofer.iosb.ilt.sta.model.Sensor;
-import de.fraunhofer.iosb.ilt.sta.model.Thing;
+import de.fraunhofer.iosb.ilt.sta.model.*;
 
 /**
  * The SensorThingsApiBundle represents a set of entities of the SensorThings-API.
@@ -18,14 +11,14 @@ import de.fraunhofer.iosb.ilt.sta.model.Thing;
  */
 public class SensorThingsApiBundle {
 
-    private List<Datastream> datastreams;
-    private List<Thing> things;
-    private List<Sensor> sensors;
-    private List<Location> locations;
-    private List<HistoricalLocation> historicalLocations;
-    private List<ObservedProperty> observedProperties;
-    private List<Observation> observations;
-    private List<FeatureOfInterest> featureOfInterests;
+    private List<EntityWrapper<Datastream>> datastreams;
+    private List<EntityWrapper<Thing>> things;
+    private List<EntityWrapper<Sensor>> sensors;
+    private List<EntityWrapper<Location>> locations;
+    private List<EntityWrapper<HistoricalLocation>> historicalLocations;
+    private List<EntityWrapper<ObservedProperty>> observedProperties;
+    private List<EntityWrapper<Observation>> observations;
+    private List<EntityWrapper<FeatureOfInterest>> featureOfInterests;
 
     /**
      * Instantiates a new SensorThingsApiBundle.
@@ -44,56 +37,56 @@ public class SensorThingsApiBundle {
     /**
      * @return List of Datastream
      */
-    public List<Datastream> getDatastreams() {
+    public List<EntityWrapper<Datastream>> getDatastreams() {
         return this.datastreams;
     }
 
     /**
      * @return List of Thing
      */
-    public List<Thing> getThings() {
+    public List<EntityWrapper<Thing>> getThings() {
         return this.things;
     }
 
     /**
      * @return List of Sensor
      */
-    public List<Sensor> getSensors() {
+    public List<EntityWrapper<Sensor>> getSensors() {
         return this.sensors;
     }
 
     /**
      * @return List of Location
      */
-    public List<Location> getLocations() {
+    public List<EntityWrapper<Location>> getLocations() {
         return this.locations;
     }
 
     /**
      * @return List of HistoricalLocation
      */
-    public List<HistoricalLocation> getHistoricalLocations() {
+    public List<EntityWrapper<HistoricalLocation>> getHistoricalLocations() {
         return this.historicalLocations;
     }
 
     /**
      * @return List of ObservedProperty
      */
-    public List<ObservedProperty> getObservedProperties() {
+    public List<EntityWrapper<ObservedProperty>> getObservedProperties() {
         return this.observedProperties;
     }
 
     /**
      * @return List of Observation
      */
-    public List<Observation> getObservations() {
+    public List<EntityWrapper<Observation>> getObservations() {
         return this.observations;
     }
 
     /**
      * @return List of FeatureOfInterest
      */
-    public List<FeatureOfInterest> getFeatureOfInterests() {
+    public List<EntityWrapper<FeatureOfInterest>> getFeatureOfInterests() {
         return this.featureOfInterests;
     }
 
@@ -102,8 +95,8 @@ public class SensorThingsApiBundle {
      *
      * @param datastream Datastream to be added
      */
-    public void addDatastream(Datastream datastream) {
-        this.datastreams.add(datastream);
+    public void addDatastream(Datastream datastream, Id id) {
+        this.datastreams.add(new EntityWrapper<>(datastream, id));
     }
 
     /**
@@ -111,8 +104,8 @@ public class SensorThingsApiBundle {
      *
      * @param thing Thing to be added
      */
-    public void addThing(Thing thing) {
-        this.things.add(thing);
+    public void addThing(Thing thing, Id id) {
+        this.things.add(new EntityWrapper<>(thing, id));
     }
 
     /**
@@ -120,8 +113,8 @@ public class SensorThingsApiBundle {
      *
      * @param sensor Sensor to be added
      */
-    public void addSensor(Sensor sensor) {
-        this.sensors.add(sensor);
+    public void addSensor(Sensor sensor, Id id) {
+        this.sensors.add(new EntityWrapper<>(sensor));
     }
 
     /**
@@ -129,8 +122,8 @@ public class SensorThingsApiBundle {
      *
      * @param location Location to be added
      */
-    public void addLocation(Location location) {
-        this.locations.add(location);
+    public void addLocation(Location location, Id id) {
+        this.locations.add(new EntityWrapper<>(location));
     }
 
     /**
@@ -138,8 +131,8 @@ public class SensorThingsApiBundle {
      *
      * @param historicalLocation HistoricalLocation to be added
      */
-    public void addHistoricalLocation(HistoricalLocation historicalLocation) {
-        this.historicalLocations.add(historicalLocation);
+    public void addHistoricalLocation(HistoricalLocation historicalLocation, Id id) {
+        this.historicalLocations.add(new EntityWrapper<>(historicalLocation));
     }
 
     /**
@@ -147,8 +140,8 @@ public class SensorThingsApiBundle {
      *
      * @param observedProperty ObservedProperty to be added
      */
-    public void addObservedProperty(ObservedProperty observedProperty) {
-        this.observedProperties.add(observedProperty);
+    public void addObservedProperty(ObservedProperty observedProperty, Id id) {
+        this.observedProperties.add(new EntityWrapper<>(observedProperty));
     }
 
     /**
@@ -156,8 +149,8 @@ public class SensorThingsApiBundle {
      *
      * @param observation Observation to be added
      */
-    public void addObservation(Observation observation) {
-        this.observations.add(observation);
+    public void addObservation(Observation observation, Id id) {
+        this.observations.add(new EntityWrapper<>(observation));
     }
 
     /**
@@ -165,7 +158,7 @@ public class SensorThingsApiBundle {
      *
      * @param featureOfInterest FeatureOfInterest to be added
      */
-    public void addFeatureOfInterest(FeatureOfInterest featureOfInterest) {
-        this.featureOfInterests.add(featureOfInterest);
+    public void addFeatureOfInterest(FeatureOfInterest featureOfInterest, Id id) {
+        this.featureOfInterests.add(new EntityWrapper<>(featureOfInterest));
     }
 }
