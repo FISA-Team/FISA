@@ -7,6 +7,7 @@ import java.util.List;
  */
 public class FisaProject {
 
+    private String connectedFrostServer;
     private FisaDocument fisaDocument;
     private boolean generateExampleData;
     private String name;
@@ -75,6 +76,15 @@ public class FisaProject {
     }
 
     /**
+     * returns the url of the connected FROST-Server
+     *
+     * @return the url of the connected FROST-Server or null
+     */
+    public String getConnectedFrostServer() {
+        return connectedFrostServer;
+    }
+
+    /**
      * Sets the underlying FisaDocument.
      *
      * @param fisaDocument FisaDocument to be placed
@@ -108,5 +118,14 @@ public class FisaProject {
      */
     public void setFisaObjects(List<FisaObject> fisaObjects) {
         this.fisaObjects = fisaObjects;
+    }
+
+    /**
+     * Sets the url of the connected FROST-Server
+     *
+     * @param connectedFrostServer The URL of the connected FROST-Server
+     */
+    public void setConnectedFrostServer(String connectedFrostServer) {
+        this.connectedFrostServer = connectedFrostServer;
     }
 }

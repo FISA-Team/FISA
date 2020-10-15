@@ -88,7 +88,7 @@ class FisaProjectToBundleConverterTest {
         expectedDatastream.setName("MyDatastream");
         assertIterableEquals(List.of(expectedThing), bundle.getThings());
         assertIterableEquals(List.of(expectedDatastream), bundle.getDatastreams());
-        assertEquals(expectedThing, bundle.getDatastreams().get(0).getThing());
+        assertEquals(expectedThing, bundle.getDatastreams().get(0).getEntity().getThing());
     }
 
     FisaProject getSimpleProject() {

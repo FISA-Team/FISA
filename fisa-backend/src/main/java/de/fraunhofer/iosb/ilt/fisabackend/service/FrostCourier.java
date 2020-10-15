@@ -2,7 +2,8 @@ package de.fraunhofer.iosb.ilt.fisabackend.service;
 
 import de.fraunhofer.iosb.ilt.fisabackend.model.EntityWrapper;
 import de.fraunhofer.iosb.ilt.fisabackend.model.SensorThingsApiBundle;
-import de.fraunhofer.iosb.ilt.fisabackend.model.responseData.DatastreamInfo;
+import de.fraunhofer.iosb.ilt.fisabackend.model.UploadToFrostResponse;
+import de.fraunhofer.iosb.ilt.fisabackend.model.definitions.FisaObject;
 import de.fraunhofer.iosb.ilt.fisabackend.service.exception.EntityTransferException;
 import de.fraunhofer.iosb.ilt.sta.ServiceFailureException;
 import de.fraunhofer.iosb.ilt.sta.StatusCodeException;
@@ -40,35 +41,44 @@ public class FrostCourier {
      * @throws ServiceFailureException If an entity cannot be uploaded to the server
      * @return a list of DatastreamIdAndName
      */
-    public List<DatastreamInfo> uploadProject(SensorThingsApiBundle bundle, String url)
+    public UploadToFrostResponse uploadProject(SensorThingsApiBundle bundle, String url)
             throws MalformedURLException, ServiceFailureException {
         SensorThingsService service = sensorThingsServiceInstantiator(url);
         LOGGER.info("Using {} as frost server url", url);
+        UploadToFrostResponse responseData = new UploadToFrostResponse();
 
         // 1:1 relations can be removed after upload
         // no entity should create multiple related entities of the same type
         for (EntityWrapper<Datastream> dataStream : bundle.getDatastreams()) {
             safeCreate(service, dataStream);
-            Datastream loaded = service.datastreams().find(dataStream.getId(), datastreamExpansion());
+            Datastream loaded = service.datastreams().find(dataStream.getEntity().getId(), datastreamExpansion());
             // remove entities that are already added
             if (dataStream.getEntity().getThing() != null) {
                 dataStream.getEntity().getThing().setId(loaded.getThing().getId());
             }
             if (dataStream.getEntity().getSensor() != null) {
                 dataStream.getEntity().getSensor().setId(loaded.getSensor().getId());
+
             }
             if (dataStream.getEntity().getObservedProperty() != null) {
                 dataStream.getEntity().getObservedProperty().setId(loaded.getObservedProperty().getId());
             }
+
+            dataStream.setFrostId();
+            responseData.addDatastream(dataStream.getDefiningFisaObject());
         }
 
         for (EntityWrapper<Thing> thing : bundle.getThings()) {
             safeCreate(service, thing);
+            thing.setFrostId();
+            responseData.addObject(thing.getDefiningFisaObject());
             // bundle.getMultiDatastream().removeAll(thing.getMultiDatastreams()); not implemented
         }
 
         for (EntityWrapper<Sensor> sensor : bundle.getSensors()) {
             safeCreate(service, sensor);
+            sensor.setFrostId();
+            responseData.addObject(sensor.getDefiningFisaObject());
             // bundle.getMultiDatastreams().removeAll(sensor.getMultiDatastreams()); not implemented
         }
 
@@ -81,19 +91,27 @@ public class FrostCourier {
                 }
             }
             safeCreate(service, location);
+            location.setFrostId();
+            responseData.addObject(location.getDefiningFisaObject());
         }
 
         for (EntityWrapper<HistoricalLocation> historicalLocation : bundle.getHistoricalLocations()) {
             safeCreate(service, historicalLocation);
+            historicalLocation.setFrostId();
+            responseData.addObject(historicalLocation.getDefiningFisaObject());
         }
 
         for (EntityWrapper<ObservedProperty> observedProperty : bundle.getObservedProperties()) {
             safeCreate(service, observedProperty);
+            observedProperty.setFrostId();
+            responseData.addObject(observedProperty.getDefiningFisaObject());
             // bundle.getMultiDatastreams().removeAll(observedProperty.getMultiDatastreams()); not implemented
         }
 
         for (EntityWrapper<Observation> observation : bundle.getObservations()) {
             safeCreate(service, observation);
+            observation.setFrostId();
+            responseData.addObject(observation.getDefiningFisaObject());
             // bundle.getDatastreams().remove(observation.getDatastream());
             // bundle.getMultiDatastreams().remove(observation.getMultiDatastream()); not implemented
             // bundle.getFeatureOfInterests().remove(observation.getEntity().getFeatureOfInterest());
@@ -101,15 +119,14 @@ public class FrostCourier {
 
         for (EntityWrapper<FeatureOfInterest> featureOfInterest : bundle.getFeatureOfInterests()) {
             safeCreate(service, featureOfInterest);
+            featureOfInterest.setFrostId();
+            responseData.addObject(featureOfInterest.getDefiningFisaObject());
         }
         LOGGER.info("Uploaded project successfully");
 
         // create upload observedProperty info list.
-        List<DatastreamInfo> infoList = new ArrayList<>();
-        for (EntityWrapper<Datastream> datastream: bundle.getDatastreams()) {
-            infoList.add(new DatastreamInfo(datastream.getEntity()));
-        }
-        return infoList;
+
+        return responseData;
     }
 
     /**
@@ -122,9 +139,7 @@ public class FrostCourier {
      */
     private static <T extends Entity<T>> void safeCreate(SensorThingsService service, EntityWrapper<T> entity)
             throws ServiceFailureException {
-        if (entity.getEntity().getId() != null) return; // ignore already created entities
-        if(entity.getId() != null){
-            entity.getEntity().setId(entity.getId());
+        if (entity.getEntity().getId() != null) {
             try {
                 service.update(entity.getEntity());
             } catch (StatusCodeException e) {

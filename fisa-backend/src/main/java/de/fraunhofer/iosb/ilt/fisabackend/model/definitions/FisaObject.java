@@ -83,11 +83,8 @@ public class FisaObject {
      *
      * @return The Frost-Id
      */
-    public String getFrostId() {
-        if(frostId != null){
-            return frostId.getJson();
-        }
-        return null;
+    public Id getFrostId() {
+        return frostId;
     }
 
     /**

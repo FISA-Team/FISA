@@ -156,7 +156,7 @@ public class FisaProjectToBundleConverter {
                 Entity<?> entity = node.getContext(Entity.class);
 
                 if (entity != null) {
-                    collected.add(new EntityWrapper<>(entity, node.getValue().getId()));
+                    collected.add(new EntityWrapper<>(entity, node.getValue()));
                 }
             });
 
@@ -179,28 +179,28 @@ public class FisaProjectToBundleConverter {
         return entityWrapper -> {
             switch (entityWrapper.getEntity().getType()) {
                 case DATASTREAM:
-                    bundle.addDatastream((Datastream) entityWrapper.getEntity(), entityWrapper.getId());
+                    bundle.addDatastream((Datastream) entityWrapper.getEntity(), entityWrapper.getDefiningFisaObject());
                     break;
                 case FEATURE_OF_INTEREST:
-                    bundle.addFeatureOfInterest((FeatureOfInterest) entityWrapper.getEntity(), entityWrapper.getId());
+                    bundle.addFeatureOfInterest((FeatureOfInterest) entityWrapper.getEntity(), entityWrapper.getDefiningFisaObject());
                     break;
                 case HISTORICAL_LOCATION:
-                    bundle.addHistoricalLocation((HistoricalLocation) entityWrapper.getEntity(), entityWrapper.getId());
+                    bundle.addHistoricalLocation((HistoricalLocation) entityWrapper.getEntity(), entityWrapper.getDefiningFisaObject());
                     break;
                 case LOCATION:
-                    bundle.addLocation((Location) entityWrapper.getEntity(), entityWrapper.getId());
+                    bundle.addLocation((Location) entityWrapper.getEntity(), entityWrapper.getDefiningFisaObject());
                     break;
                 case OBSERVATION:
-                    bundle.addObservation((Observation) entityWrapper.getEntity(), entityWrapper.getId());
+                    bundle.addObservation((Observation) entityWrapper.getEntity(), entityWrapper.getDefiningFisaObject());
                     break;
                 case OBSERVED_PROPERTY:
-                    bundle.addObservedProperty((ObservedProperty) entityWrapper.getEntity(), entityWrapper.getId());
+                    bundle.addObservedProperty((ObservedProperty) entityWrapper.getEntity(), entityWrapper.getDefiningFisaObject());
                     break;
                 case SENSOR:
-                    bundle.addSensor((Sensor) entityWrapper.getEntity(), entityWrapper.getId());
+                    bundle.addSensor((Sensor) entityWrapper.getEntity(), entityWrapper.getDefiningFisaObject());
                     break;
                 case THING:
-                    bundle.addThing((Thing) entityWrapper.getEntity(), entityWrapper.getId());
+                    bundle.addThing((Thing) entityWrapper.getEntity(), entityWrapper.getDefiningFisaObject());
                     break;
                 default:
                     throw new UnsupportedOperationException(entityWrapper.getEntity().getType() + " is not supported");

@@ -1,39 +1,38 @@
 package de.fraunhofer.iosb.ilt.fisabackend.model;
 
+import de.fraunhofer.iosb.ilt.fisabackend.model.definitions.FisaObject;
+import de.fraunhofer.iosb.ilt.sta.model.Entity;
 import de.fraunhofer.iosb.ilt.sta.model.Id;
 import de.fraunhofer.iosb.ilt.sta.model.IdLong;
 
-public class EntityWrapper <E> {
+public class EntityWrapper <E extends Entity<?>> {
     private final E entity;
-    private Id id;
+    private FisaObject definingFisaObject;
 
     public EntityWrapper(E entity){
         this.entity = entity;
     }
 
-    public EntityWrapper(E entity, long id){
+    public EntityWrapper(E entity, FisaObject definingFisaObject){
         this.entity = entity;
-        this.id = new IdLong(id);
-    }
-
-    public EntityWrapper(E entity, Id id){
-        this.entity = entity;
-        this.id = id;
+        this.definingFisaObject = definingFisaObject;
+        if(definingFisaObject != null && definingFisaObject.getFrostId() != null) {
+            entity.setId(definingFisaObject.getFrostId());
+        }
     }
 
     public  E getEntity() {
         return entity;
     }
 
-    public Id getId() {
-        return id;
+    public FisaObject getDefiningFisaObject() {
+        return definingFisaObject;
     }
 
-    public void setId(Id id) {
-        this.id = id;
+    public void setFrostId() {
+        if(this.definingFisaObject != null && this.entity != null) {
+            this.definingFisaObject.setFrostId(entity.getId().getJson());
+        }
     }
 
-    public boolean existsOnFrost() {
-        return this.id == null;
-    }
 }

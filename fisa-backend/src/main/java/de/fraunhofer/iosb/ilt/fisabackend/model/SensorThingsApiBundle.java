@@ -3,6 +3,7 @@ package de.fraunhofer.iosb.ilt.fisabackend.model;
 import java.util.List;
 import java.util.ArrayList;
 
+import de.fraunhofer.iosb.ilt.fisabackend.model.definitions.FisaObject;
 import de.fraunhofer.iosb.ilt.sta.model.*;
 
 /**
@@ -95,8 +96,8 @@ public class SensorThingsApiBundle {
      *
      * @param datastream Datastream to be added
      */
-    public void addDatastream(Datastream datastream, Id id) {
-        this.datastreams.add(new EntityWrapper<>(datastream, id));
+    public void addDatastream(Datastream datastream, FisaObject definingFisaObject) {
+        this.datastreams.add(new EntityWrapper<>(datastream, definingFisaObject));
     }
 
     /**
@@ -104,8 +105,8 @@ public class SensorThingsApiBundle {
      *
      * @param thing Thing to be added
      */
-    public void addThing(Thing thing, Id id) {
-        this.things.add(new EntityWrapper<>(thing, id));
+    public void addThing(Thing thing, FisaObject definingFisaObject) {
+        this.things.add(new EntityWrapper<>(thing, definingFisaObject));
     }
 
     /**
@@ -113,8 +114,8 @@ public class SensorThingsApiBundle {
      *
      * @param sensor Sensor to be added
      */
-    public void addSensor(Sensor sensor, Id id) {
-        this.sensors.add(new EntityWrapper<>(sensor));
+    public void addSensor(Sensor sensor, FisaObject definingFisaObject) {
+        this.sensors.add(new EntityWrapper<>(sensor, definingFisaObject));
     }
 
     /**
@@ -122,8 +123,8 @@ public class SensorThingsApiBundle {
      *
      * @param location Location to be added
      */
-    public void addLocation(Location location, Id id) {
-        this.locations.add(new EntityWrapper<>(location));
+    public void addLocation(Location location, FisaObject definingFisaObject) {
+        this.locations.add(new EntityWrapper<>(location, definingFisaObject));
     }
 
     /**
@@ -131,8 +132,8 @@ public class SensorThingsApiBundle {
      *
      * @param historicalLocation HistoricalLocation to be added
      */
-    public void addHistoricalLocation(HistoricalLocation historicalLocation, Id id) {
-        this.historicalLocations.add(new EntityWrapper<>(historicalLocation));
+    public void addHistoricalLocation(HistoricalLocation historicalLocation, FisaObject definingFisaObject) {
+        this.historicalLocations.add(new EntityWrapper<>(historicalLocation, definingFisaObject));
     }
 
     /**
@@ -140,8 +141,8 @@ public class SensorThingsApiBundle {
      *
      * @param observedProperty ObservedProperty to be added
      */
-    public void addObservedProperty(ObservedProperty observedProperty, Id id) {
-        this.observedProperties.add(new EntityWrapper<>(observedProperty));
+    public void addObservedProperty(ObservedProperty observedProperty, FisaObject definingFisaObject) {
+        this.observedProperties.add(new EntityWrapper<>(observedProperty, definingFisaObject));
     }
 
     /**
@@ -149,8 +150,8 @@ public class SensorThingsApiBundle {
      *
      * @param observation Observation to be added
      */
-    public void addObservation(Observation observation, Id id) {
-        this.observations.add(new EntityWrapper<>(observation));
+    public void addObservation(Observation observation, FisaObject definingFisaObject) {
+        this.observations.add(new EntityWrapper<>(observation, definingFisaObject));
     }
 
     /**
@@ -158,7 +159,7 @@ public class SensorThingsApiBundle {
      *
      * @param featureOfInterest FeatureOfInterest to be added
      */
-    public void addFeatureOfInterest(FeatureOfInterest featureOfInterest, Id id) {
-        this.featureOfInterests.add(new EntityWrapper<>(featureOfInterest));
+    public void addFeatureOfInterest(FeatureOfInterest featureOfInterest, FisaObject definingFisaObject) {
+        this.featureOfInterests.add(new EntityWrapper<>(featureOfInterest, definingFisaObject));
     }
 }

@@ -31,6 +31,7 @@ public class ProjectService {
         }
         Path currentRelativePath = Paths.get(fisaFilesDirectory);
         String dir = currentRelativePath.toAbsolutePath().toString() + File.separator + "ProjectRepository";
+        dir = "/home/nicolai/FISA_DIRS/ProjectRepository";
         repo = new ProjectRepository(dir);
     }
 
