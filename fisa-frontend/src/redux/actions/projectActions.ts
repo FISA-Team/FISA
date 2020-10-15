@@ -1,6 +1,10 @@
 // A collections of actions to change the Project Store
 
-import { ValueType, BackendFisaProjectI } from '../interfaces';
+import {
+  ValueType,
+  BackendFisaProjectI,
+  BackendFisaObjectI,
+} from '../interfaces';
 import * as actionTypes from '../actionTypes';
 
 export const addObjectByObjectDefinition = (definitionName: string) => ({
@@ -71,4 +75,9 @@ export const setFromBackend = () => ({
 export const changeProjectName = (newName: string) => ({
   type: actionTypes.CHANGE_PROJECT_NAME,
   payload: { newName },
+});
+
+export const setFrostIdsOfObjects = (fisaObjects: BackendFisaObjectI[]) => ({
+  type: actionTypes.SET_FROST_IDS_OF_OBJECTS,
+  payload: { fisaObjects },
 });

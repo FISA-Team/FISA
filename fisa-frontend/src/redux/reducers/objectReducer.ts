@@ -33,6 +33,7 @@ export default function objectReducer(
       return insertObject(
         state,
         {
+          frostId: undefined,
           id: action.payload.newId,
           parent: action.payload.objectToAddTo,
           definitionName: action.payload.objectDefinition.name,
@@ -113,6 +114,9 @@ export default function objectReducer(
         return object;
       });
 
+    case actionTypes.SET_FROST_IDS_OF_OBJECTS:
+      return setFrostIds(state, action.payload.fisaObjects);
+
     case actionTypes.CHANGE_PROJECT_NAME:
       return state.map((object) => {
         if (object.definitionName === action.payload.oldName) {
@@ -153,6 +157,22 @@ function insertObject(
     }),
     newObject,
   ];
+}
+
+/**
+ * Assign the Frost-Ids to the Obect-list
+ * @param objectList - the list of Fisa-Objects
+ * @param responseData - the response data after uploading
+ */
+function setFrostIds(
+  objectList: FisaObjectI[],
+  responseData: BackendFisaObjectI[]
+): FisaObjectI[] {
+  return objectList.map((object) => ({
+    ...object,
+    frostId: responseData.find((respObject) => respObject.id === object.id)
+      ?.frostId,
+  }));
 }
 
 /**
@@ -266,6 +286,7 @@ function createProject(
   baseDefinition: FisaObjectDefinitionI
 ): FisaObjectI[] {
   const baseObject: FisaObjectI = {
+    frostId: undefined,
     id: 0,
     parent: undefined,
     definitionName: baseDefinition.name,
@@ -296,8 +317,8 @@ function createBaseProjectList(
 
   const fisaObjects: FisaObjectI[] = objects.map((object) => {
     const definitionOfObject:
-    | FisaObjectDefinitionI
-    | undefined = fisaObjectDefinition.find(
+      | FisaObjectDefinitionI
+      | undefined = fisaObjectDefinition.find(
       (definition) => definition.name === object.definitionName
     );
 
@@ -312,6 +333,7 @@ function createBaseProjectList(
     if (definitionOfObject.isTopLayer) {
       baseObject.children.push({ id: object.id, isLinked: false });
       return {
+        frostId: object.frostId,
         id: object.id,
         definitionName: object.definitionName,
         children: [
@@ -334,6 +356,7 @@ function createBaseProjectList(
     }
 
     return {
+      frostId: object.frostId,
       id: object.id,
       definitionName: object.definitionName,
       children: [

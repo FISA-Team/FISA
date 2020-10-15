@@ -304,6 +304,16 @@ function realFisaProjectReducer(
       };
 
     /**
+     * Update the Frost-Ids
+     */
+
+    case actionTypes.SET_FROST_IDS_OF_OBJECTS:
+      return {
+        ...workingState,
+        objects: objectReducer(workingState.objects, action),
+      };
+
+    /**
      * returns the default state
      */
     case actionTypes.RESET_STATE:

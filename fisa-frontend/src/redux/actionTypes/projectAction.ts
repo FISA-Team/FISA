@@ -12,3 +12,4 @@ export const LOAD_AUTO_SAVE = 'loadAutoSave';
 export const EXTRACT_FROM_CSV = 'extractFromCSV';
 export const SET_FROM_BACKEND_TRUE = 'setFromBackendTrue';
 export const CHANGE_PROJECT_NAME = 'changeProjectName';
+export const SET_FROST_IDS_OF_OBJECTS = 'setFrostIdsOfObjects';

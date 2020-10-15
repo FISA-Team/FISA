@@ -12,7 +12,11 @@ import {
   ErrorMessageI,
 } from '../interfaces';
 
-import { loadSavedProject, setFromBackend } from './projectActions';
+import {
+  loadSavedProject,
+  setFromBackend,
+  setFrostIdsOfObjects,
+} from './projectActions';
 import { OVERRIDE_ERROR_CODE } from '../../variables/variables';
 import { setSaved, setDatastreamConnectionData } from './pageActions';
 
@@ -203,8 +207,12 @@ export const uploadProjectToFrost = (
       }
     )
     .then((response) => {
+      console.log(response.data);
       dispatch(setCommunicationSuccess());
-      dispatch(setDatastreamConnectionData(response.data));
+      dispatch(setFrostIdsOfObjects(response.data.updatedObjects));
+      dispatch(
+        setDatastreamConnectionData(response.data.datastreamConnectionData)
+      );
     })
     .catch((error) => {
       dispatch(setErrorToShow(createErrorMessage(error)));

@@ -77,6 +77,7 @@ function objectToBackendObject(
   predefinedAttributes: AttributesDefinitionI[]
 ): BackendFisaObjectI {
   return {
+    frostId: object.frostId,
     id: object.id,
     definitionName: object.definitionName,
     attributes: [

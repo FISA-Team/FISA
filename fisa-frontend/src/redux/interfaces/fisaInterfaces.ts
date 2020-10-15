@@ -19,6 +19,7 @@ export interface BackendFisaProjectI {
 }
 
 export interface FisaObjectI {
+  frostId: number | undefined;
   id: number;
   parent: number | undefined;
   definitionName: string;
@@ -29,6 +30,7 @@ export interface FisaObjectI {
 }
 
 export interface BackendFisaObjectI {
+  frostId: number | undefined;
   id: number;
   definitionName: string;
   children: number[];
