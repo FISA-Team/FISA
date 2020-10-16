@@ -5,7 +5,14 @@ import java.util.List;
 import java.util.ArrayList;
 
 import de.fraunhofer.iosb.ilt.fisabackend.model.definitions.FisaObject;
-import de.fraunhofer.iosb.ilt.sta.model.*;
+import de.fraunhofer.iosb.ilt.sta.model.Datastream;
+import de.fraunhofer.iosb.ilt.sta.model.FeatureOfInterest;
+import de.fraunhofer.iosb.ilt.sta.model.Observation;
+import de.fraunhofer.iosb.ilt.sta.model.HistoricalLocation;
+import de.fraunhofer.iosb.ilt.sta.model.Location;
+import de.fraunhofer.iosb.ilt.sta.model.ObservedProperty;
+import de.fraunhofer.iosb.ilt.sta.model.Sensor;
+import de.fraunhofer.iosb.ilt.sta.model.Thing;
 
 /**
  * The SensorThingsApiBundle represents a set of entities of the SensorThings-API.

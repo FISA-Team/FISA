@@ -14,7 +14,15 @@ import de.fraunhofer.iosb.ilt.fisabackend.service.mapper.Mapper;
 import de.fraunhofer.iosb.ilt.fisabackend.service.mapper.MappingResolver;
 import de.fraunhofer.iosb.ilt.fisabackend.service.tree.FisaTree;
 import de.fraunhofer.iosb.ilt.fisabackend.util.StaUtil;
-import de.fraunhofer.iosb.ilt.sta.model.*;
+import de.fraunhofer.iosb.ilt.sta.model.Datastream;
+import de.fraunhofer.iosb.ilt.sta.model.Entity;
+import de.fraunhofer.iosb.ilt.sta.model.FeatureOfInterest;
+import de.fraunhofer.iosb.ilt.sta.model.Observation;
+import de.fraunhofer.iosb.ilt.sta.model.HistoricalLocation;
+import de.fraunhofer.iosb.ilt.sta.model.Location;
+import de.fraunhofer.iosb.ilt.sta.model.ObservedProperty;
+import de.fraunhofer.iosb.ilt.sta.model.Sensor;
+import de.fraunhofer.iosb.ilt.sta.model.Thing;
 import org.geojson.GeoJsonObject;
 
 import java.util.ArrayList;
