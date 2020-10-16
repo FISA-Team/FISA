@@ -318,8 +318,8 @@ function createBaseProjectList(
 
   const fisaObjects: FisaObjectI[] = objects.map((object) => {
     const definitionOfObject:
-      | FisaObjectDefinitionI
-      | undefined = fisaObjectDefinition.find(
+    | FisaObjectDefinitionI
+    | undefined = fisaObjectDefinition.find(
       (definition) => definition.name === object.definitionName
     );
 

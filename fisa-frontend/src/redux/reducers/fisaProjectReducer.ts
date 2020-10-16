@@ -309,7 +309,7 @@ function realFisaProjectReducer(
         }),
       };
 
-    /**
+      /**
      * Update the Frost-Ids
      */
 
@@ -601,7 +601,7 @@ function extractProjectFromLocaleStorage(): ProjectStateI {
   return {
     ...defaultState(),
     connectedFrostServer:
-      connectedFrostServer === null
+      connectedFrostServer || connectedFrostServer === null
         ? undefined
         : JSON.parse(connectedFrostServer),
     objects: JSON.parse(objects),

@@ -124,8 +124,7 @@ function ObjectBox(props: ObjectBoxProps) {
                 objectId={props.object.id}
                 attributeDefinitionName={attribute.definitionName}
                 changeObjectProperty={(key: string, value: string) =>
-                  props.changeObjectProperty(props.object.id, key, value)
-                }
+                  props.changeObjectProperty(props.object.id, key, value)}
               />
             </ListItem>
           ))}

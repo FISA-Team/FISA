@@ -4,6 +4,7 @@ import { ProjectStateI, FrontendReduxStateI } from '../../../redux/interfaces';
 import { objectDefinitions } from './objectDefinitions';
 
 export const emptyProjectState: ProjectStateI = {
+  connectedFrostServer: undefined,
   csvExtractionError: undefined,
   activeObject: 0,
   latestId: 0,
@@ -19,11 +20,13 @@ export const emptyProjectState: ProjectStateI = {
 
 export const testState: () => FrontendReduxStateI = () => ({
   fisaProject: {
+    connectedFrostServer: undefined,
     csvExtractionError: undefined,
     activeObject: 0,
     latestId: 7,
     objects: [
       {
+        frostId: undefined,
         id: 0,
         definitionName: 'Mein Projekt',
         isNotReusable: true,
@@ -42,6 +45,7 @@ export const testState: () => FrontendReduxStateI = () => ({
         ],
       },
       {
+        frostId: undefined,
         id: 1,
         definitionName: 'Raum',
         isNotReusable: undefined,
@@ -83,6 +87,7 @@ export const testState: () => FrontendReduxStateI = () => ({
         parent: 0,
       },
       {
+        frostId: undefined,
         id: 2,
         definitionName: 'Datenstrom',
         isNotReusable: true,
@@ -132,6 +137,7 @@ export const testState: () => FrontendReduxStateI = () => ({
         parent: 1,
       },
       {
+        frostId: undefined,
         id: 3,
         definitionName: 'Ort',
         isNotReusable: undefined,
@@ -186,6 +192,7 @@ export const testState: () => FrontendReduxStateI = () => ({
         parent: 1,
       },
       {
+        frostId: undefined,
         id: 5,
         definitionName: 'Sensor',
         isNotReusable: undefined,
@@ -235,6 +242,7 @@ export const testState: () => FrontendReduxStateI = () => ({
         parent: 2,
       },
       {
+        frostId: undefined,
         id: 6,
         definitionName: 'Sensortyp',
         isNotReusable: undefined,
@@ -279,6 +287,7 @@ export const testState: () => FrontendReduxStateI = () => ({
         parent: 5,
       },
       {
+        frostId: undefined,
         id: 7,
         parent: 0,
         definitionName: 'Raum',
@@ -356,11 +365,13 @@ export const testState: () => FrontendReduxStateI = () => ({
 
 export const baseState: () => FrontendReduxStateI = () => ({
   fisaProject: {
+    connectedFrostServer: undefined,
     csvExtractionError: undefined,
     activeObject: 0,
     latestId: 6,
     objects: [
       {
+        frostId: undefined,
         id: 0,
         definitionName: 'Mein Projekt',
         isNotReusable: true,
@@ -375,6 +386,7 @@ export const baseState: () => FrontendReduxStateI = () => ({
         ],
       },
       {
+        frostId: undefined,
         id: 1,
         definitionName: 'Raum',
         isNotReusable: undefined,
@@ -416,6 +428,7 @@ export const baseState: () => FrontendReduxStateI = () => ({
         parent: 0,
       },
       {
+        frostId: undefined,
         id: 2,
         definitionName: 'Datenstrom',
         isNotReusable: true,
@@ -469,6 +482,7 @@ export const baseState: () => FrontendReduxStateI = () => ({
         parent: 1,
       },
       {
+        frostId: undefined,
         id: 3,
         definitionName: 'Ort',
         isNotReusable: undefined,
@@ -523,6 +537,7 @@ export const baseState: () => FrontendReduxStateI = () => ({
         parent: 1,
       },
       {
+        frostId: undefined,
         id: 5,
         definitionName: 'Sensor',
         isNotReusable: undefined,
@@ -567,6 +582,7 @@ export const baseState: () => FrontendReduxStateI = () => ({
         children: [],
       },
       {
+        frostId: undefined,
         id: 6,
         definitionName: 'Sensortyp',
         isNotReusable: undefined,

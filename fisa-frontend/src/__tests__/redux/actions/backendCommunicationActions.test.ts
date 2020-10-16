@@ -286,7 +286,7 @@ describe('axios tests success', () => {
   });
 
   it('uploadProjectToFrost', async () => {
-    const frostUri = 'https://frost-server.de';
+    const frostUrl = 'https://frost-server.de';
     const datastreamConnectionData = [{ id: 1, name: 'Room' }];
     const updatedObjects = [{ id: 1, frostId: 1 }];
 
@@ -308,6 +308,7 @@ describe('axios tests success', () => {
         type: actionTypes.ADD_DATASTREAM_DATA,
         payload: { data: datastreamConnectionData },
       },
+      { type: actionTypes.SET_FROST_URL, payload: { frostUrl } },
       { type: actionTypes.STOP_COMMUNICATION_PENDING, payload: undefined },
     ];
 
@@ -317,7 +318,7 @@ describe('axios tests success', () => {
     };
 
     // @ts-ignore
-    await store.dispatch(actions.uploadProjectToFrost(project, frostUri));
+    await store.dispatch(actions.uploadProjectToFrost(project, frostUrl));
     expect(store.getActions()).toEqual(expectedActions);
     expect(mockAxios.post).toHaveBeenCalledTimes(1);
     expect(

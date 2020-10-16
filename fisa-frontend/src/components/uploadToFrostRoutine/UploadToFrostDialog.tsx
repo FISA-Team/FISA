@@ -12,7 +12,6 @@ import {
   Checkbox,
   CircularProgress,
   Tooltip,
-  Typography,
 } from '@material-ui/core';
 import { connect } from 'react-redux';
 import { useTranslation } from 'react-i18next';
@@ -34,7 +33,6 @@ import {
 } from '../../redux/selectors';
 import ErrorDialogContent from '../errorMessages/ErrorDialogContent';
 import Success from './UploadSuccessMessage';
-import { Warning } from '@material-ui/icons';
 
 const uploadDialogStyle = makeStyles((theme) => ({
   uploadDialRoot: {
@@ -70,7 +68,9 @@ function UploadToFrostDialog(props: UploadToFrostDialogProps) {
     UploadStates.ENTER_PROPERTIES
   );
   const [urlTextDisabled, setUrlTextDisabled] = React.useState<boolean>(true);
-  const [generateExampleData, setGenerateExampleData] = React.useState(false);
+  const [generateExampleDataSave, setGenerateExampleDataSave] = React.useState(
+    false
+  );
 
   const [url, setUrl] = React.useState(
     props.connectedFrostServerURL ||
@@ -94,7 +94,7 @@ function UploadToFrostDialog(props: UploadToFrostDialogProps) {
       currentUploadState !== UploadStates.UPLOAD_WARNING
     ) {
       setCurrentUploadState(UploadStates.UPLOAD_WARNING);
-      setGenerateExampleData(generateExampleData);
+      setGenerateExampleDataSave(generateExampleData);
       setUrlTextDisabled(true);
       return;
     }
@@ -128,7 +128,7 @@ function UploadToFrostDialog(props: UploadToFrostDialogProps) {
           cancel={() => {
             reset();
           }}
-          upload={() => upload(generateExampleData, true)}
+          upload={() => upload(generateExampleDataSave, true)}
         />
       );
       break;

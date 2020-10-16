@@ -208,7 +208,6 @@ export const uploadProjectToFrost = (
       }
     )
     .then((response) => {
-      console.log(response.data);
       dispatch(setCommunicationSuccess());
       dispatch(setFrostIdsOfObjects(response.data.updatedObjects));
       dispatch(

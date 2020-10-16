@@ -1,11 +1,13 @@
 import { fakeFisaDoc } from './fakeFisaDoc';
-import { BackendFisaProjectI } from '../../../redux/interfaces';
+import { FisaProjectI } from '../../../redux/interfaces';
 
-export const fisaProject: () => BackendFisaProjectI = () => ({
+export const fisaProject: () => FisaProjectI = () => ({
+  connectedFrostServer: undefined,
   fisaDocument: fakeFisaDoc(),
   name: 'Mein Projekt',
   fisaObjects: [
     {
+      frostId: undefined,
       id: 1,
       definitionName: 'Raum',
       attributes: [
@@ -18,6 +20,7 @@ export const fisaProject: () => BackendFisaProjectI = () => ({
       children: [2, 3],
     },
     {
+      frostId: undefined,
       id: 2,
       definitionName: 'Datenstrom',
       attributes: [
@@ -35,6 +38,7 @@ export const fisaProject: () => BackendFisaProjectI = () => ({
       children: [5, 6],
     },
     {
+      frostId: undefined,
       id: 3,
       definitionName: 'Ort',
       attributes: [
@@ -46,6 +50,7 @@ export const fisaProject: () => BackendFisaProjectI = () => ({
       children: [],
     },
     {
+      frostId: undefined,
       id: 5,
       definitionName: 'Sensor',
       attributes: [
@@ -63,6 +68,7 @@ export const fisaProject: () => BackendFisaProjectI = () => ({
       children: [],
     },
     {
+      frostId: undefined,
       id: 6,
       definitionName: 'Sensortyp',
       attributes: [

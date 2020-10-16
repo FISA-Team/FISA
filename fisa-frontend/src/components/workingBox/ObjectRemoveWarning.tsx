@@ -1,11 +1,10 @@
 import React from 'react';
 import { Checkbox, FormControlLabel, Typography } from '@material-ui/core';
 import { connect } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 import { dontShowObjectRemoveWarning } from '../../redux/actions/pageActions';
 import RemoveWarning from '../errorMessages/RemoveWarning';
 import { ObjectWithNameI } from '../../redux/interfaces';
-import { Label } from '@material-ui/icons';
-import { useTranslation } from 'react-i18next';
 
 interface RemoveWarningProps {
   warningOpen: boolean;
