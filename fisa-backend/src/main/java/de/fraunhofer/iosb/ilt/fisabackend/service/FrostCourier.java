@@ -3,7 +3,6 @@ package de.fraunhofer.iosb.ilt.fisabackend.service;
 import de.fraunhofer.iosb.ilt.fisabackend.model.EntityWrapper;
 import de.fraunhofer.iosb.ilt.fisabackend.model.SensorThingsApiBundle;
 import de.fraunhofer.iosb.ilt.fisabackend.model.UploadToFrostResponse;
-import de.fraunhofer.iosb.ilt.fisabackend.model.definitions.FisaObject;
 import de.fraunhofer.iosb.ilt.fisabackend.service.exception.EntityTransferException;
 import de.fraunhofer.iosb.ilt.sta.ServiceFailureException;
 import de.fraunhofer.iosb.ilt.sta.StatusCodeException;
@@ -26,8 +25,6 @@ import org.slf4j.LoggerFactory;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 
 public class FrostCourier {
     private static final Logger LOGGER = LoggerFactory.getLogger(FrostCourier.class);
@@ -39,13 +36,16 @@ public class FrostCourier {
      * @param url    URL of the server, a project shall be uploaded to
      * @throws MalformedURLException   If an invalid URL is given
      * @throws ServiceFailureException If an entity cannot be uploaded to the server
-     * @return a list of DatastreamIdAndName
+     * @return The response data for the Frontend
      */
     public UploadToFrostResponse uploadProject(SensorThingsApiBundle bundle, String url)
             throws MalformedURLException, ServiceFailureException {
         SensorThingsService service = sensorThingsServiceInstantiator(url);
         LOGGER.info("Using {} as frost server url", url);
         UploadToFrostResponse responseData = new UploadToFrostResponse();
+
+        // Sort the bundle, so not created Entites will be added first
+        bundle.sort();
 
         // 1:1 relations can be removed after upload
         // no entity should create multiple related entities of the same type
@@ -123,8 +123,6 @@ public class FrostCourier {
             responseData.addObject(featureOfInterest.getDefiningFisaObject());
         }
         LOGGER.info("Uploaded project successfully");
-
-        // create upload observedProperty info list.
 
         return responseData;
     }

@@ -1,5 +1,6 @@
 package de.fraunhofer.iosb.ilt.fisabackend.model;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -33,6 +34,20 @@ public class SensorThingsApiBundle {
         this.observedProperties = new ArrayList<>();
         this.observations = new ArrayList<>();
         this.featureOfInterests = new ArrayList<>();
+    }
+
+    /**
+     * Sorts Entities with no FrostId to the front, to create this Entities first.
+     */
+    public void sort() {
+        datastreams.sort(new CompareEntities());
+        things.sort(new CompareEntities());
+        sensors.sort(new CompareEntities());
+        locations.sort(new CompareEntities());
+        historicalLocations.sort(new CompareEntities());
+        observedProperties.sort(new CompareEntities());
+        observations.sort(new CompareEntities());
+        featureOfInterests.sort(new CompareEntities());
     }
 
     /**
@@ -161,5 +176,25 @@ public class SensorThingsApiBundle {
      */
     public void addFeatureOfInterest(FeatureOfInterest featureOfInterest, FisaObject definingFisaObject) {
         this.featureOfInterests.add(new EntityWrapper<>(featureOfInterest, definingFisaObject));
+    }
+
+    /**
+     * A private class to compare the Enteties
+     */
+    private static class CompareEntities implements Comparator<EntityWrapper<?>> {
+
+        @Override
+        public int compare(EntityWrapper<?> o1, EntityWrapper<?> o2) {
+            if(o1.getDefiningFisaObject().getFrostId() == null && o2.getDefiningFisaObject().getFrostId() == null){
+                return 0;
+            }
+            if(o1.getDefiningFisaObject().getFrostId() == null) {
+                return -1;
+            }
+            if(o2.getDefiningFisaObject().getFrostId() == null) {
+                return 1;
+            }
+            return 0;
+        }
     }
 }
