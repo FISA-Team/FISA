@@ -440,6 +440,7 @@ describe('setFetchProjectName', () => {
     };
 
     const expected: ProjectStateI = {
+      connectedFrostServer: undefined,
       csvExtractionError: undefined,
       activeObject: 0,
       latestId: 0,
