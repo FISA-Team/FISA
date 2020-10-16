@@ -5,6 +5,8 @@ import de.fraunhofer.iosb.ilt.sta.model.Entity;
 import de.fraunhofer.iosb.ilt.sta.model.Id;
 import de.fraunhofer.iosb.ilt.sta.model.IdLong;
 
+import java.util.Objects;
+
 public class EntityWrapper <E extends Entity<?>> {
     private final E entity;
     private FisaObject definingFisaObject;
@@ -35,4 +37,17 @@ public class EntityWrapper <E extends Entity<?>> {
         }
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        EntityWrapper<?> that = (EntityWrapper<?>) o;
+        return Objects.equals(entity, that.entity) &&
+                Objects.equals(definingFisaObject, that.definingFisaObject);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(entity, definingFisaObject);
+    }
 }
