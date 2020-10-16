@@ -141,7 +141,7 @@ public class FisaProjectToBundleConverter {
                         GeoJsonObject observedArea = datastream.getObservedArea();
                         List<Observation> observations = generator.generateObservations(exampleData, observedArea);
                         observations.forEach(observation -> observation.setDatastream(datastream));
-                        for(Observation o: observations){
+                        for (Observation o: observations) {
                             bundle.addObservation(o, null);
                         }
                     }
@@ -179,22 +179,27 @@ public class FisaProjectToBundleConverter {
         return entityWrapper -> {
             switch (entityWrapper.getEntity().getType()) {
                 case DATASTREAM:
-                    bundle.addDatastream((Datastream) entityWrapper.getEntity(), entityWrapper.getDefiningFisaObject());
+                    bundle.addDatastream((Datastream) entityWrapper.getEntity(),
+                            entityWrapper.getDefiningFisaObject());
                     break;
                 case FEATURE_OF_INTEREST:
-                    bundle.addFeatureOfInterest((FeatureOfInterest) entityWrapper.getEntity(), entityWrapper.getDefiningFisaObject());
+                    bundle.addFeatureOfInterest((FeatureOfInterest) entityWrapper.getEntity(),
+                            entityWrapper.getDefiningFisaObject());
                     break;
                 case HISTORICAL_LOCATION:
-                    bundle.addHistoricalLocation((HistoricalLocation) entityWrapper.getEntity(), entityWrapper.getDefiningFisaObject());
+                    bundle.addHistoricalLocation((HistoricalLocation) entityWrapper.getEntity(),
+                            entityWrapper.getDefiningFisaObject());
                     break;
                 case LOCATION:
                     bundle.addLocation((Location) entityWrapper.getEntity(), entityWrapper.getDefiningFisaObject());
                     break;
                 case OBSERVATION:
-                    bundle.addObservation((Observation) entityWrapper.getEntity(), entityWrapper.getDefiningFisaObject());
+                    bundle.addObservation((Observation) entityWrapper.getEntity(),
+                            entityWrapper.getDefiningFisaObject());
                     break;
                 case OBSERVED_PROPERTY:
-                    bundle.addObservedProperty((ObservedProperty) entityWrapper.getEntity(), entityWrapper.getDefiningFisaObject());
+                    bundle.addObservedProperty((ObservedProperty) entityWrapper.getEntity(),
+                            entityWrapper.getDefiningFisaObject());
                     break;
                 case SENSOR:
                     bundle.addSensor((Sensor) entityWrapper.getEntity(), entityWrapper.getDefiningFisaObject());

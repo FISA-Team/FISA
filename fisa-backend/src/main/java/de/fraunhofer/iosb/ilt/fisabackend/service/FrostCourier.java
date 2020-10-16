@@ -65,7 +65,7 @@ public class FrostCourier {
             }
 
             dataStream.setFrostId();
-            responseData.addDatastream(dataStream.getDefiningFisaObject());
+            responseData.addDatastream(dataStream.getDefiningFisaObject(), dataStream.getEntity().getName());
         }
 
         for (EntityWrapper<Thing> thing : bundle.getThings()) {

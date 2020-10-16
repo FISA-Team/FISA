@@ -110,6 +110,7 @@ public class SensorThingsApiBundle {
      * Adds a new Datastream to the list of Datastream.
      *
      * @param datastream Datastream to be added
+     * @param definingFisaObject the defining FISA-Object of the Datastream
      */
     public void addDatastream(Datastream datastream, FisaObject definingFisaObject) {
         this.datastreams.add(new EntityWrapper<>(datastream, definingFisaObject));
@@ -119,6 +120,7 @@ public class SensorThingsApiBundle {
      * Adds a new Thing to the list of Thing.
      *
      * @param thing Thing to be added
+     * @param definingFisaObject the defining FISA-Object of the Thing
      */
     public void addThing(Thing thing, FisaObject definingFisaObject) {
         this.things.add(new EntityWrapper<>(thing, definingFisaObject));
@@ -128,6 +130,7 @@ public class SensorThingsApiBundle {
      * Adds a new Sensor to the list of Sensor.
      *
      * @param sensor Sensor to be added
+     * @param definingFisaObject the defining FISA-Object of the Sensor
      */
     public void addSensor(Sensor sensor, FisaObject definingFisaObject) {
         this.sensors.add(new EntityWrapper<>(sensor, definingFisaObject));
@@ -137,6 +140,7 @@ public class SensorThingsApiBundle {
      * Adds a new Location to the list of Location.
      *
      * @param location Location to be added
+     * @param definingFisaObject the defining FISA-Object of the Location
      */
     public void addLocation(Location location, FisaObject definingFisaObject) {
         this.locations.add(new EntityWrapper<>(location, definingFisaObject));
@@ -146,6 +150,7 @@ public class SensorThingsApiBundle {
      * Adds a new HistoricalLocation to the list of HistoricalLocation.
      *
      * @param historicalLocation HistoricalLocation to be added
+     * @param definingFisaObject the defining FISA-Object of the HistoricalLocation
      */
     public void addHistoricalLocation(HistoricalLocation historicalLocation, FisaObject definingFisaObject) {
         this.historicalLocations.add(new EntityWrapper<>(historicalLocation, definingFisaObject));
@@ -155,6 +160,7 @@ public class SensorThingsApiBundle {
      * Adds a new ObservedProperty to the list of ObservedProperty.
      *
      * @param observedProperty ObservedProperty to be added
+     * @param definingFisaObject the defining FISA-Object of the ObservedProperty
      */
     public void addObservedProperty(ObservedProperty observedProperty, FisaObject definingFisaObject) {
         this.observedProperties.add(new EntityWrapper<>(observedProperty, definingFisaObject));
@@ -164,6 +170,7 @@ public class SensorThingsApiBundle {
      * Adds a new Observation to the list of Observation.
      *
      * @param observation Observation to be added
+     * @param definingFisaObject the defining FISA-Object of the Observation
      */
     public void addObservation(Observation observation, FisaObject definingFisaObject) {
         this.observations.add(new EntityWrapper<>(observation, definingFisaObject));
@@ -173,6 +180,7 @@ public class SensorThingsApiBundle {
      * Adds a new FeatureOfInterest to the list of FeatureOfInterest.
      *
      * @param featureOfInterest FeatureOfInterest to be added
+     * @param definingFisaObject the defining FISA-Object of the FeatureOfInterest
      */
     public void addFeatureOfInterest(FeatureOfInterest featureOfInterest, FisaObject definingFisaObject) {
         this.featureOfInterests.add(new EntityWrapper<>(featureOfInterest, definingFisaObject));
@@ -185,13 +193,13 @@ public class SensorThingsApiBundle {
 
         @Override
         public int compare(EntityWrapper<?> o1, EntityWrapper<?> o2) {
-            if(o1.getDefiningFisaObject().getFrostId() == null && o2.getDefiningFisaObject().getFrostId() == null){
+            if (o1.getDefiningFisaObject().getFrostId() == null && o2.getDefiningFisaObject().getFrostId() == null) {
                 return 0;
             }
-            if(o1.getDefiningFisaObject().getFrostId() == null) {
+            if (o1.getDefiningFisaObject().getFrostId() == null) {
                 return -1;
             }
-            if(o2.getDefiningFisaObject().getFrostId() == null) {
+            if (o2.getDefiningFisaObject().getFrostId() == null) {
                 return 1;
             }
             return 0;

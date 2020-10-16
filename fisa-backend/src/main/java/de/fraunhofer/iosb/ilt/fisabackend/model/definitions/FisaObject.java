@@ -129,7 +129,7 @@ public class FisaObject {
      * @param frostId The Id of this FisaObject on FROST
      */
     public void setFrostId(String frostId) {
-        if(frostId != null && !frostId.isEmpty()) {
+        if (frostId != null && !frostId.isEmpty()) {
             this.frostId = Id.tryToParse(frostId);
         }
     }
