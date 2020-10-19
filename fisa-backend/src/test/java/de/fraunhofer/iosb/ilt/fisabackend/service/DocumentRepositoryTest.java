@@ -375,7 +375,7 @@ class DocumentRepositoryTest {
      *
      * @return true if documents represent equal java class instances, otherwise false
      */
-    private boolean checkEqualFisaDoc(FisaDocument docA, FisaDocument docB){
+    private boolean checkEqualFisaDoc(FisaDocument docA, FisaDocument docB) {
         String docAString = null, docBString = null;
         ObjectMapper objectMapper = new ObjectMapper();
 
