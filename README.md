@@ -3,7 +3,7 @@
 
 <img src="fisa-logo.svg" height="144">
 
-A tool to setup a SensorThings-Datamodel on a visual basis.
+A tool to set up a SensorThings-Datamodel on a visual basis.
 
 ## Usage
 
@@ -29,8 +29,8 @@ The backend ist based on Spring-Boot and can be build via the maven-goal `packag
 
 Configuration options for the backend:
 
-- Root-Path of the API: server.servlet.context-path
-- Path to save the use-case and project files: app.filesDirectory
+-   Root-Path of the API: server.servlet.context-path
+-   Path to save the use-case and project files: app.filesDirectory
 
 ## Frontend
 
@@ -38,7 +38,7 @@ The frontend uses react and is created via `create-react-app`. To execute it, ru
 
 Configuration options for the frontend:
 
-- Location of the Backend: API_URL
+-   Location of the Backend: API_URL
 
 ## Features
 
@@ -55,7 +55,7 @@ Configuration options for the frontend:
 
 The specification of the FisaDoc in typescript notation
 
-```
+```typescript
 interface FisaDocument {
     name: string;
     fisaObjects: FisaObjectDefinition[];

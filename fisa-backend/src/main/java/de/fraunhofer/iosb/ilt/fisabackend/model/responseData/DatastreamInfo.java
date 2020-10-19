@@ -1,4 +1,4 @@
-package de.fraunhofer.iosb.ilt.fisabackend.model.responseData;
+package de.fraunhofer.iosb.ilt.fisabackend.model.responsedata;
 
 import de.fraunhofer.iosb.ilt.sta.model.Datastream;
 import de.fraunhofer.iosb.ilt.sta.model.Id;

@@ -30,11 +30,9 @@ class FisaProjectToBundleConverterTest {
 
     @BeforeEach
     void setUp() {
-        var resolver = new DynamicMappingResolver();
+        resolver = new DynamicMappingResolver();
         resolver.registerRootMapper("STA", new StaMapper());
-        this.resolver = resolver;
     }
-
 
     @Test
     void testVerySimpleProjectConvert() {
@@ -121,5 +119,4 @@ class FisaProjectToBundleConverterTest {
         project.setFisaObjects(fisaObjects);
         return project;
     }
-
 }

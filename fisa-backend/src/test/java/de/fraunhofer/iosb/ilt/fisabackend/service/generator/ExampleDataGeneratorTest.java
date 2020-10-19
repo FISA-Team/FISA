@@ -19,7 +19,6 @@ class ExampleDataGeneratorTest {
         this.generator = new ExampleDataGenerator();
     }
 
-
     @Test
     void generateExampleDataTest() {
         ExampleData data = new ExampleData(2, 25d, 15d,

@@ -1,7 +1,7 @@
 package de.fraunhofer.iosb.ilt.fisabackend.service;
 
 import de.fraunhofer.iosb.ilt.fisabackend.model.SensorThingsApiBundle;
-import de.fraunhofer.iosb.ilt.fisabackend.model.responseData.DatastreamInfo;
+import de.fraunhofer.iosb.ilt.fisabackend.model.responsedata.DatastreamInfo;
 import de.fraunhofer.iosb.ilt.fisabackend.service.exception.EntityTransferException;
 import de.fraunhofer.iosb.ilt.sta.ServiceFailureException;
 import de.fraunhofer.iosb.ilt.sta.StatusCodeException;

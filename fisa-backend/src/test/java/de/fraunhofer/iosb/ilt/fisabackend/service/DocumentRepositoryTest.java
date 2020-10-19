@@ -386,5 +386,4 @@ import static org.junit.jupiter.api.Assertions.*;
         }
         return (docAString.compareTo(docBString) == 0);
     }
-
 }
