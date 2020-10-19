@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
      * Testing of standard directory creation
      **/
     @Test
-    void CreateStandardDir(){
+    void createDefaultDirectory(){
 
         Path currentRelativePath = Paths.get("");
         String dir = currentRelativePath.toAbsolutePath().toString() + File.separator + "ProjectRepository";
@@ -159,7 +159,7 @@ import static org.junit.jupiter.api.Assertions.*;
      */
     @Test
     void getFisaProjectCorrectUuid() {
-        ProjectRepository repo = populatedTestRepoCreater();
+        ProjectRepository repo = populatedTestRepoCreator();
         FisaProject[] fisaList = getTestDocuments();
 
         for (FisaProject fisaDoc:fisaList) {
@@ -182,7 +182,7 @@ import static org.junit.jupiter.api.Assertions.*;
      */
     @Test
     void getFisaProjectUnmatchingUuid() {
-        ProjectRepository repo = populatedTestRepoCreater();
+        ProjectRepository repo = populatedTestRepoCreator();
         FisaProject[] fisaList = getTestDocuments();
 
 
@@ -205,7 +205,7 @@ import static org.junit.jupiter.api.Assertions.*;
      */
     @Test
     void getFisaDocumentListComplete() {
-        ProjectRepository repo = populatedTestRepoCreater();
+        ProjectRepository repo = populatedTestRepoCreator();
         FisaProject[] fisaDocs = getTestDocuments();
         Map<UUID,String> testmap = null;
 
@@ -228,7 +228,7 @@ import static org.junit.jupiter.api.Assertions.*;
      */
     @Test
     void deleteFisaDocDeletion() {
-        ProjectRepository repo = populatedTestRepoCreater();
+        ProjectRepository repo = populatedTestRepoCreator();
         FisaProject[] fisaDocs = getTestDocuments();
 
         for (FisaProject doc : fisaDocs) {
@@ -341,7 +341,7 @@ import static org.junit.jupiter.api.Assertions.*;
     /**
      * creates a fresh repository at specified path and fills it with the test projects from resource folder
      **/
-    ProjectRepository populatedTestRepoCreater() {
+    ProjectRepository populatedTestRepoCreator() {
         Path currentRelativePath = Paths.get("");
         String repoDir = currentRelativePath.toAbsolutePath().toString() + File.separator + "ProjectRepository";
         ProjectRepository repo = null;

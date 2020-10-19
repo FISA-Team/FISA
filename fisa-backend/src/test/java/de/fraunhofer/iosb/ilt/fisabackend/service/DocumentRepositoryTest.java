@@ -14,20 +14,20 @@ import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 
- class DocumentRepositoryTest {
+class DocumentRepositoryTest {
 
     /**
      * Testing of standard directory creation
      */
     @Test
-    void CreateStandardDir(){
+    void createDefaultDirectory() {
 
         Path currentRelativePath = Paths.get("");
         String dir = currentRelativePath.toAbsolutePath().toString() + File.separator + "DocumentRepository";
 
         try {
             DocumentRepository repo = new DocumentRepository(dir);
-        } catch (Exception e){
+        } catch (Exception e) {
             fail("create repo failed");
         }
         File file = new File(dir);
@@ -39,7 +39,7 @@ import static org.junit.jupiter.api.Assertions.*;
      * java classes as represented inside the FisaDocument that had to be saved
      */
     @Test
-    void saveFisaDocumentInRepo(){
+    void saveFisaDocumentInRepo() {
         //read fisa Document. Fisa Document has to be testet to be a usable Fisa Document
 
         Path currentRelativePath = Paths.get("");
@@ -55,13 +55,12 @@ import static org.junit.jupiter.api.Assertions.*;
             try {
                 repo = new DocumentRepository(repoDir);
                 repo.saveFisaDocument(fisaDoc);
-            }catch (Exception e) {
+            } catch (Exception e) {
                 System.out.print(e.toString());
                 fail("Should not have thrown any exception");
             }
 
             //check if File was created in correct folder with correct name
-
             String filename = repoDir + File.separator
                               + UUID.nameUUIDFromBytes(fisaDoc.getName().getBytes()).toString() + ".json";
 
@@ -71,20 +70,20 @@ import static org.junit.jupiter.api.Assertions.*;
             String repoJSON = null, testJSON = null;
 
             try {
-                Scanner scan = new Scanner(new File(repoDir+ File.separator
+                Scanner scan = new Scanner(new File(repoDir + File.separator
                                                     + UUID.nameUUIDFromBytes(fisaDoc.getName().getBytes()).toString()
                                                     + ".json")).useDelimiter("\\Z");
                 repoJSON = scan.next();
                 scan.close();
 
                 testJSON = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(fisaDoc);
-            }catch (Exception e){
-                //we checked for existence of both files so no error should be thrown here
+            } catch (Exception e){
+                // We checked for existence of both files so no error should be thrown here
                 System.out.print(e.toString());
                 fail();
             }
 
-            assertEquals(0,repoJSON.compareTo(testJSON));
+            assertEquals(0, repoJSON.compareTo(testJSON));
         }
     }
 
@@ -93,7 +92,7 @@ import static org.junit.jupiter.api.Assertions.*;
      * name as a use-case that has already been saved inside the repository
      */
     @Test
-    void saveFisaDocumentSameName(){
+    void saveFisaDocumentSameName() {
         Path currentRelativePath = Paths.get("");
         String repoDir = currentRelativePath.toAbsolutePath().toString() + File.separator + "DocumentRepository";
 
@@ -123,7 +122,7 @@ import static org.junit.jupiter.api.Assertions.*;
      * Testing if two use-cases with same content but different use-case-name can be saved in repository
      */
     @Test
-    void saveFisaDocumentDifferentName (){
+    void saveFisaDocumentDifferentName () {
         Path currentRelativePath = Paths.get("");
         String repoDir = currentRelativePath.toAbsolutePath().toString() + File.separator + "DocumentRepository";
 
@@ -135,12 +134,10 @@ import static org.junit.jupiter.api.Assertions.*;
             fail("creating repo should not fail");
         }
 
-
         for (FisaDocument fisaDoc : testDocs) {
             ObjectMapper objectMapper = new ObjectMapper();
 
             //save fisa doc in repo
-
             try {
                 repo.saveFisaDocument(fisaDoc);
                 String name = fisaDoc.getName() + "_01";
@@ -160,21 +157,22 @@ import static org.junit.jupiter.api.Assertions.*;
      */
     @Test
     void getFisaDocumentCorrectUuid() {
-        DocumentRepository repo = populatedTestRepoCreater();
+        DocumentRepository repo = populatedTestRepoCreator();
         FisaDocument[] fisaList = getTestDocuments();
 
         for (FisaDocument fisaDoc:fisaList) {
             UUID uuid = UUID.nameUUIDFromBytes(fisaDoc.getName().getBytes());
             FisaDocument repoDoc = null;
+
             try {
                 repoDoc = repo.getFisaDocument(uuid);
-            } catch (Exception e){
+            } catch (Exception e) {
                 System.out.print(e.getMessage());
                 fail("should return matching FisaDocument");
             }
+
             assertTrue(checkEqualFisaDoc(repoDoc,fisaDoc));
         }
-
     }
 
     /**
@@ -182,13 +180,12 @@ import static org.junit.jupiter.api.Assertions.*;
      * an exception
      */
     @Test
-    void getFisaDocumentUnmatchingUuid() {
-        DocumentRepository repo = populatedTestRepoCreater();
+    void getFisaDocumentNotMatchingUuid() {
+        DocumentRepository repo = populatedTestRepoCreator();
         FisaDocument[] fisaList = getTestDocuments();
 
-
-            String fakename = "bluegreenisnotacolor";
-            UUID uuid = UUID.nameUUIDFromBytes(fakename.getBytes());
+            String fakeName = "bluegreenisnotacolor";
+            UUID uuid = UUID.nameUUIDFromBytes(fakeName.getBytes());
             try {
                 repo.getFisaDocument(uuid);
                 fail("should throw exception");
@@ -197,7 +194,6 @@ import static org.junit.jupiter.api.Assertions.*;
                 System.out.print(e.getMessage());
                 fail("wrong exception thrown");
             }
-
     }
 
     /**
@@ -206,7 +202,7 @@ import static org.junit.jupiter.api.Assertions.*;
      */
     @Test
     void getFisaDocumentListComplete() {
-        DocumentRepository repo = populatedTestRepoCreater();
+        DocumentRepository repo = populatedTestRepoCreator();
         FisaDocument[] fisaDocs = getTestDocuments();
         Map<UUID,String> testmap = null;
 
@@ -220,8 +216,7 @@ import static org.junit.jupiter.api.Assertions.*;
             String name = doc.getName();
             UUID uuid = UUID.nameUUIDFromBytes(name.getBytes());
 
-
-            assertEquals(0,testmap.get(uuid).compareTo(name));
+            assertEquals(0, testmap.get(uuid).compareTo(name));
         }
 
     }
@@ -231,7 +226,7 @@ import static org.junit.jupiter.api.Assertions.*;
      */
     @Test
     void deleteFisaDocDeletion() {
-        DocumentRepository repo = populatedTestRepoCreater();
+        DocumentRepository repo = populatedTestRepoCreator();
         FisaDocument[] fisaDocs = getTestDocuments();
 
         for (FisaDocument doc : fisaDocs) {
@@ -246,7 +241,7 @@ import static org.junit.jupiter.api.Assertions.*;
                 repo.deleteFisaDocument(uuid);
                 fail("file should be deleted and error should be thrown");
             } catch (Exception e) {
-                if(e.getMessage().compareTo("Specified UUID cannot be matched with use case in database")!=0){
+                if (e.getMessage().compareTo("Specified UUID cannot be matched with use case in database") != 0){
                     System.out.print(e.getMessage());
                     fail("wrong exception thrown");
                 }
@@ -256,7 +251,7 @@ import static org.junit.jupiter.api.Assertions.*;
                 repo.getFisaDocument(uuid);
                 fail("File should be deleted and repository should throw error when try to access uuid matching file");
             } catch (Exception e) {
-                if(e.getMessage().compareTo("Specified UUID does not exist in database")!=0){
+                if (e.getMessage().compareTo("Specified UUID does not exist in database") !=0 ){
                     System.out.print(e.getMessage());
                     fail("wrong exception thrown");
                 }
@@ -274,10 +269,10 @@ import static org.junit.jupiter.api.Assertions.*;
         String dir = currentRelativePath.toAbsolutePath().toString() + File.separator + "DocumentRepository";
 
         File file = new File(dir);
-        if(file.exists()){
+        if (file.exists()){
             try {
                 deleteDirectoryRecursion(Paths.get(dir));
-            }catch (Exception e){
+            } catch (Exception e) {
                 System.out.print(e.toString());
                 fail("could not delete generated path of DocumentRepository");
             }
@@ -315,6 +310,7 @@ import static org.junit.jupiter.api.Assertions.*;
             projectDir = projectDir.substring(0, index - 1);
             System.out.println(projectDir);
         }
+
         String dir = projectDir + File.separator + "fisa-backend"
                      + File.separator + "src" + File.separator + "test" + File.separator + "resources" + File.separator
                      + "Use-Cases";
@@ -324,13 +320,13 @@ import static org.junit.jupiter.api.Assertions.*;
         if (listOfFiles == null) return null;
 
         FisaDocument[] fisaDocList = new FisaDocument[listOfFiles.length];
-        int i=0;
+        int i = 0;
         for (File fisaJSON : listOfFiles) {
             ObjectMapper objectMapper = new ObjectMapper();
             FisaDocument fisaDoc = null;
             try {
                 fisaDoc = objectMapper.readValue(fisaJSON, FisaDocument.class);
-            }catch (Exception e) {
+            } catch (Exception e) {
                 System.out.print(e.toString());
                 fail("Fisa doc json is not valid. jackson could not convert");
             }
@@ -346,7 +342,7 @@ import static org.junit.jupiter.api.Assertions.*;
     /**
      * creates a fresh repository at specified path and fills it with the test use-cases from resource folder
      **/
-    DocumentRepository populatedTestRepoCreater() {
+    DocumentRepository populatedTestRepoCreator() {
         Path currentRelativePath = Paths.get("");
         String repoDir = currentRelativePath.toAbsolutePath().toString() + File.separator + "DocumentRepository";
         DocumentRepository repo = null;
@@ -359,7 +355,7 @@ import static org.junit.jupiter.api.Assertions.*;
         for (FisaDocument doc : testDoc) {
             try {
                 repo.saveFisaDocument(doc);
-            }catch (Exception e){
+            } catch (Exception e) {
                 System.out.print(e.getMessage());
                 fail("Populating Repo schould not fail");
             }
@@ -378,12 +374,14 @@ import static org.junit.jupiter.api.Assertions.*;
     boolean checkEqualFisaDoc(FisaDocument docA, FisaDocument docB){
         String docAString = null, docBString = null;
         ObjectMapper objectMapper = new ObjectMapper();
+
         try {
             docAString = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(docA);
             docBString = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(docB);
         } catch (Exception e) {
             fail("Objects should be matchable");
         }
+
         return (docAString.compareTo(docBString) == 0);
     }
 }
