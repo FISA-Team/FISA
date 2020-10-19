@@ -241,7 +241,7 @@ class DocumentRepositoryTest {
                 repo.deleteFisaDocument(uuid);
                 fail("file should be deleted and error should be thrown");
             } catch (Exception e) {
-                if (e.getMessage().compareTo("Specified UUID cannot be matched with use case in database") != 0){
+                if (e.getMessage().compareTo("Specified UUID cannot be matched with use case in database") != 0) {
                     System.out.print(e.getMessage());
                     fail("wrong exception thrown");
                 }
@@ -251,7 +251,7 @@ class DocumentRepositoryTest {
                 repo.getFisaDocument(uuid);
                 fail("File should be deleted and repository should throw error when try to access uuid matching file");
             } catch (Exception e) {
-                if (e.getMessage().compareTo("Specified UUID does not exist in database") != 0 ){
+                if (e.getMessage().compareTo("Specified UUID does not exist in database") != 0) {
                     System.out.print(e.getMessage());
                     fail("wrong exception thrown");
                 }
@@ -340,7 +340,9 @@ class DocumentRepositoryTest {
     }
 
     /**
-     * creates a fresh repository at specified path and fills it with the test use-cases from resource folder
+     * Creates a fresh repository at specified path and fills it with the test projects from resource folder
+     *
+     * @return A ProjectRepository with tests-documents
      **/
     private DocumentRepository populatedTestRepoCreator() {
         Path currentRelativePath = Paths.get("");
@@ -367,8 +369,10 @@ class DocumentRepositoryTest {
     /**
      * checks if two FisaDocuments result in same java class instances. Will fail test if FisaDocuments cannot be
      * parsed as java class instances
+     *
      * @param docA first document to be tested
      * @param docB second document to be tested
+     *
      * @return true if documents represent equal java class instances, otherwise false
      */
     private boolean checkEqualFisaDoc(FisaDocument docA, FisaDocument docB){

@@ -78,7 +78,7 @@ import static org.junit.jupiter.api.Assertions.*;
                 scan.close();
 
                 testJSON = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(fisaDoc);
-            } catch (Exception e){
+            } catch (Exception e) {
                 //we checked for existence of both files so no error should be thrown here
                 System.out.print(e.toString());
                 fail();
@@ -339,7 +339,9 @@ import static org.junit.jupiter.api.Assertions.*;
     }
 
     /**
-     * creates a fresh repository at specified path and fills it with the test projects from resource folder
+     * Creates a fresh repository at specified path and fills it with the test projects from resource folder
+     *
+     * @return A ProjectRepository with tests-documents
      **/
     private ProjectRepository populatedTestRepoCreator() {
         Path currentRelativePath = Paths.get("");
@@ -366,11 +368,13 @@ import static org.junit.jupiter.api.Assertions.*;
     /**
      * checks if two projects result in same java class instances. Will fail test if projects cannot be
      * parsed as java class instances
+     *
      * @param docA first project to be tested
      * @param docB second project to be tested
+     *
      * @return true if projects represent equal java class instances, otherwise false
      */
-    private boolean checkEqualFisaDoc(FisaProject docA, FisaProject docB){
+    private boolean checkEqualFisaDoc(FisaProject docA, FisaProject docB) {
         String docAString = null, docBString = null;
         ObjectMapper objectMapper = new ObjectMapper();
         try {
