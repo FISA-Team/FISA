@@ -13,6 +13,7 @@ import {
 } from '../interfaces';
 
 import {
+  clearRemovedObjects,
   loadSavedProject,
   setConnectedFrostUrl,
   setFromBackend,
@@ -214,6 +215,7 @@ export const uploadProjectToFrost = (
         setDatastreamConnectionData(response.data.datastreamConnectionData)
       );
       dispatch(setConnectedFrostUrl(frostUrl));
+      dispatch(clearRemovedObjects());
     })
     .catch((error) => {
       dispatch(setErrorToShow(createErrorMessage(error)));

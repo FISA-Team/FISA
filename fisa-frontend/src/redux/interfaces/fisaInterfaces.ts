@@ -9,6 +9,7 @@ export interface FisaProjectI {
   fisaDocument: FisaDocumentI;
   generateExampleData: boolean;
   fisaObjects: BackendFisaObjectI[];
+  removedFisaObjects: BackendFisaObjectI[];
   connectedFrostServer: string | undefined;
 }
 

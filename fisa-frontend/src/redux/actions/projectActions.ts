@@ -82,3 +82,8 @@ export const setConnectedFrostUrl = (frostUrl: string) => ({
   type: actionTypes.SET_FROST_URL,
   payload: { frostUrl },
 });
+
+export const clearRemovedObjects = () => ({
+  type: actionTypes.CLEAR_REMOVED_OBJECTS,
+  payload: undefined
+})

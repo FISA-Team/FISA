@@ -14,3 +14,4 @@ export const SET_FROM_BACKEND_TRUE = 'setFromBackendTrue';
 export const CHANGE_PROJECT_NAME = 'changeProjectName';
 export const SET_FROST_IDS_OF_OBJECTS = 'setFrostIdsOfObjects';
 export const SET_FROST_URL = 'setFrostUrl';
+export const CLEAR_REMOVED_OBJECTS = 'clearRemovedObjects';
