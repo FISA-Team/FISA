@@ -15,7 +15,7 @@ import { createOgcType } from '../../variables/manipulators';
 const defaultState: () => ObjectReducerI = () => ({
   active: [],
   removed: []
-})
+});
 
 export default function objectReducer(
   state: ObjectReducerI = defaultState(),
@@ -34,7 +34,7 @@ export default function objectReducer(
           action.payload.objects,
           action.payload.baseDefinition
         )
-      }
+      };
     /**
      * add new Object by given 'template' with id 'newId' and link to the parent
      */
@@ -58,7 +58,7 @@ export default function objectReducer(
           },
           action.payload.objectToAddTo
         )
-      }
+      };
     /**
      * Change the value under 'key' to 'value' from Object with 'objectId'
      */
@@ -82,7 +82,7 @@ export default function objectReducer(
           }
           return object;
         })
-      }
+      };
     /**
      * Removes the given Object and its children.
      */
@@ -115,7 +115,7 @@ export default function objectReducer(
       return {
         removed: state.removed,
         active: insertObject(state.active, newObject, action.payload.parent)
-      }
+      };
     /**
      * Link the given object 'objectId' to the object 'linkTo'
      */
@@ -134,13 +134,13 @@ export default function objectReducer(
           }
           return object;
         })
-      }
+      };
 
     case actionTypes.SET_FROST_IDS_OF_OBJECTS:
       return {
         removed: state.removed,
         active: setFrostIds(state.active, action.payload.fisaObjects)
-      }
+      };
 
     case actionTypes.CHANGE_PROJECT_NAME:
       return {
@@ -154,13 +154,13 @@ export default function objectReducer(
           }
           return object;
         })
-      }
+      };
 
     case actionTypes.CLEAR_REMOVED_OBJECTS:
       return {
         active: state.active,
         removed: []
-      }
+      };
     default:
       return state;
   }
@@ -231,10 +231,10 @@ function removeObject(
     return {
       removed: state.removed,
       active: removeLinkedObject(state.active, toDelete, removeFrom, otherWithChild)
-    }
+    };
   }
 
-  const removed = state.removed;
+  const { removed } = state;
   const objectToRemove = state.active.find(object => object.id === toDelete);
 
   if (objectToRemove?.frostId) {
@@ -254,7 +254,7 @@ function removeObject(
         }
         return object;
       })
-  }
+  };
 }
 
 /**
@@ -363,10 +363,10 @@ function createBaseProjectList(
 
   const fisaObjects: FisaObjectI[] = objects.map((object) => {
     const definitionOfObject:
-      | FisaObjectDefinitionI
-      | undefined = fisaObjectDefinition.find(
-        (definition) => definition.name === object.definitionName
-      );
+    | FisaObjectDefinitionI
+    | undefined = fisaObjectDefinition.find(
+      (definition) => definition.name === object.definitionName
+    );
 
     // is not possible
     if (!definitionOfObject) {

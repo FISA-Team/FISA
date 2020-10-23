@@ -196,8 +196,6 @@ export const uploadProjectToFrost = (
   project: FisaProjectI,
   frostUrl: string
 ) => (dispatch: Dispatch<ActionI>) => {
-  console.log("Upload now");
-
   dispatch(setCommunicationPending());
   const encodetUrl = encodeURIComponent(frostUrl);
   return axios

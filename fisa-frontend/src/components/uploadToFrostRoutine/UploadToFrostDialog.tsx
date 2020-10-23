@@ -104,12 +104,10 @@ function UploadToFrostDialog(props: UploadToFrostDialogProps) {
 
     // Update on FROST
     if (props.connectedFrostServerURL && !ignoreFrostIds && urlTextDisabled) {
-      console.log("Update");
       props.updateProjectOnFrost(
         props.getFisaProject(generateExampleData, ignoreFrostIds)
       );
     } else {
-      console.log("Upload");
       // Upload to frost
       props.uploadProjectToFrost(
         props.getFisaProject(generateExampleData, ignoreFrostIds),
