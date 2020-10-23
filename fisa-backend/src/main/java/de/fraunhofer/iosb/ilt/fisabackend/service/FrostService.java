@@ -44,13 +44,14 @@ public class FrostService {
      * @throws ServiceFailureException if the FROST-Server fails to accept the data.
      * @return a list of DatastreamIdAndName
      */
-    public UploadToFrostResponse updateFrostServer(FisaProject project) throws MalformedURLException, ServiceFailureException {
+    public UploadToFrostResponse updateFrostServer(FisaProject project)
+            throws MalformedURLException, ServiceFailureException {
         // Fist add the entities
         SensorThingsApiBundle bundle = this.fisaConverter.convertToBundle(project);
         UploadToFrostResponse responseData = this.frostCourier.uploadProject(bundle, project.getConnectedFrostServer());
 
         // remove removed objects from FROST
-        if(!project.getRemovedFisaObjects().isEmpty()) {
+        if (!project.getRemovedFisaObjects().isEmpty()) {
             SensorThingsApiBundle removedObjectsBundle = this.fisaConverter.convertRemovedObjectsToBundle(project);
             this.frostCourier.removeObjects(removedObjectsBundle, project.getConnectedFrostServer());
         }

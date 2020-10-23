@@ -3,7 +3,6 @@ package de.fraunhofer.iosb.ilt.fisabackend.service;
 import de.fraunhofer.iosb.ilt.fisabackend.model.EntityWrapper;
 import de.fraunhofer.iosb.ilt.fisabackend.model.SensorThingsApiBundle;
 import de.fraunhofer.iosb.ilt.fisabackend.model.UploadToFrostResponse;
-import de.fraunhofer.iosb.ilt.fisabackend.model.definitions.FisaObject;
 import de.fraunhofer.iosb.ilt.fisabackend.service.exception.EntityTransferException;
 import de.fraunhofer.iosb.ilt.sta.ServiceFailureException;
 import de.fraunhofer.iosb.ilt.sta.StatusCodeException;
@@ -26,18 +25,25 @@ import org.slf4j.LoggerFactory;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.List;
 
 public class FrostCourier {
     private static final Logger LOGGER = LoggerFactory.getLogger(FrostCourier.class);
 
-    public void removeObjects(SensorThingsApiBundle toRemove, String url) throws MalformedURLException, ServiceFailureException {
+    /**
+     * removes the given Objects from the FROST-Server
+     *
+     * @param toRemove the SensorThingsApiBundle with the entities to remove
+     * @param url the url of the FROST-Server
+     * @throws MalformedURLException   If an invalid URL is given
+     * @throws ServiceFailureException If an entity cannot be uploaded to the server
+     */
+    public void removeObjects(SensorThingsApiBundle toRemove, String url) throws MalformedURLException {
         SensorThingsService service = sensorThingsServiceInstantiator(url);
 
         for (EntityWrapper<Observation> observation : toRemove.getObservations()) {
             try {
                 Observation o = service.observations().find(observation.getEntity().getId());
-                if(o != null && o.equals(observation.getEntity())) {
+                if (o != null && o.equals(observation.getEntity())) {
                     service.observations().delete(o);
                 }
             } catch (ServiceFailureException e) {
@@ -48,7 +54,7 @@ public class FrostCourier {
         for (EntityWrapper<Datastream> dataStream : toRemove.getDatastreams()) {
             try {
                 Datastream d = service.datastreams().find(dataStream.getEntity().getId());
-                if(d != null && d.equals(dataStream.getEntity())) {
+                if (d != null && d.equals(dataStream.getEntity())) {
                     service.datastreams().delete(d);
                 }
             } catch (ServiceFailureException e) {
@@ -79,7 +85,7 @@ public class FrostCourier {
         for (EntityWrapper<Location> location : toRemove.getLocations()) {
             try {
                 Location l = service.locations().find(location.getEntity().getId());
-                if(l != null && l.equals(location.getEntity())) {
+                if (l != null && l.equals(location.getEntity())) {
                     service.locations().delete(l);
                 }
             } catch (ServiceFailureException e) {
@@ -94,14 +100,15 @@ public class FrostCourier {
                     service.historicalLocations().delete(hl);
                 }
             } catch (ServiceFailureException e) {
-                LOGGER.error("Can't find and remove the HistoricalLocation: " + historicalLocation.getEntity().toString());
+                LOGGER.error("Can't find and remove the HistoricalLocation: "
+                        + historicalLocation.getEntity().toString());
             }
         }
 
         for (EntityWrapper<ObservedProperty> observedProperty : toRemove.getObservedProperties()) {
             try {
                 ObservedProperty op = service.observedProperties().find(observedProperty.getEntity().getId());
-                if(op != null && op.equals(observedProperty.getEntity())) {
+                if (op != null && op.equals(observedProperty.getEntity())) {
                     service.observedProperties().delete(op);
                 }
             } catch (ServiceFailureException e) {
@@ -112,7 +119,7 @@ public class FrostCourier {
         for (EntityWrapper<FeatureOfInterest> featureOfInterest : toRemove.getFeatureOfInterests()) {
             try {
                 FeatureOfInterest f = service.featuresOfInterest().find(featureOfInterest.getEntity().getId());
-                if(f != null && f.equals(featureOfInterest.getEntity())) {
+                if (f != null && f.equals(featureOfInterest.getEntity())) {
                     service.featuresOfInterest().delete(f);
                 }
             } catch (ServiceFailureException e) {

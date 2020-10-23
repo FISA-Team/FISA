@@ -49,18 +49,22 @@ public class FisaProjectToBundleConverter {
         this.resolver = resolver;
     }
 
-    public SensorThingsApiBundle convertObjectsToBundle(){
-        return convertToBundle(project.getFisaObjects());
-    }
-
-    public SensorThingsApiBundle convertRemovedObjectsToBundle() {
-        return convertToBundle(project.getRemovedFisaObjects());
-    }
-
     /**
      * Converts a {@link FisaProject} into a {@link SensorThingsApiBundle}.
      * @return the converted bundle.
      */
+    public SensorThingsApiBundle convertObjectsToBundle() {
+        return convertToBundle(project.getFisaObjects());
+    }
+
+    /**
+     * Converts the removed objects in the {@link FisaProject} into a {@link SensorThingsApiBundle}.
+     * @return the converted bundle.
+     */
+    public SensorThingsApiBundle convertRemovedObjectsToBundle() {
+        return convertToBundle(project.getRemovedFisaObjects());
+    }
+
     private SensorThingsApiBundle convertToBundle(List<FisaObject> fisaObjects) {
         FisaDocument fisaDoc = this.project.getFisaDocument();
         Map<String, FisaObjectDefinition> objectDefinitions = fisaDoc.getObjectDefinitions().stream()
@@ -173,7 +177,7 @@ public class FisaProjectToBundleConverter {
                 Entity<?> entity = node.getContext(Entity.class);
 
                 if (entity != null) {
-                    collected.add(entity);
+                    collected.add(new EntityWrapper<>(entity, node.getValue()));
                     nodesOfCollected.add(node);
                 }
             });
@@ -181,8 +185,8 @@ public class FisaProjectToBundleConverter {
             // create STA relations between collected entities
             for (int outer = 0; outer < collected.size(); outer++) {
                 for (int inner = 0; inner < collected.size(); inner++) {
-                    Entity<?> to = collected.get(inner);
-                    Entity<?> from = collected.get(outer);
+                    Entity<?> to = collected.get(inner).getEntity();
+                    Entity<?> from = collected.get(outer).getEntity();
                     // Check if the Objects and the Entity-Types are in relation
                     if (StaUtil.hasChildRelation(nodesOfCollected.get(inner), nodesOfCollected.get(outer))
                             && StaUtil.hasRelation(from.getType(), to.getType())) {

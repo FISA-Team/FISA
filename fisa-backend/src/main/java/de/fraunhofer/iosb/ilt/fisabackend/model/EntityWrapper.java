@@ -69,6 +69,7 @@ public class EntityWrapper<E extends Entity<?>> {
         return Objects.hash(entity, definingFisaObject);
     }
 
+    @Override
     public String toString() {
         return entity.toString();
     }
