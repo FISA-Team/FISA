@@ -110,4 +110,9 @@ public class FisaObject {
     public void setAttributes(List<FisaObjectAttribute> attributes) {
         this.attributes = attributes;
     }
+
+    @Override
+    public String toString() {
+        return this.id + " " + this.definitionName;
+    }
 }

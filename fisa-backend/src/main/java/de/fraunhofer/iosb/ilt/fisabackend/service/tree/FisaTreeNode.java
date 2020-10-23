@@ -95,4 +95,9 @@ public class FisaTreeNode implements TreeNode<FisaObject, FisaTreeNode> {
     public final int hashCode() {
         return Objects.hash(parent, object);
     }
+
+    @Override
+    public String toString() {
+        return object.toString();
+    }
 }
