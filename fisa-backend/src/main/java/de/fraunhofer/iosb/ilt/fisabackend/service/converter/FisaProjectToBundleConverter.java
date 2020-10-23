@@ -75,7 +75,7 @@ public class FisaProjectToBundleConverter {
                     .collect(Collectors.toMap(FisaObjectAttributeDefinition::getName, Function.identity()))));
         Map<Long, FisaObject> idMap = fisaObjects.stream()
                 .collect(Collectors.toMap(FisaObject::getId, Function.identity()));
-        // map of entites with their FISA-IDs to allow linking
+        // map of entities with their FISA-IDs to allow linking
         Map<Long, Entity<?>> allChildren = fisaObjects.stream()
                 .flatMap(obj -> obj.getChildren().stream())
                 // workaround to allow null values in map
@@ -97,77 +97,20 @@ public class FisaProjectToBundleConverter {
         }
         // generate entities
         for (FisaTree tree : fisaTrees) {
-            tree.accept(node -> {
-                FisaObjectDefinition definition = objectDefinitions.get(node.getValue().getDefinitionName());
-                if (definition == null) {
-                    throw new IllegalArgumentException(node.getValue().getDefinitionName() + " is not defined");
-                }
-                node.addContext(FisaObjectDefinition.class, definition);
-                // if the object is reusable, only create a new entity if not already exists
-                if (definition.getIsNotReusable()) {
-                    Mapper mapper = this.resolver.resolve(definition.getMapsTo());
-                    mapper.apply(node);
-                } else {
-                    Entity<?> entity = allChildren.computeIfAbsent(node.getValue().getId(), id -> {
-                        Mapper mapper = this.resolver.resolve(definition.getMapsTo());
-                        mapper.apply(node);
-                        return node.getContext(Entity.class);
-                    });
-                    // set (if already in allChildren)
-                    // or overwrite with same instance
-                    node.addContext(Entity.class, entity);
-                }
-            });
+            tree.accept(node -> generateEntities(node, objectDefinitions, allChildren));
         }
+
         // set attributes
         for (FisaTree tree : fisaTrees) {
-            tree.accept(node -> {
-                FisaObjectDefinition objectDefinition = node.getContext(FisaObjectDefinition.class);
-                for (FisaObjectAttribute attribute : node.getValue().getAttributes()) {
-                    FisaObjectAttributeDefinition definition = attributeDefinitions.get(objectDefinition)
-                            .get(attribute.getDefinitionName());
-                    if (definition == null) {
-                        throw new IllegalArgumentException(attribute.getDefinitionName()
-                                + " is no defined definition name");
-                    }
-                    Mapper mapper = this.resolver.resolve(definition.getMapsTo());
-                    if (mapper == null) {
-                        throw new IllegalArgumentException("No mapper found for " + definition.getMapsTo());
-                    }
-                    node.accept(n -> {
-                        FisaObjectDefinition nObjectDef = n.getContext(FisaObjectDefinition.class);
-                        // notReusable objects can't inherit attributes from other nodes
-                        if (nObjectDef.getIsNotReusable() && n != node) {
-                            return;
-                        }
-                        mapper.apply(n, attribute.getValue());
-                    });
-                }
-            });
+            tree.accept(node -> setAttributes(node, attributeDefinitions));
         }
 
         SensorThingsApiBundle bundle = new SensorThingsApiBundle();
         if (project.getGenerateExampleData()) {
             // generate example data
-            ExampleDataGenerator generator = new ExampleDataGenerator();
-            for (FisaTree tree : fisaTrees) {
-                tree.accept(node -> {
-                    Entity<?> context = node.getContext(Entity.class);
-                    FisaObjectDefinition definition = node.getContext(FisaObjectDefinition.class);
-                    ExampleData exampleData = definition.getExampleData();
-                    if (exampleData == null) return;
-                    if (context instanceof Datastream) {
-                        Datastream datastream = (Datastream) context;
-                        GeoJsonObject observedArea = datastream.getObservedArea();
-                        List<Observation> observations = generator.generateObservations(exampleData, observedArea);
-                        observations.forEach(observation -> observation.setDatastream(datastream));
-                        for (Observation o: observations) {
-                            bundle.addObservation(o, null);
-                        }
-                    }
-                });
-            }
+            addExampleData(fisaTrees, bundle);
         }
+
         // create bundle
         for (FisaTree tree : fisaTrees) {
             // collect all entities of tree
@@ -198,6 +141,75 @@ public class FisaProjectToBundleConverter {
             collected.forEach(addToBundle(bundle));
         }
         return bundle;
+    }
+
+    private void generateEntities(FisaTreeNode node, Map<String, FisaObjectDefinition> objectDefinitions,
+                                  Map<Long, Entity<?>> allChildren) {
+        FisaObjectDefinition definition = objectDefinitions.get(node.getValue().getDefinitionName());
+        if (definition == null) {
+            throw new IllegalArgumentException(node.getValue().getDefinitionName() + " is not defined");
+        }
+        node.addContext(FisaObjectDefinition.class, definition);
+        // if the object is reusable, only create a new entity if not already exists
+        if (definition.getIsNotReusable()) {
+            Mapper mapper = this.resolver.resolve(definition.getMapsTo());
+            mapper.apply(node);
+        } else {
+            Entity<?> entity = allChildren.computeIfAbsent(node.getValue().getId(), id -> {
+                Mapper mapper = this.resolver.resolve(definition.getMapsTo());
+                mapper.apply(node);
+                return node.getContext(Entity.class);
+            });
+            // set (if already in allChildren)
+            // or overwrite with same instance
+            node.addContext(Entity.class, entity);
+        }
+    }
+
+    private void setAttributes(FisaTreeNode node, Map<FisaObjectDefinition, Map<String,
+            FisaObjectAttributeDefinition>> attributeDefinitions) {
+        FisaObjectDefinition objectDefinition = node.getContext(FisaObjectDefinition.class);
+        for (FisaObjectAttribute attribute : node.getValue().getAttributes()) {
+            FisaObjectAttributeDefinition definition = attributeDefinitions.get(objectDefinition)
+                    .get(attribute.getDefinitionName());
+            if (definition == null) {
+                throw new IllegalArgumentException(attribute.getDefinitionName()
+                        + " is no defined definition name");
+            }
+            Mapper mapper = this.resolver.resolve(definition.getMapsTo());
+            if (mapper == null) {
+                throw new IllegalArgumentException("No mapper found for " + definition.getMapsTo());
+            }
+            node.accept(n -> {
+                FisaObjectDefinition nObjectDef = n.getContext(FisaObjectDefinition.class);
+                // notReusable objects can't inherit attributes from other nodes
+                if (nObjectDef.getIsNotReusable() && n != node) {
+                    return;
+                }
+                mapper.apply(n, attribute.getValue());
+            });
+        }
+    }
+
+    private void addExampleData(List<FisaTree> fisaTrees, SensorThingsApiBundle bundle) {
+        ExampleDataGenerator generator = new ExampleDataGenerator();
+        for (FisaTree tree : fisaTrees) {
+            tree.accept(node -> {
+                Entity<?> context = node.getContext(Entity.class);
+                FisaObjectDefinition definition = node.getContext(FisaObjectDefinition.class);
+                ExampleData exampleData = definition.getExampleData();
+                if (exampleData == null) return;
+                if (context instanceof Datastream) {
+                    Datastream datastream = (Datastream) context;
+                    GeoJsonObject observedArea = datastream.getObservedArea();
+                    List<Observation> observations = generator.generateObservations(exampleData, observedArea);
+                    observations.forEach(observation -> observation.setDatastream(datastream));
+                    for (Observation o: observations) {
+                        bundle.addObservation(o, null);
+                    }
+                }
+            });
+        }
     }
 
     private Consumer<EntityWrapper<Entity<?>>> addToBundle(SensorThingsApiBundle bundle) {

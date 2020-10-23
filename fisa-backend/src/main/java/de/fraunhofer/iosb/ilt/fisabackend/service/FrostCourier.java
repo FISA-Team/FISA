@@ -53,52 +53,40 @@ public class FrostCourier {
 
         for (EntityWrapper<Datastream> dataStream : toRemove.getDatastreams()) {
             try {
-                Datastream d = service.datastreams().find(dataStream.getEntity().getId());
-                if (d != null && d.equals(dataStream.getEntity())) {
-                    service.datastreams().delete(d);
-                }
+                service.delete(dataStream.getEntity());
             } catch (ServiceFailureException e) {
                 LOGGER.error("Can't find and remove the Datastream: " + dataStream.getEntity().toString());
             }
-
         }
+
         for (EntityWrapper<Thing> thing : toRemove.getThings()) {
             try {
-                Thing t = service.things().find(thing.getEntity().getId());
-                if (t != null && t.equals(thing.getEntity())) {
-                    service.things().delete(t);
-                }
+                service.delete(thing.getEntity());
             } catch (ServiceFailureException e) {
                 LOGGER.error("Can't find and remove the Thing: " + thing.getEntity().toString());
             }
         }
+
         for (EntityWrapper<Sensor> sensor : toRemove.getSensors()) {
             try {
-                Sensor s = service.sensors().find(sensor.getEntity().getId());
-                if (s != null && s.equals(sensor.getEntity())) {
-                    service.sensors().delete(s);
-                }
+                service.delete(sensor.getEntity());
             } catch (ServiceFailureException e) {
                 LOGGER.error("Can't find and remove the Sensor: " + sensor.getEntity().toString());
             }
         }
+
         for (EntityWrapper<Location> location : toRemove.getLocations()) {
             try {
-                Location l = service.locations().find(location.getEntity().getId());
-                if (l != null && l.equals(location.getEntity())) {
-                    service.locations().delete(l);
-                }
+                service.delete(location.getEntity());
             } catch (ServiceFailureException e) {
                 LOGGER.error("Can't find and remove the Location: " + location.getEntity().toString());
             }
 
         }
+
         for (EntityWrapper<HistoricalLocation> historicalLocation : toRemove.getHistoricalLocations()) {
             try {
-                HistoricalLocation hl = service.historicalLocations().find(historicalLocation.getEntity().getId());
-                if (hl != null && hl.equals(historicalLocation.getEntity())) {
-                    service.historicalLocations().delete(hl);
-                }
+                service.delete(historicalLocation.getEntity());
             } catch (ServiceFailureException e) {
                 LOGGER.error("Can't find and remove the HistoricalLocation: "
                         + historicalLocation.getEntity().toString());
@@ -107,10 +95,7 @@ public class FrostCourier {
 
         for (EntityWrapper<ObservedProperty> observedProperty : toRemove.getObservedProperties()) {
             try {
-                ObservedProperty op = service.observedProperties().find(observedProperty.getEntity().getId());
-                if (op != null && op.equals(observedProperty.getEntity())) {
-                    service.observedProperties().delete(op);
-                }
+                service.delete(observedProperty.getEntity());
             } catch (ServiceFailureException e) {
                 LOGGER.error("Can't find and remove the ObserverProperty: " + observedProperty.getEntity().toString());
             }
@@ -118,12 +103,10 @@ public class FrostCourier {
 
         for (EntityWrapper<FeatureOfInterest> featureOfInterest : toRemove.getFeatureOfInterests()) {
             try {
-                FeatureOfInterest f = service.featuresOfInterest().find(featureOfInterest.getEntity().getId());
-                if (f != null && f.equals(featureOfInterest.getEntity())) {
-                    service.featuresOfInterest().delete(f);
-                }
+                service.delete(featureOfInterest.getEntity());
             } catch (ServiceFailureException e) {
-                // can't find this featureOfInterest
+                LOGGER.error("Can't find and remove the FeatureOfInterest: "
+                        + featureOfInterest.getEntity().toString());
             }
         }
     }
