@@ -35,17 +35,13 @@ public class FrostCourier {
      * @param toRemove the SensorThingsApiBundle with the entities to remove
      * @param url the url of the FROST-Server
      * @throws MalformedURLException   If an invalid URL is given
-     * @throws ServiceFailureException If an entity cannot be uploaded to the server
      */
     public void removeObjects(SensorThingsApiBundle toRemove, String url) throws MalformedURLException {
         SensorThingsService service = sensorThingsServiceInstantiator(url);
 
         for (EntityWrapper<Observation> observation : toRemove.getObservations()) {
             try {
-                Observation o = service.observations().find(observation.getEntity().getId());
-                if (o != null && o.equals(observation.getEntity())) {
-                    service.observations().delete(o);
-                }
+                service.delete(observation.getEntity());
             } catch (ServiceFailureException e) {
                 LOGGER.error("Can't find and remove the Observation: " + observation.getEntity().toString());
             }
@@ -126,7 +122,7 @@ public class FrostCourier {
         LOGGER.info("Using {} as frost server url", url);
         UploadToFrostResponse responseData = new UploadToFrostResponse();
 
-        // Sort the bundle, so not created Entites will be added first
+        // Sort the bundle, so not created Entities will be added first
         bundle.sort();
 
         for (EntityWrapper<Thing> thing : bundle.getThings()) {
@@ -144,13 +140,6 @@ public class FrostCourier {
         }
 
         for (EntityWrapper<Location> location : bundle.getLocations()) {
-            // workaround for n:m, create things if they don't exist
-            // to prevent duplication (one thing may be related to multiple locations)
-            for (Thing thing : location.getEntity().getThings()) {
-                if (thing.getId() == null) {
-                    safeCreate(service, new EntityWrapper<>(thing));
-                }
-            }
             safeCreate(service, location);
             location.setFrostId();
             responseData.addObject(location.getDefiningFisaObject());
@@ -173,18 +162,6 @@ public class FrostCourier {
         // no entity should create multiple related entities of the same type
         for (EntityWrapper<Datastream> dataStream : bundle.getDatastreams()) {
             safeCreate(service, dataStream);
-            Datastream loaded = service.datastreams().find(dataStream.getEntity().getId(), datastreamExpansion());
-            // remove entities that are already added
-            if (dataStream.getEntity().getThing() != null) {
-                dataStream.getEntity().getThing().setId(loaded.getThing().getId());
-            }
-            if (dataStream.getEntity().getSensor() != null) {
-                dataStream.getEntity().getSensor().setId(loaded.getSensor().getId());
-
-            }
-            if (dataStream.getEntity().getObservedProperty() != null) {
-                dataStream.getEntity().getObservedProperty().setId(loaded.getObservedProperty().getId());
-            }
 
             dataStream.setFrostId();
             responseData.addDatastream(dataStream.getDefiningFisaObject(), dataStream.getEntity().getName());
@@ -204,6 +181,7 @@ public class FrostCourier {
             featureOfInterest.setFrostId();
             responseData.addObject(featureOfInterest.getDefiningFisaObject());
         }
+
         LOGGER.info("Uploaded project successfully");
 
         return responseData;
