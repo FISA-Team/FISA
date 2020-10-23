@@ -13,6 +13,7 @@ import de.fraunhofer.iosb.ilt.fisabackend.service.generator.ExampleDataGenerator
 import de.fraunhofer.iosb.ilt.fisabackend.service.mapper.Mapper;
 import de.fraunhofer.iosb.ilt.fisabackend.service.mapper.MappingResolver;
 import de.fraunhofer.iosb.ilt.fisabackend.service.tree.FisaTree;
+import de.fraunhofer.iosb.ilt.fisabackend.service.tree.FisaTreeNode;
 import de.fraunhofer.iosb.ilt.fisabackend.util.StaUtil;
 import de.fraunhofer.iosb.ilt.sta.model.Datastream;
 import de.fraunhofer.iosb.ilt.sta.model.Entity;
@@ -167,20 +168,25 @@ public class FisaProjectToBundleConverter {
         for (FisaTree tree : fisaTrees) {
             // collect all entities of tree
             List<EntityWrapper<Entity<?>>> collected = new ArrayList<>();
+            List<FisaTreeNode> nodesOfCollected = new ArrayList<>();
             tree.accept(node -> {
                 Entity<?> entity = node.getContext(Entity.class);
 
                 if (entity != null) {
-                    collected.add(new EntityWrapper<>(entity, node.getValue()));
+                    collected.add(entity);
+                    nodesOfCollected.add(node);
                 }
             });
 
             // create STA relations between collected entities
             for (int outer = 0; outer < collected.size(); outer++) {
-                for (EntityWrapper<Entity<?>> inner : collected) {
-                    EntityWrapper<Entity<?>> from = collected.get(outer);
-                    if (StaUtil.hasRelation(from.getEntity().getType(), inner.getEntity().getType())) {
-                        StaUtil.setInRelation(from.getEntity(), inner.getEntity());
+                for (int inner = 0; inner < collected.size(); inner++) {
+                    Entity<?> to = collected.get(inner);
+                    Entity<?> from = collected.get(outer);
+                    // Check if the Objects and the Entity-Types are in relation
+                    if (StaUtil.hasChildRelation(nodesOfCollected.get(inner), nodesOfCollected.get(outer))
+                            && StaUtil.hasRelation(from.getType(), to.getType())) {
+                        StaUtil.setInRelation(from, to);
                     }
                 }
             }

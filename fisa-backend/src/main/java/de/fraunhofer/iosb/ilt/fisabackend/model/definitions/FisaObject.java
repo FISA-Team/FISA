@@ -132,5 +132,8 @@ public class FisaObject {
         if (frostId != null && !frostId.isEmpty()) {
             this.frostId = Id.tryToParse(frostId);
         }
+    @Override
+    public String toString() {
+        return this.id + " " + this.definitionName;
     }
 }

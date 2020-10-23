@@ -1,5 +1,6 @@
 package de.fraunhofer.iosb.ilt.fisabackend.util;
 
+import de.fraunhofer.iosb.ilt.fisabackend.service.tree.FisaTreeNode;
 import de.fraunhofer.iosb.ilt.sta.model.Datastream;
 import de.fraunhofer.iosb.ilt.sta.model.Entity;
 import de.fraunhofer.iosb.ilt.sta.model.EntityType;
@@ -47,6 +48,37 @@ public final class StaUtil {
             default:
                 return false;
         }
+    }
+
+    /**
+     * Check if the objects are in a children-relation
+     *
+     * @param o1 the first object to check
+     * @param o2 the second object to check
+     * @return true if there is a child-relation between this objects
+     */
+    public static boolean hasChildRelation(FisaTreeNode o1, FisaTreeNode o2) {
+        // Check if there is a direct relation of thees objects
+        if (o1.getValue().getChildren().contains(o2.getValue().getId())
+                || o2.getValue().getChildren().contains(o1.getValue().getId())) {
+            return true;
+        }
+
+        // check the children of o1
+        for (FisaTreeNode child: o1.getChildren()) {
+            if (hasChildRelation(child, o2)) {
+                return true;
+            }
+        }
+
+        // check the children of o2
+        for (FisaTreeNode child: o2.getChildren()) {
+            if (hasChildRelation(o1, child)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
