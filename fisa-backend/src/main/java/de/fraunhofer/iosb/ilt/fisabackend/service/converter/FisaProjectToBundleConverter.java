@@ -80,11 +80,16 @@ public class FisaProjectToBundleConverter {
                 .flatMap(obj -> obj.getChildren().stream())
                 // workaround to allow null values in map
                 .collect(HashMap::new, (m, l) -> m.put(l, null), HashMap::putAll);
-        // remove all non-root objects
-        fisaObjects.removeIf(obj -> allChildren.containsKey(obj.getId()));
+        List<FisaObject> rootObjects = new ArrayList<>();
         List<FisaTree> fisaTrees = new ArrayList<>();
+        // add root Objects to the rootObjects list
+        for (FisaObject o: fisaObjects) {
+            if (!allChildren.containsKey(o.getId())) {
+                rootObjects.add(o);
+            }
+        }
         // build trees by adding the children
-        for (FisaObject fisaObject : fisaObjects) {
+        for (FisaObject fisaObject : rootObjects) {
             FisaTree tree = FisaTree.createTree(fisaObject);
             tree.acceptDownwards(node -> {
                 FisaObject value = node.getValue();

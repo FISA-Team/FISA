@@ -8,7 +8,6 @@ import de.fraunhofer.iosb.ilt.sta.ServiceFailureException;
 import de.fraunhofer.iosb.ilt.sta.StatusCodeException;
 import de.fraunhofer.iosb.ilt.sta.model.Datastream;
 import de.fraunhofer.iosb.ilt.sta.model.Entity;
-import de.fraunhofer.iosb.ilt.sta.model.EntityType;
 import de.fraunhofer.iosb.ilt.sta.model.FeatureOfInterest;
 import de.fraunhofer.iosb.ilt.sta.model.HistoricalLocation;
 import de.fraunhofer.iosb.ilt.sta.model.Location;
@@ -16,9 +15,6 @@ import de.fraunhofer.iosb.ilt.sta.model.Observation;
 import de.fraunhofer.iosb.ilt.sta.model.ObservedProperty;
 import de.fraunhofer.iosb.ilt.sta.model.Sensor;
 import de.fraunhofer.iosb.ilt.sta.model.Thing;
-import de.fraunhofer.iosb.ilt.sta.query.ExpandedEntity;
-import de.fraunhofer.iosb.ilt.sta.query.Expansion;
-import de.fraunhofer.iosb.ilt.sta.query.InvalidRelationException;
 import de.fraunhofer.iosb.ilt.sta.service.SensorThingsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -222,17 +218,5 @@ public class FrostCourier {
     private SensorThingsService sensorThingsServiceInstantiator(String url) throws MalformedURLException {
         URL serviceEndpoint = new URL(url);
         return new SensorThingsService(serviceEndpoint);
-    }
-
-    private static Expansion datastreamExpansion() {
-        try {
-            return Expansion.of(EntityType.DATASTREAM)
-                    .with(ExpandedEntity.from(EntityType.THING))
-                    .and(ExpandedEntity.from(EntityType.SENSOR))
-                    .and(ExpandedEntity.from(EntityType.OBSERVATIONS, EntityType.FEATURE_OF_INTEREST))
-                    .and(ExpandedEntity.from(EntityType.OBSERVED_PROPERTY));
-        } catch (InvalidRelationException e) {
-            throw new AssertionError(e);
-        }
     }
 }
