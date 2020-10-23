@@ -23,6 +23,7 @@ import {
 import {
   uploadProjectToFrost,
   clearErrorMessage,
+  updateProjectOnFrost,
 } from '../../redux/actions/backendCommunicationActions';
 import {
   getServerCommunicationPending,
@@ -52,7 +53,8 @@ export interface UploadToFrostDialogProps {
   communicationPending: boolean;
   communicationError: ErrorMessageI | undefined;
   clearErrorMessage: () => void;
-  uploadProjectToFrostServer: (project: FisaProjectI, frostUrl: string) => void;
+  uploadProjectToFrost: (project: FisaProjectI, frostUrl: string) => void;
+  updateProjectOnFrost: (project: FisaProjectI) => void;
   connectedFrostServerURL: string | undefined;
 }
 
@@ -74,7 +76,7 @@ function UploadToFrostDialog(props: UploadToFrostDialogProps) {
 
   const [url, setUrl] = React.useState(
     props.connectedFrostServerURL ||
-      'http://frost-server:8080/FROST-Server/v1.1'
+    'http://frost-server:8080/FROST-Server/v1.1'
   );
 
   const reset = () => {
@@ -100,11 +102,20 @@ function UploadToFrostDialog(props: UploadToFrostDialogProps) {
     }
     setCurrentUploadState(UploadStates.PENDING);
 
-    // Upload to frost
-    props.uploadProjectToFrostServer(
-      props.getFisaProject(generateExampleData, ignoreFrostIds),
-      url
-    );
+    // Update on FROST
+    if (props.connectedFrostServerURL && !ignoreFrostIds && urlTextDisabled) {
+      console.log("Update");
+      props.updateProjectOnFrost(
+        props.getFisaProject(generateExampleData, ignoreFrostIds)
+      );
+    } else {
+      console.log("Upload");
+      // Upload to frost
+      props.uploadProjectToFrost(
+        props.getFisaProject(generateExampleData, ignoreFrostIds),
+        url
+      );
+    }
   };
 
   let content;
@@ -316,10 +327,10 @@ const stateToProps = (state: FrontendReduxStateI) => ({
 });
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const mapDispatchToProps = (dispatch: any) => ({
-  uploadProjectToFrostServer: (project: FisaProjectI, frostUrl: string) =>
-    dispatch(uploadProjectToFrost(project, frostUrl)),
-  clearErrorMessage: () => dispatch(clearErrorMessage()),
-});
+const mapDispatchToProps = {
+  clearErrorMessage,
+  uploadProjectToFrost,
+  updateProjectOnFrost
+};
 
 export default connect(stateToProps, mapDispatchToProps)(UploadToFrostDialog);

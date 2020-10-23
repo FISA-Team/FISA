@@ -41,7 +41,7 @@ class FisaProjectToBundleConverterTest {
     void testVerySimpleProjectConvert() {
         FisaProject project = getVerySimpleProject();
         FisaProjectToBundleConverter converter = new FisaProjectToBundleConverter(project, this.resolver);
-        SensorThingsApiBundle bundle = converter.convertToBundle();
+        SensorThingsApiBundle bundle = converter.convertObjectsToBundle();
         EntityWrapper<Thing> expected = new EntityWrapper<>(new Thing(), project.getFisaObjects().get(0));
         expected.getEntity().setName("MyThing");
         assertIterableEquals(List.of(expected), bundle.getThings());
@@ -82,7 +82,7 @@ class FisaProjectToBundleConverterTest {
     void testSimpleProjectConvert() throws ServiceFailureException {
         FisaProject project = getSimpleProject();
         FisaProjectToBundleConverter converter = new FisaProjectToBundleConverter(project, this.resolver);
-        SensorThingsApiBundle bundle = converter.convertToBundle();
+        SensorThingsApiBundle bundle = converter.convertObjectsToBundle();
         EntityWrapper<Thing> expectedThing = new EntityWrapper<>(new Thing(), project.getFisaObjects().get(0));
         expectedThing.getEntity().setName("MyThing");
         EntityWrapper<Datastream> expectedDatastream = new EntityWrapper<>(new Datastream(), project.getFisaObjects().get(1));

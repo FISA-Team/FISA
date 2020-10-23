@@ -195,6 +195,33 @@ public class ProjectController {
     }
 
     /**
+     * Updates an existing Project on a FROST-Server
+     *
+     * @param project the project that has to be converted and uploaded
+     * @return Response of the backend operation
+     */
+    @CrossOrigin(origins = "*")
+    @PutMapping("/frostServer/update")
+    public ResponseEntity updateFrostServer(@RequestBody FisaProject project) {
+        LOGGER.info("Received project, uploading...");
+        try {
+            return ResponseEntity.ok(this.frostService.updateFrostServer(project));
+        } catch (EntityTransferException e) {
+            LOGGER.error("Communication with SensorThingsApi-Server failed", e);
+            return ResponseEntity.status(e.getStatusCode())
+                    .body(e.getReturnedContent());
+        } catch (ServiceFailureException e) {
+            LOGGER.error("Communication with SensorThingsApi-Server failed", e);
+            return ResponseEntity.status(HttpStatus.BAD_GATEWAY)
+                    .body("Communication with SensorThingsApi-Server failed: " + e.getMessage());
+        } catch (Exception e) {
+            LOGGER.error("Failed to fulfill request", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Failed to fulfill request: " + e.getMessage());
+        }
+    }
+
+    /**
      * Offers the project as a File
      *
      * @param uuidString The uuid of the project

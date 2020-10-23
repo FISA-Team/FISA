@@ -3,6 +3,7 @@ package de.fraunhofer.iosb.ilt.fisabackend.service;
 import de.fraunhofer.iosb.ilt.fisabackend.model.EntityWrapper;
 import de.fraunhofer.iosb.ilt.fisabackend.model.SensorThingsApiBundle;
 import de.fraunhofer.iosb.ilt.fisabackend.model.UploadToFrostResponse;
+import de.fraunhofer.iosb.ilt.fisabackend.model.definitions.FisaObject;
 import de.fraunhofer.iosb.ilt.fisabackend.service.exception.EntityTransferException;
 import de.fraunhofer.iosb.ilt.sta.ServiceFailureException;
 import de.fraunhofer.iosb.ilt.sta.StatusCodeException;
@@ -25,9 +26,100 @@ import org.slf4j.LoggerFactory;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.List;
 
 public class FrostCourier {
     private static final Logger LOGGER = LoggerFactory.getLogger(FrostCourier.class);
+
+    public void removeObjects(SensorThingsApiBundle toRemove, String url) throws MalformedURLException, ServiceFailureException {
+        SensorThingsService service = sensorThingsServiceInstantiator(url);
+
+        for (EntityWrapper<Observation> observation : toRemove.getObservations()) {
+            try {
+                Observation o = service.observations().find(observation.getEntity().getId());
+                if(o != null && o.equals(observation.getEntity())) {
+                    service.observations().delete(o);
+                }
+            } catch (ServiceFailureException e) {
+                LOGGER.error("Can't find and remove the Observation: " + observation.getEntity().toString());
+            }
+        }
+
+        for (EntityWrapper<Datastream> dataStream : toRemove.getDatastreams()) {
+            try {
+                Datastream d = service.datastreams().find(dataStream.getEntity().getId());
+                if(d != null && d.equals(dataStream.getEntity())) {
+                    service.datastreams().delete(d);
+                }
+            } catch (ServiceFailureException e) {
+                LOGGER.error("Can't find and remove the Datastream: " + dataStream.getEntity().toString());
+            }
+
+        }
+        for (EntityWrapper<Thing> thing : toRemove.getThings()) {
+            try {
+                Thing t = service.things().find(thing.getEntity().getId());
+                if (t != null && t.equals(thing.getEntity())) {
+                    service.things().delete(t);
+                }
+            } catch (ServiceFailureException e) {
+                LOGGER.error("Can't find and remove the Thing: " + thing.getEntity().toString());
+            }
+        }
+        for (EntityWrapper<Sensor> sensor : toRemove.getSensors()) {
+            try {
+                Sensor s = service.sensors().find(sensor.getEntity().getId());
+                if (s != null && s.equals(sensor.getEntity())) {
+                    service.sensors().delete(s);
+                }
+            } catch (ServiceFailureException e) {
+                LOGGER.error("Can't find and remove the Sensor: " + sensor.getEntity().toString());
+            }
+        }
+        for (EntityWrapper<Location> location : toRemove.getLocations()) {
+            try {
+                Location l = service.locations().find(location.getEntity().getId());
+                if(l != null && l.equals(location.getEntity())) {
+                    service.locations().delete(l);
+                }
+            } catch (ServiceFailureException e) {
+                LOGGER.error("Can't find and remove the Location: " + location.getEntity().toString());
+            }
+
+        }
+        for (EntityWrapper<HistoricalLocation> historicalLocation : toRemove.getHistoricalLocations()) {
+            try {
+                HistoricalLocation hl = service.historicalLocations().find(historicalLocation.getEntity().getId());
+                if (hl != null && hl.equals(historicalLocation.getEntity())) {
+                    service.historicalLocations().delete(hl);
+                }
+            } catch (ServiceFailureException e) {
+                LOGGER.error("Can't find and remove the HistoricalLocation: " + historicalLocation.getEntity().toString());
+            }
+        }
+
+        for (EntityWrapper<ObservedProperty> observedProperty : toRemove.getObservedProperties()) {
+            try {
+                ObservedProperty op = service.observedProperties().find(observedProperty.getEntity().getId());
+                if(op != null && op.equals(observedProperty.getEntity())) {
+                    service.observedProperties().delete(op);
+                }
+            } catch (ServiceFailureException e) {
+                LOGGER.error("Can't find and remove the ObserverProperty: " + observedProperty.getEntity().toString());
+            }
+        }
+
+        for (EntityWrapper<FeatureOfInterest> featureOfInterest : toRemove.getFeatureOfInterests()) {
+            try {
+                FeatureOfInterest f = service.featuresOfInterest().find(featureOfInterest.getEntity().getId());
+                if(f != null && f.equals(featureOfInterest.getEntity())) {
+                    service.featuresOfInterest().delete(f);
+                }
+            } catch (ServiceFailureException e) {
+                // can't find this featureOfInterest
+            }
+        }
+    }
 
     /**
      * Uploads a FISA-Project to a FROST-Server.
@@ -46,27 +138,6 @@ public class FrostCourier {
 
         // Sort the bundle, so not created Entites will be added first
         bundle.sort();
-
-        // 1:1 relations can be removed after upload
-        // no entity should create multiple related entities of the same type
-        for (EntityWrapper<Datastream> dataStream : bundle.getDatastreams()) {
-            safeCreate(service, dataStream);
-            Datastream loaded = service.datastreams().find(dataStream.getEntity().getId(), datastreamExpansion());
-            // remove entities that are already added
-            if (dataStream.getEntity().getThing() != null) {
-                dataStream.getEntity().getThing().setId(loaded.getThing().getId());
-            }
-            if (dataStream.getEntity().getSensor() != null) {
-                dataStream.getEntity().getSensor().setId(loaded.getSensor().getId());
-
-            }
-            if (dataStream.getEntity().getObservedProperty() != null) {
-                dataStream.getEntity().getObservedProperty().setId(loaded.getObservedProperty().getId());
-            }
-
-            dataStream.setFrostId();
-            responseData.addDatastream(dataStream.getDefiningFisaObject(), dataStream.getEntity().getName());
-        }
 
         for (EntityWrapper<Thing> thing : bundle.getThings()) {
             safeCreate(service, thing);
@@ -106,6 +177,27 @@ public class FrostCourier {
             observedProperty.setFrostId();
             responseData.addObject(observedProperty.getDefiningFisaObject());
             // bundle.getMultiDatastreams().removeAll(observedProperty.getMultiDatastreams()); not implemented
+        }
+
+        // 1:1 relations can be removed after upload
+        // no entity should create multiple related entities of the same type
+        for (EntityWrapper<Datastream> dataStream : bundle.getDatastreams()) {
+            safeCreate(service, dataStream);
+            Datastream loaded = service.datastreams().find(dataStream.getEntity().getId(), datastreamExpansion());
+            // remove entities that are already added
+            if (dataStream.getEntity().getThing() != null) {
+                dataStream.getEntity().getThing().setId(loaded.getThing().getId());
+            }
+            if (dataStream.getEntity().getSensor() != null) {
+                dataStream.getEntity().getSensor().setId(loaded.getSensor().getId());
+
+            }
+            if (dataStream.getEntity().getObservedProperty() != null) {
+                dataStream.getEntity().getObservedProperty().setId(loaded.getObservedProperty().getId());
+            }
+
+            dataStream.setFrostId();
+            responseData.addDatastream(dataStream.getDefiningFisaObject(), dataStream.getEntity().getName());
         }
 
         for (EntityWrapper<Observation> observation : bundle.getObservations()) {

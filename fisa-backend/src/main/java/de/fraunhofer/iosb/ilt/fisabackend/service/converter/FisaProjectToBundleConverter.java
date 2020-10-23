@@ -48,12 +48,19 @@ public class FisaProjectToBundleConverter {
         this.resolver = resolver;
     }
 
+    public SensorThingsApiBundle convertObjectsToBundle(){
+        return convertToBundle(project.getFisaObjects());
+    }
+
+    public SensorThingsApiBundle convertRemovedObjectsToBundle() {
+        return convertToBundle(project.getRemovedFisaObjects());
+    }
+
     /**
      * Converts a {@link FisaProject} into a {@link SensorThingsApiBundle}.
      * @return the converted bundle.
      */
-    public SensorThingsApiBundle convertToBundle() {
-        List<FisaObject> fisaObjects = new ArrayList<>(this.project.getFisaObjects());
+    private SensorThingsApiBundle convertToBundle(List<FisaObject> fisaObjects) {
         FisaDocument fisaDoc = this.project.getFisaDocument();
         Map<String, FisaObjectDefinition> objectDefinitions = fisaDoc.getObjectDefinitions().stream()
                 .collect(Collectors.toMap(FisaObjectDefinition::getName, Function.identity()));

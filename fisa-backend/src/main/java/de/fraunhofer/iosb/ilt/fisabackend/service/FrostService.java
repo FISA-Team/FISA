@@ -35,4 +35,25 @@ public class FrostService {
         SensorThingsApiBundle bundle = this.fisaConverter.convertToBundle(project);
         return this.frostCourier.uploadProject(bundle, url);
     }
+
+    /**
+     * Updates the given {@link FisaProject} on the FROST-Server with the given url.
+     *
+     * @param project the project to send to the server.
+     * @throws MalformedURLException   if the url is invalid.
+     * @throws ServiceFailureException if the FROST-Server fails to accept the data.
+     * @return a list of DatastreamIdAndName
+     */
+    public UploadToFrostResponse updateFrostServer(FisaProject project) throws MalformedURLException, ServiceFailureException {
+        // Fist add the entities
+        SensorThingsApiBundle bundle = this.fisaConverter.convertToBundle(project);
+        UploadToFrostResponse responseData = this.frostCourier.uploadProject(bundle, project.getConnectedFrostServer());
+
+        // remove removed objects from FROST
+        if(!project.getRemovedFisaObjects().isEmpty()) {
+            SensorThingsApiBundle removedObjectsBundle = this.fisaConverter.convertRemovedObjectsToBundle(project);
+            this.frostCourier.removeObjects(removedObjectsBundle, project.getConnectedFrostServer());
+        }
+        return responseData;
+    }
 }

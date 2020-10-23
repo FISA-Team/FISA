@@ -42,7 +42,7 @@
       "children": [
         {
           "objectName": "Water quality sample",
-          "quantity": 1,
+          "quantity": -1,
           "infoText": null
         }
       ]
@@ -129,7 +129,7 @@
         },
         {
           "objectName": "Sensor type",
-          "quantity": -1,
+          "quantity": 1,
           "infoText": null
         }
       ]
@@ -276,7 +276,7 @@
       "children": [
         {
           "objectName": "Environmental Monitoring Facility",
-          "quantity": 1,
+          "quantity": -1,
           "infoText": null
         }
       ]
@@ -343,7 +343,7 @@
       "children": [
         {
           "objectName": "Environmental Monitoring Facility",
-          "quantity": 1,
+          "quantity": -1,
           "infoText": null
         }
       ]

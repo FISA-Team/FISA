@@ -26,6 +26,17 @@ public class FisaConverter {
      */
     public SensorThingsApiBundle convertToBundle(FisaProject project) {
         FisaProjectToBundleConverter converter = new FisaProjectToBundleConverter(project, this.resolver);
-        return converter.convertToBundle();
+        return converter.convertObjectsToBundle();
+    }
+
+    /**
+     * Converts the removed Objects in a {@link FisaProject} into a {@link SensorThingsApiBundle}.
+     *
+     * @param project the project to convert.
+     * @return the converted bundle.
+     */
+    public SensorThingsApiBundle convertRemovedObjectsToBundle(FisaProject project) {
+        FisaProjectToBundleConverter converter = new FisaProjectToBundleConverter(project, this.resolver);
+        return converter.convertRemovedObjectsToBundle();
     }
 }

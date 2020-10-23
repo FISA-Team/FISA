@@ -196,6 +196,8 @@ export const uploadProjectToFrost = (
   project: FisaProjectI,
   frostUrl: string
 ) => (dispatch: Dispatch<ActionI>) => {
+  console.log("Upload now");
+
   dispatch(setCommunicationPending());
   const encodetUrl = encodeURIComponent(frostUrl);
   return axios
@@ -215,6 +217,36 @@ export const uploadProjectToFrost = (
         setDatastreamConnectionData(response.data.datastreamConnectionData)
       );
       dispatch(setConnectedFrostUrl(frostUrl));
+      dispatch(clearRemovedObjects());
+    })
+    .catch((error) => {
+      dispatch(setErrorToShow(createErrorMessage(error)));
+    })
+    .finally(() => {
+      dispatch(stopCommunicationPending());
+    });
+};
+
+export const updateProjectOnFrost = (
+  project: FisaProjectI
+) => (dispatch: Dispatch<ActionI>) => {
+  dispatch(setCommunicationPending());
+  return axios
+    .put(
+      `${BackendUrl}/frostServer/update/`,
+      JSON.stringify(project),
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    )
+    .then((response) => {
+      dispatch(setCommunicationSuccess());
+      dispatch(setFrostIdsOfObjects(response.data.updatedObjects));
+      dispatch(
+        setDatastreamConnectionData(response.data.datastreamConnectionData)
+      );
       dispatch(clearRemovedObjects());
     })
     .catch((error) => {

@@ -591,16 +591,15 @@ function extractProjectFromLocaleStorage(): ProjectStateI {
   const objects = localStorage.getItem(FISA_OBJECTS);
   const latestId = localStorage.getItem(LATEST_ID);
   const connectedFrostServer = localStorage.getItem(CONNECTED_FROST_URL);
+  console.log(connectedFrostServer);
 
-  if (!constantParts || !objects || !latestId) {
+
+  if (!constantParts || !objects || !latestId || !connectedFrostServer) {
     return defaultState();
   }
   return {
     ...defaultState(),
-    connectedFrostServer:
-      connectedFrostServer || connectedFrostServer === null
-        ? undefined
-        : JSON.parse(connectedFrostServer),
+    connectedFrostServer: JSON.parse(connectedFrostServer),
     objects: JSON.parse(objects),
     constantParts: JSON.parse(constantParts),
     latestId: JSON.parse(latestId),

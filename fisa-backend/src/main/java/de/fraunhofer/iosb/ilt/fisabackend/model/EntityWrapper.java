@@ -68,4 +68,8 @@ public class EntityWrapper<E extends Entity<?>> {
     public int hashCode() {
         return Objects.hash(entity, definingFisaObject);
     }
+
+    public String toString() {
+        return entity.toString();
+    }
 }

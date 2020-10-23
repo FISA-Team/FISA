@@ -31,6 +31,7 @@ public class DocumentService {
         }
         Path currentRelativePath = Paths.get(fisaFilesDirectory);
         String dir = currentRelativePath.toAbsolutePath().toString() + File.separator + "DocumentRepository";
+        dir = "/home/pc/FISA_DIR/DocumentRepository";
         repo = new DocumentRepository(dir);
     }
 
