@@ -12,6 +12,11 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ExampleDataGeneratorTest {
+    private static final int EXAMPLE_YEAR = 2020;
+    private static final double EXAMPLE_VALUE_MAX = 25d;
+    private static final double EXAMPLE_VALUE_MIN = 15d;
+    private static final int EXAMPLE_COUNT = 3;
+
     private ExampleDataGenerator generator;
 
     @BeforeEach
@@ -22,19 +27,19 @@ class ExampleDataGeneratorTest {
 
     @Test
     void generateExampleDataTest() {
-        ExampleData data = new ExampleData(2, 25d, 15d,
-                LocalDateTime.of(2021, 1, 1, 0, 0),
-                LocalDateTime.of(2020, 1, 1, 0, 0));
+        ExampleData data = new ExampleData(2, EXAMPLE_VALUE_MAX, EXAMPLE_VALUE_MIN,
+                LocalDateTime.of(EXAMPLE_YEAR + 1, 1, 1, 0, 0),
+                LocalDateTime.of(EXAMPLE_YEAR, 1, 1, 0, 0));
         List<Observation> observations = generator.generateObservations(data, new Point(1, 1));
         assertEquals(2, observations.size());
     }
 
     @Test
     void generateExampleDataTest2() {
-        ExampleData data = new ExampleData(3, 25d, 15d,
-                LocalDateTime.of(2021, 1, 1, 0, 0),
-                LocalDateTime.of(2020, 1, 1, 0, 0));
+        ExampleData data = new ExampleData(EXAMPLE_COUNT, EXAMPLE_VALUE_MAX, EXAMPLE_VALUE_MIN,
+                LocalDateTime.of(EXAMPLE_YEAR + 1, 1, 1, 0, 0),
+                LocalDateTime.of(EXAMPLE_YEAR, 1, 1, 0, 0));
         List<Observation> observations = generator.generateObservations(data, new Point(1, 0));
-        assertEquals(3, observations.size());
+        assertEquals(EXAMPLE_COUNT, observations.size());
     }
 }

@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ChildDefinitionTest {
+    private static final int EXAMPLE_QUANTITY = 10;
 
     private String expectedObjectName;
     private int expectedQuantity;
@@ -47,8 +48,8 @@ public class ChildDefinitionTest {
 
     @Test
     void setQuantityTest() {
-        this.expectedQuantity = 10;
-        this.actual.setQuantity(10);
+        this.expectedQuantity = EXAMPLE_QUANTITY;
+        this.actual.setQuantity(EXAMPLE_QUANTITY);
 
         assertEquals(this.expectedQuantity, this.expectedQuantity);
     }

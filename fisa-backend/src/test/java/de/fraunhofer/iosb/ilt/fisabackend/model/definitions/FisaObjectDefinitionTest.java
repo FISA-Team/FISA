@@ -12,6 +12,9 @@ import static org.junit.jupiter.api.Assertions.assertIterableEquals;
 
 public class FisaObjectDefinitionTest {
 
+    private static final int EXAMPLE_QUANTITY = 5;
+    private static final int EXAMPLE_VAL_MIN = -5;
+
     private String expectedName;
     private String expectedInfoText;
     private boolean expectedIsTopLayer;
@@ -33,7 +36,7 @@ public class FisaObjectDefinitionTest {
         this.expectedIsTopLayer = false;
         this.expectedMapsTo = "Thing";
         this.expectedAttributes = new ArrayList<>();
-        this.expectedChildren = new ChildDefinition[5];
+        this.expectedChildren = new ChildDefinition[EXAMPLE_QUANTITY];
         this.expectedExampleData = new ExampleData();
         this.expectedPositionAttributes = new String[]{"1", "5"};
         this.expectedCaption = "Etwas";
@@ -158,7 +161,7 @@ public class FisaObjectDefinitionTest {
     void setChildrenTest() {
         ChildDefinition testChild = new ChildDefinition(
                 "Fridge",
-                5,
+                EXAMPLE_QUANTITY,
                 "A Generic Fridge"
         );
 
@@ -173,9 +176,9 @@ public class FisaObjectDefinitionTest {
     @Test
     void setExampleDataTest() {
         ExampleData testData = new ExampleData(
-                5,
-                -5,
-                5,
+                EXAMPLE_QUANTITY,
+                EXAMPLE_VAL_MIN,
+                EXAMPLE_QUANTITY,
                 LocalDateTime.now(),
                 LocalDateTime.now()
         );

@@ -12,6 +12,20 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 public class ExampleDataTest {
 
+    private static final int EXAMPLE_YEAR = 2020;
+    private static final int EXAMPLE_EXP_COUNT = 300;
+    private static final int EXAMPLE_EXP_VAL_MAX = 20;
+    private static final int EXAMPLE_EXP_VAL_MIN = -10;
+    private static final int EXAMPLE_MONTH = 5;
+    private static final int EXAMPLE_DAY_ONE = 10;
+    private static final int EXAMPLE_DAY_TWO = 7;
+    private static final int EXAMPLE_HOUR = 12;
+    private static final int  EXAMPLE_HOUR_TWO = 6;
+    private static final int EXAMPLE_MINUTE = 55;
+    private static final int EXAMPLE_COUNT = 100;
+    private static final int EXAMPLE_MAX_VALUE = 1000;
+    private static final int EXAMPLE_MIN_VALUE = -300;
+
     private int expectedCount;
     private double expectedValueMax;
     private double expectedValueMin;
@@ -22,11 +36,21 @@ public class ExampleDataTest {
 
     @BeforeEach
     void setUp() {
-        this.expectedCount = 300;
-        this.expectedValueMax = 20;
-        this.expectedValueMin = -10;
-        this.expectedTimeMax = LocalDateTime.of(2020, 5, 10, 12, 55);
-        this.expectedTimeMin = LocalDateTime.of(2020, 5, 7, 12, 55);
+        this.expectedCount = EXAMPLE_EXP_COUNT;
+        this.expectedValueMax = EXAMPLE_EXP_VAL_MAX;
+        this.expectedValueMin = EXAMPLE_EXP_VAL_MIN;
+        this.expectedTimeMax = LocalDateTime.of(
+                EXAMPLE_YEAR,
+                EXAMPLE_MONTH,
+                EXAMPLE_DAY_ONE,
+                EXAMPLE_HOUR,
+                EXAMPLE_MINUTE);
+        this.expectedTimeMin = LocalDateTime.of(
+                EXAMPLE_YEAR,
+                EXAMPLE_MONTH,
+                EXAMPLE_DAY_TWO,
+                EXAMPLE_HOUR,
+                EXAMPLE_MINUTE);
 
         this.actual = new ExampleData(
                 this.expectedCount,
@@ -64,45 +88,65 @@ public class ExampleDataTest {
 
     @Test
     void setCountTest() {
-        this.expectedCount = 100;
+        this.expectedCount = EXAMPLE_COUNT;
 
-        this.actual.setCount(100);
+        this.actual.setCount(EXAMPLE_COUNT);
 
         assertEquals(this.expectedCount, this.actual.getCount());
     }
 
     @Test
     void setValueMaxTest() {
-        this.expectedValueMax = 1000;
+        this.expectedValueMax = EXAMPLE_MAX_VALUE;
 
-        this.actual.setValueMax(1000);
+        this.actual.setValueMax(EXAMPLE_MAX_VALUE);
 
         assertEquals(this.expectedValueMax, this.actual.getValueMax());
     }
 
     @Test
     void setValueMinTest() {
-        this.expectedValueMin = -300;
+        this.expectedValueMin = EXAMPLE_MIN_VALUE;
 
-        this.actual.setValueMin(-300);
+        this.actual.setValueMin(EXAMPLE_MIN_VALUE);
 
         assertEquals(this.expectedValueMin, this.actual.getValueMin());
     }
 
     @Test
     void setTimeMax() {
-        this.expectedTimeMax = LocalDateTime.of(2020, 5, 6, 6, 6);
+        this.expectedTimeMax = LocalDateTime.of(
+                EXAMPLE_YEAR,
+                EXAMPLE_MONTH,
+                EXAMPLE_MONTH + 1,
+                EXAMPLE_HOUR,
+                EXAMPLE_MINUTE);
 
-        this.actual.setTimeMax(LocalDateTime.of(2020, 5, 6, 6, 6));
+        this.actual.setTimeMax(LocalDateTime.of(
+                EXAMPLE_YEAR,
+                EXAMPLE_MONTH,
+                EXAMPLE_MONTH + 1,
+                EXAMPLE_HOUR,
+                EXAMPLE_MINUTE));
 
         assertEquals(this.expectedTimeMax, this.actual.getTimeMax());
     }
 
     @Test
     void setTimeMin() {
-        this.expectedTimeMin = LocalDateTime.of(2020, 5, 6, 6, 6);
+        this.expectedTimeMin = LocalDateTime.of(
+                EXAMPLE_YEAR,
+                EXAMPLE_MONTH,
+                EXAMPLE_DAY_TWO,
+                EXAMPLE_HOUR_TWO,
+                EXAMPLE_HOUR_TWO);
 
-        this.actual.setTimeMin(LocalDateTime.of(2020, 5, 6, 6, 6));
+        this.actual.setTimeMin(LocalDateTime.of(
+                EXAMPLE_YEAR,
+                EXAMPLE_MONTH,
+                EXAMPLE_DAY_TWO,
+                EXAMPLE_HOUR_TWO,
+                EXAMPLE_HOUR_TWO));
 
         assertEquals(this.expectedTimeMin, this.actual.getTimeMin());
     }

@@ -10,6 +10,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertIterableEquals;
 
 public class FisaObjectTest {
+    private static final int EXAMPLE_ID = 2020;
+    private static final int EXAMPLE_ID_TWO = 4040;
 
     private long expectedId;
     private String expectedDefinitionName;
@@ -20,7 +22,7 @@ public class FisaObjectTest {
 
     @BeforeEach
     void setUp() {
-        this.expectedId = 2020;
+        this.expectedId = EXAMPLE_ID;
         this.expectedDefinitionName = "Kitchen";
         this.expectedChildren = new ArrayList<>();
         this.expectedAttributes = new ArrayList<>();
@@ -55,7 +57,7 @@ public class FisaObjectTest {
 
     @Test
     void setIdTest() {
-        this.expectedId = 4040;
+        this.expectedId = EXAMPLE_ID_TWO;
 
         this.actual.setId(this.expectedId);
 
