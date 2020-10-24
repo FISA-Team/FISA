@@ -147,8 +147,8 @@ export const getAllActiveObjectBundles = (
   state: FrontendReduxStateI
 ): ObjectBundleI[] => {
   const activeObject = getActiveObjectFromState(state);
-  const childsOfActiveObjectDefinition = state.fisaProject.constantParts.
-    objectDefinitions.find(
+  const childsOfActiveObjectDefinition = state.fisaProject.constantParts
+    .objectDefinitions.find(
       (definition) => {
         if (!activeObject) {
           return false;
