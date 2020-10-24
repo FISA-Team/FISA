@@ -50,11 +50,22 @@ public class FrostService {
         SensorThingsApiBundle bundle = this.fisaConverter.convertToBundle(project);
         UploadToFrostResponse responseData = this.frostCourier.uploadProject(bundle, project.getConnectedFrostServer());
 
-        // remove removed objects from FROST
+        // remove removed objects from FROST-Server
         if (!project.getRemovedFisaObjects().isEmpty()) {
-            SensorThingsApiBundle removedObjectsBundle = this.fisaConverter.convertRemovedObjectsToBundle(project);
-            this.frostCourier.removeObjects(removedObjectsBundle, project.getConnectedFrostServer());
+            SensorThingsApiBundle toRemove = this.fisaConverter.convertRemovedObjectsToBundle(project);
+            this.frostCourier.removeObjects(toRemove, project.getConnectedFrostServer());
         }
         return responseData;
+    }
+
+    /**
+     * Rempves the given Project from the FROST-Server
+     *
+     * @param project the Project to remove
+     * @throws MalformedURLException   if the url is invalid.
+     */
+    public void removeProjectFromFrostServer(FisaProject project) throws MalformedURLException {
+        SensorThingsApiBundle bundle = this.fisaConverter.convertToBundle(project);
+        this.frostCourier.removeObjects(bundle, project.getConnectedFrostServer());
     }
 }
