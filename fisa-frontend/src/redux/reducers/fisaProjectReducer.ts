@@ -74,7 +74,7 @@ export default function fisaProjectReducer(
     localStorage.setItem(LATEST_ID, JSON.stringify(newState.latestId));
     localStorage.setItem(
       CONNECTED_FROST_URL,
-      JSON.stringify(newState.connectedFrostServer || "")
+      JSON.stringify(newState.connectedFrostServer || '')
     );
   }
   return newState;

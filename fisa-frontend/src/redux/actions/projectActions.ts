@@ -21,9 +21,9 @@ export const changeObjectProperty = (
   },
 });
 
-export const removeObject = (objectId: number) => ({
+export const removeObject = (objectId: number, removeFromFrost: boolean) => ({
   type: actionTypes.REMOVE_OBJECT,
-  payload: { objectId },
+  payload: { objectId, removeFromFrost },
 });
 
 export const addObjectByExisting = (objectId: number) => ({

@@ -56,12 +56,12 @@ function ObjectBox(props: ObjectBoxProps) {
   const closeWarning = () => setWarningOpen(false);
   const openWarning = () =>
     props.dontShowWarning && !props.object.frostId
-      ? deleteObject()
+      ? deleteObject(false)
       : setWarningOpen(true);
 
-  const deleteObject = () => {
+  const deleteObject = (removeFromFrost: boolean) => {
     setWarningOpen(false);
-    props.removeObject(props.object.id);
+    props.removeObject(props.object.id, removeFromFrost);
   };
 
   const checkIfGoToObject = (

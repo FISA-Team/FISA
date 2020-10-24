@@ -6,6 +6,7 @@
   "linkButton": "Link Object",
   "doYouWantToRemove1": "Do you really want to delete",
   "doYouWantToRemove2": "?",
+  "removeFromFrost": "Delete also from FROST-Server",
   "goToObject": "Go to object",
   "getPositionFromCard": "Position from Card",
   "getPositionsFromCard": "get Positions from Card",

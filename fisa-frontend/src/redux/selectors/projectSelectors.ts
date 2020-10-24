@@ -147,17 +147,18 @@ export const getAllActiveObjectBundles = (
   state: FrontendReduxStateI
 ): ObjectBundleI[] => {
   const activeObject = getActiveObjectFromState(state);
-  const childsOfActiveObjectDefinition = state.fisaProject.constantParts.objectDefinitions.find(
-    (definition) => {
-      if (!activeObject) {
-        return false;
+  const childsOfActiveObjectDefinition = state.fisaProject.constantParts.
+    objectDefinitions.find(
+      (definition) => {
+        if (!activeObject) {
+          return false;
+        }
+        return definition.name === activeObject.definitionName;
       }
-      return definition.name === activeObject.definitionName;
-    }
-  )?.children;
+    )?.children;
 
-  const objectsInCategories: ObjectBundleI[] = state.fisaProject.constantParts.objectDefinitions
-    .filter(
+  const objectsInCategories: ObjectBundleI[] = state.fisaProject.constantParts
+    .objectDefinitions.filter(
       (definition) =>
         definition.name !== state.fisaProject.constantParts.fisaProjectName
     )
@@ -441,7 +442,7 @@ export const getObjectsInActiveWithCategories = (
           : '<undefined>',
         isAddable: definition
           ? definition.quantity <= 0 ||
-            objectsOfCategory.length < definition.quantity
+          objectsOfCategory.length < definition.quantity
           : false,
         objects: objectsOfCategory,
       };

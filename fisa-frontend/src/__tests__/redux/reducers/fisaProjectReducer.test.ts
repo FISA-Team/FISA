@@ -439,7 +439,7 @@ describe('loadAutoSave', () => {
       LATEST_ID,
       JSON.stringify(testState().fisaProject.latestId)
     );
-    localStorage.setItem(CONNECTED_FROST_URL, JSON.stringify(""));
+    localStorage.setItem(CONNECTED_FROST_URL, JSON.stringify(''));
     expect(fisaProjectReducer(emptyProjectState, action)).toEqual(
       testState().fisaProject
     );

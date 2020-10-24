@@ -97,7 +97,7 @@ describe('newObjectFromTemplate', () => {
           children: [],
         },
       ]
-    }
+    };
     expect(objectReducer(objectReducerTestState(), action)).toEqual(expected);
   });
 
@@ -134,7 +134,7 @@ describe('newObjectFromTemplate', () => {
             };
           }),
       ]
-    }
+    };
 
     expect(objectReducer(objectReducerTestState(), action)).toEqual(expected);
   });
@@ -174,7 +174,7 @@ describe('addObjectFromExisting', () => {
             };
           }),
       ]
-    }
+    };
 
     expect(objectReducer(objectReducerTestState(), action)).toEqual(expected);
   });
@@ -205,7 +205,7 @@ describe('removeObject', () => {
             return object;
           }),
       ]
-    }
+    };
 
     expect(objectReducer(objectReducerTestState(), action)).toEqual(expected);
   });
@@ -231,7 +231,7 @@ describe('removeObject', () => {
           return object;
         }),
       ]
-    }
+    };
     expect(objectReducer(objectReducerTestState(), action)).toEqual(expected);
   });
 
@@ -257,7 +257,7 @@ describe('removeObject', () => {
           }
           return object;
         })
-    }
+    };
     expect(objectReducer(objectReducerTestState(), action)).toEqual(expected);
   });
 });
@@ -293,7 +293,7 @@ describe('linkObject', () => {
           }
           return object;
         })
-    }
+    };
     expect(objectReducer(objectReducerTestState(), action)).toEqual(expected);
   });
 });
@@ -328,7 +328,7 @@ describe('changeObjectValue', () => {
         }
         return object;
       })
-    }
+    };
     expect(objectReducer(objectReducerTestState(), action)).toEqual(expected);
   });
 });
@@ -356,7 +356,7 @@ describe('changeProjectName', () => {
           }
           return object;
         })
-    }
+    };
     expect(objectReducer(testState().fisaProject.objects, action)).toEqual(
       expectedOutput
     );

@@ -322,3 +322,14 @@ export const loadFromPC = (project: FisaProjectI) => (
   // Check Document in backend
   dispatch(loadSavedProject(project));
 };
+
+export const deleteProjectFromBackendAndServer = (uuid: string) => (dispatch: any) => {
+  dispatch(setCommunicationPending());
+  return axios.delete(`${BackendUrl}/frostServer/${uuid}`)
+    .then(() => {
+      dispatch(setCommunicationSuccess());
+      dispatch(fetchAvailableProjects());
+    }).catch((e) => {
+      dispatch(setErrorToShow(createErrorMessage(e)));
+    }).finally(() => dispatch(stopCommunicationPending()));
+};

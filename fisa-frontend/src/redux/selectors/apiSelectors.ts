@@ -35,10 +35,13 @@ export const getFisaProjectFromState = (
       )
     );
 
-  const removedFisaObjects: BackendFisaObjectI[] = state.fisaProject.objects.removed.map(object =>
-    objectToBackendObject(
+  const removedFisaObjects: BackendFisaObjectI[] = state.fisaProject.objects.removed.map(
+    object => objectToBackendObject(
       object,
-      getPredefinedAttributes(state.fisaProject.constantParts.objectDefinitions, object.definitionName), ignoreFrostIds));
+      getPredefinedAttributes(
+        state.fisaProject.constantParts.objectDefinitions,
+        object.definitionName),
+      ignoreFrostIds));
 
   const fisaObjectDefinition = state.fisaProject.constantParts.objectDefinitions
     .filter((definition) => definition.mapsTo !== ERROR_MAPS_TO)

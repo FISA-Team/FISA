@@ -17,7 +17,7 @@ export interface AttributeProps {
 
 export interface ObjectBoxBaseProps {
   object: ObjectWithNameI;
-  removeObject: (objectId: number) => void;
+  removeObject: (objectId: number, removeFromFrost: boolean) => void;
   changeObjectProperty: (objectId: number, key: string, value: string) => void;
   goToObject: (objectId: number) => void;
 }
