@@ -117,7 +117,13 @@ public class FisaProjectToBundleConverter {
         }
 
         // create bundle
+        createBundle(fisaTrees, bundle);
+        return bundle;
+    }
+
+    private void createBundle(List<FisaTree> fisaTrees, SensorThingsApiBundle bundle) {
         for (FisaTree tree : fisaTrees) {
+
             // collect all entities of tree
             List<EntityWrapper<Entity<?>>> collected = new ArrayList<>();
             List<FisaTreeNode> nodesOfCollected = new ArrayList<>();
@@ -145,7 +151,6 @@ public class FisaProjectToBundleConverter {
             // add entities of tree to bundle
             collected.forEach(addToBundle(bundle));
         }
-        return bundle;
     }
 
     private void generateEntities(FisaTreeNode node, Map<String, FisaObjectDefinition> objectDefinitions,

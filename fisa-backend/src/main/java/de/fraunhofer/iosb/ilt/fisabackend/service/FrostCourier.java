@@ -8,25 +8,20 @@ import de.fraunhofer.iosb.ilt.sta.ServiceFailureException;
 import de.fraunhofer.iosb.ilt.sta.StatusCodeException;
 import de.fraunhofer.iosb.ilt.sta.model.Datastream;
 import de.fraunhofer.iosb.ilt.sta.model.Entity;
-import de.fraunhofer.iosb.ilt.sta.model.FeatureOfInterest;
-import de.fraunhofer.iosb.ilt.sta.model.HistoricalLocation;
-import de.fraunhofer.iosb.ilt.sta.model.Location;
-import de.fraunhofer.iosb.ilt.sta.model.Observation;
-import de.fraunhofer.iosb.ilt.sta.model.ObservedProperty;
-import de.fraunhofer.iosb.ilt.sta.model.Sensor;
-import de.fraunhofer.iosb.ilt.sta.model.Thing;
+import de.fraunhofer.iosb.ilt.sta.model.EntityType;
 import de.fraunhofer.iosb.ilt.sta.service.SensorThingsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.List;
 
 public class FrostCourier {
     private static final Logger LOGGER = LoggerFactory.getLogger(FrostCourier.class);
 
     /**
-     * removes the given Objects from the FROST-Server
+     * Removes the given Objects from the FROST-Server
      *
      * @param toRemove the SensorThingsApiBundle with the entities to remove
      * @param url the url of the FROST-Server
@@ -35,70 +30,38 @@ public class FrostCourier {
     public void removeObjects(SensorThingsApiBundle toRemove, String url) throws MalformedURLException {
         SensorThingsService service = sensorThingsServiceInstantiator(url);
 
-        for (EntityWrapper<Observation> observation : toRemove.getObservations()) {
-            try {
-                service.delete(observation.getEntity());
-            } catch (ServiceFailureException e) {
-                LOGGER.error("Can't find and remove the Observation: " + observation.getEntity().toString());
-            }
-        }
+        // remove all Observations
+        removeEntities(toRemove.getObservations(), service);
+        // remove all FeatureOfInterests
+        removeEntities(toRemove.getFeatureOfInterests(), service);
+        // remove all Datastreams
+        removeEntities(toRemove.getDatastreams(), service);
+        // remove all Sensors
+        removeEntities(toRemove.getSensors(), service);
+        // remove all HistoricalLocations
+        removeEntities(toRemove.getHistoricalLocations(), service);
+        // remove all Locations
+        removeEntities(toRemove.getLocations(), service);
+        // remove all Thins
+        removeEntities(toRemove.getThings(), service);
+        // remove all ObservedProperties
+        removeEntities(toRemove.getObservedProperties(), service);
+    }
 
-        for (EntityWrapper<Datastream> dataStream : toRemove.getDatastreams()) {
+    /**
+     * removes the entity with the help of the service
+     * @param entityWrapperList the Entity to remove
+     * @param service the sensor-thing service
+     * @param <T> the type of the entity.
+     */
+    private  <T extends Entity<T>> void removeEntities(List<EntityWrapper<T>> entityWrapperList,
+                                                       SensorThingsService service) {
+        for (EntityWrapper<T> entity: entityWrapperList) {
             try {
-                service.delete(dataStream.getEntity());
+                service.delete(entity.getEntity());
             } catch (ServiceFailureException e) {
-                LOGGER.error("Can't find and remove the Datastream: " + dataStream.getEntity().toString());
-            }
-        }
-
-        for (EntityWrapper<Thing> thing : toRemove.getThings()) {
-            try {
-                service.delete(thing.getEntity());
-            } catch (ServiceFailureException e) {
-                LOGGER.error("Can't find and remove the Thing: " + thing.getEntity().toString());
-            }
-        }
-
-        for (EntityWrapper<Sensor> sensor : toRemove.getSensors()) {
-            try {
-                service.delete(sensor.getEntity());
-            } catch (ServiceFailureException e) {
-                LOGGER.error("Can't find and remove the Sensor: " + sensor.getEntity().toString());
-            }
-        }
-
-        for (EntityWrapper<Location> location : toRemove.getLocations()) {
-            try {
-                service.delete(location.getEntity());
-            } catch (ServiceFailureException e) {
-                LOGGER.error("Can't find and remove the Location: " + location.getEntity().toString());
-            }
-
-        }
-
-        for (EntityWrapper<HistoricalLocation> historicalLocation : toRemove.getHistoricalLocations()) {
-            try {
-                service.delete(historicalLocation.getEntity());
-            } catch (ServiceFailureException e) {
-                LOGGER.error("Can't find and remove the HistoricalLocation: "
-                        + historicalLocation.getEntity().toString());
-            }
-        }
-
-        for (EntityWrapper<ObservedProperty> observedProperty : toRemove.getObservedProperties()) {
-            try {
-                service.delete(observedProperty.getEntity());
-            } catch (ServiceFailureException e) {
-                LOGGER.error("Can't find and remove the ObserverProperty: " + observedProperty.getEntity().toString());
-            }
-        }
-
-        for (EntityWrapper<FeatureOfInterest> featureOfInterest : toRemove.getFeatureOfInterests()) {
-            try {
-                service.delete(featureOfInterest.getEntity());
-            } catch (ServiceFailureException e) {
-                LOGGER.error("Can't find and remove the FeatureOfInterest: "
-                        + featureOfInterest.getEntity().toString());
+                LOGGER.error("Can't find and remove " + entity.getEntity().getType() + ": "
+                        + entity.getEntity().toString());
             }
         }
     }
@@ -120,67 +83,41 @@ public class FrostCourier {
 
         // Sort the bundle, so not created Entities will be added first
         bundle.sort();
-
-        for (EntityWrapper<Thing> thing : bundle.getThings()) {
-            safeCreate(service, thing);
-            thing.setFrostId();
-            responseData.addObject(thing.getDefiningFisaObject());
-            // bundle.getMultiDatastream().removeAll(thing.getMultiDatastreams()); not implemented
-        }
-
-        for (EntityWrapper<Sensor> sensor : bundle.getSensors()) {
-            safeCreate(service, sensor);
-            sensor.setFrostId();
-            responseData.addObject(sensor.getDefiningFisaObject());
-            // bundle.getMultiDatastreams().removeAll(sensor.getMultiDatastreams()); not implemented
-        }
-
-        for (EntityWrapper<Location> location : bundle.getLocations()) {
-            safeCreate(service, location);
-            location.setFrostId();
-            responseData.addObject(location.getDefiningFisaObject());
-        }
-
-        for (EntityWrapper<HistoricalLocation> historicalLocation : bundle.getHistoricalLocations()) {
-            safeCreate(service, historicalLocation);
-            historicalLocation.setFrostId();
-            responseData.addObject(historicalLocation.getDefiningFisaObject());
-        }
-
-        for (EntityWrapper<ObservedProperty> observedProperty : bundle.getObservedProperties()) {
-            safeCreate(service, observedProperty);
-            observedProperty.setFrostId();
-            responseData.addObject(observedProperty.getDefiningFisaObject());
-            // bundle.getMultiDatastreams().removeAll(observedProperty.getMultiDatastreams()); not implemented
-        }
-
-        // 1:1 relations can be removed after upload
-        // no entity should create multiple related entities of the same type
-        for (EntityWrapper<Datastream> dataStream : bundle.getDatastreams()) {
-            safeCreate(service, dataStream);
-
-            dataStream.setFrostId();
-            responseData.addDatastream(dataStream.getDefiningFisaObject(), dataStream.getEntity().getName());
-        }
-
-        for (EntityWrapper<Observation> observation : bundle.getObservations()) {
-            safeCreate(service, observation);
-            observation.setFrostId();
-            responseData.addObject(observation.getDefiningFisaObject());
-            // bundle.getDatastreams().remove(observation.getDatastream());
-            // bundle.getMultiDatastreams().remove(observation.getMultiDatastream()); not implemented
-            // bundle.getFeatureOfInterests().remove(observation.getEntity().getFeatureOfInterest());
-        }
-
-        for (EntityWrapper<FeatureOfInterest> featureOfInterest : bundle.getFeatureOfInterests()) {
-            safeCreate(service, featureOfInterest);
-            featureOfInterest.setFrostId();
-            responseData.addObject(featureOfInterest.getDefiningFisaObject());
-        }
+        // upload all Things
+        uploadEntityList(bundle.getThings(),  responseData, service);
+        // upload all Sensors
+        uploadEntityList(bundle.getSensors(),  responseData, service);
+        // upload all Locations
+        uploadEntityList(bundle.getLocations(),  responseData, service);
+        // upload all HistoricalLocations
+        uploadEntityList(bundle.getHistoricalLocations(),  responseData, service);
+        // upload all ObservedProperties
+        uploadEntityList(bundle.getObservedProperties(),  responseData, service);
+        // upload all Datastreams
+        uploadEntityList(bundle.getDatastreams(),  responseData, service);
+        // upload all FeatureOfInterests
+        uploadEntityList(bundle.getFeatureOfInterests(),  responseData, service);
+        // upload all Observations
+        uploadEntityList(bundle.getObservations(),  responseData, service);
 
         LOGGER.info("Uploaded project successfully");
 
         return responseData;
+    }
+
+    private <T extends Entity<T>> void uploadEntityList(List<EntityWrapper<T>> entityList,
+                       UploadToFrostResponse responseData, SensorThingsService service) throws ServiceFailureException {
+        for (EntityWrapper<T> entity: entityList) {
+            safeCreate(service, entity.getEntity());
+            entity.setFrostId();
+            if (entity.getEntity().getType() == EntityType.DATASTREAM) {
+                Datastream datastream = (Datastream) entity.getEntity();
+                responseData.addDatastream(entity.getDefiningFisaObject(), datastream.getName());
+            } else {
+                responseData.addObject(entity.getDefiningFisaObject());
+            }
+
+        }
     }
 
     /**
@@ -191,20 +128,20 @@ public class FrostCourier {
      * @param <T>     the type of the entity.
      * @throws EntityTransferException if the entity couldn't be transferred correctly.
      */
-    private static <T extends Entity<T>> void safeCreate(SensorThingsService service, EntityWrapper<T> entity)
+    private static <T extends Entity<T>> void safeCreate(SensorThingsService service, T entity)
             throws ServiceFailureException {
-        if (entity.getEntity().getId() != null) {
+        if (entity.getId() != null) {
             try {
-                service.update(entity.getEntity());
+                service.update(entity);
             } catch (StatusCodeException e) {
-                throw new EntityTransferException(entity.getEntity(), e);
+                throw new EntityTransferException(entity, e);
             }
             return;
         }
         try {
-            service.create(entity.getEntity());
+            service.create(entity);
         } catch (StatusCodeException e) {
-            throw new EntityTransferException(entity.getEntity(), e);
+            throw new EntityTransferException(entity, e);
         }
     }
 
