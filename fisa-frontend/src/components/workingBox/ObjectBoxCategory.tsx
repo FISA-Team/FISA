@@ -102,6 +102,7 @@ function ObjectBoxCategory(props: ObjectBoxCategoryProps) {
       <AccordionDetails>
         <ObjectGrid
           objects={props.objectCategory.objects}
+          ogcType={props.objectCategory.ogcType}
           withAddIcon={props.objectCategory.isAddable}
           dispatch={props.dispatch}
           definitionName={props.objectCategory.definitionName}
@@ -167,6 +168,7 @@ function ObjectGrid(props: ObjectGridProps) {
         <ObjectBoxFrame
           key={object.id}
           object={object}
+          ogcType={props.ogcType}
           scroll={props.scroll}
           parentRef={props.parentRef}
         />
@@ -245,6 +247,7 @@ function ObjectBoxFrameUpdated(props: ObjectBoxFrameProps) {
       <Grow in={checked} key={props.object.id}>
         <div ref={ref}>
           <ObjectBox
+            ogcType={props.ogcType}
             object={props.object}
             goToObject={(objectId) => props.dispatch(setObjectActive(objectId))}
             changeObjectProperty={(id, key, value) =>

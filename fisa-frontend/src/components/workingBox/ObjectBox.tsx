@@ -16,6 +16,7 @@ import {
 import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
 import { useTranslation } from 'react-i18next';
 
+import clsx from 'clsx';
 import AttributeBox from './AttributeBox';
 import RemoveWarning from './ObjectRemoveWarning';
 import {
@@ -35,6 +36,7 @@ import {
 import MapDialog from '../map/MapDialog';
 import { setObjectActive } from '../../redux/actions';
 import { ObjectBoxProps, ObjectBoxBaseProps } from './workingBoxInterfaces';
+import FrostLink from './FrostLink';
 
 /**
  * The Boxes of Objects inside the WorkingBox
@@ -48,6 +50,10 @@ function ObjectBox(props: ObjectBoxProps) {
           ? getHighlightBackgroundColor(theme)
           : getBackgroundColor(theme),
     },
+    bordered: {
+      borderStyle: 'solid',
+      borderColor: theme.palette.primary.dark
+    }
   }))();
 
   const [warningOpen, setWarningOpen] = React.useState(false);
@@ -80,16 +86,14 @@ function ObjectBox(props: ObjectBoxProps) {
 
   const { t } = useTranslation('projectPage');
 
+  const objectBoxClassName = props.object.frostId
+    ? clsx(classes.card, classes.bordered) : classes.card;
+
   const objectBox = (
     <Card
-      className={classes.card}
+      className={objectBoxClassName}
       onMouseEnter={() => props.dispatch(setHighlightedObject(props.object.id))}
       onClick={checkIfGoToObject}
-      style={
-        props.object.frostId
-          ? { borderStyle: 'solid', borderColor: '#006622' }
-          : {}
-      }
     >
       <CardHeader
         title={
@@ -128,6 +132,8 @@ function ObjectBox(props: ObjectBoxProps) {
               />
             </ListItem>
           ))}
+          {props.object.frostId &&
+            <FrostLink ogcType={props.ogcType} frostId={props.object.frostId} />}
         </List>
         <CardActions>
           {props.object.selectable && (

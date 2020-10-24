@@ -315,10 +315,17 @@ function realFisaProjectReducer(
     * Stuff just for the objectReducer
     */
     case actionTypes.CHANGE_OBJECT_VALUE:
-    case actionTypes.CLEAR_REMOVED_OBJECTS:
     case actionTypes.SET_FROST_IDS_OF_OBJECTS:
       return {
         ...workingState,
+        objects: objectReducer(workingState.objects, action),
+      };
+
+    case actionTypes.CLEAR_REMOVED_OBJECTS:
+      return {
+        ...workingState,
+        undoHistory: [],
+        redoHistory: [],
         objects: objectReducer(workingState.objects, action),
       };
 
