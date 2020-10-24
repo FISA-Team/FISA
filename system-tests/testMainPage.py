@@ -14,15 +14,15 @@ class TestMainPage(BaseTest):
         self.driver.find_element_by_id('themeLanguageMenu').click()
         time.sleep(0.2)
         self.driver.find_element_by_xpath('/html/body/div[2]/div[3]/ul/fieldset/div[1]/label[2]/span[1]/span[1]/input').click()
-        time.sleep(0.2)
+        time.sleep(0.5)
         color = self.driver.find_element_by_xpath('/html/body/div/div/div/div/div[1]').value_of_css_property('background-color')
         assert color == 'rgb(44, 49, 58)'
 
         # dark theme to light theme
         self.driver.find_element_by_id('themeLanguageMenu').click()
         time.sleep(0.2)
-        self.driver.find_element_by_xpath('/html/body/div[2]/div[3]/ul/fieldset/div[1]/label[1]/span[1]').click()
-        time.sleep(0.2)
+        self.driver.find_element_by_xpath('/html/body/div[2]/div[3]/ul/fieldset/div[1]/label[1]/span[1]/span[1]/input').click()
+        time.sleep(0.5)
         color = self.driver.find_element_by_xpath('/html/body/div/div/div/div/div[1]').value_of_css_property('background-color')
         assert color == 'rgb(242, 242, 242)'
 
