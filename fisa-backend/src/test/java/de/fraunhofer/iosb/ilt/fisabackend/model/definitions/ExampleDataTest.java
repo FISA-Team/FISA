@@ -109,13 +109,13 @@ public class ExampleDataTest {
 
     @Test
     void parseExampleData() {
-        String s = "{\n" +
-                "        \"count\": 10,\n" +
-                "        \"valueMin\": 0,\n" +
-                "        \"valueMax\": 14,\n" +
-                "        \"timeMin\": \"2020-01-01T01:00:00\",\n" +
-                "        \"timeMax\": \"2020-01-01T23:59:59\"\n" +
-                "      }";
+        String s = "{\n"
+                + "        \"count\": 10,\n"
+                + "        \"valueMin\": 0,\n"
+                + "        \"valueMax\": 14,\n"
+                + "        \"timeMin\": \"2020-01-01T01:00:00\",\n"
+                + "        \"timeMax\": \"2020-01-01T23:59:59\"\n"
+                + "      }";
         ObjectMapper mapper = new ObjectMapper();
         try {
             ExampleData data = mapper.readValue(s, ExampleData.class);

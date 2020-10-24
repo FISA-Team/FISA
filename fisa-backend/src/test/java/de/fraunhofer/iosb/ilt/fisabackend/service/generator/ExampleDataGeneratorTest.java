@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ExampleDataGeneratorTest {
     private ExampleDataGenerator generator;
@@ -37,5 +37,4 @@ class ExampleDataGeneratorTest {
         List<Observation> observations = generator.generateObservations(data, new Point(1, 0));
         assertEquals(3, observations.size());
     }
-
 }

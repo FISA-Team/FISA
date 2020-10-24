@@ -31,9 +31,9 @@ class FisaProjectToBundleConverterTest {
 
     @BeforeEach
     void setUp() {
-        var resolver = new DynamicMappingResolver();
-        resolver.registerRootMapper("STA", new StaMapper());
-        this.resolver = resolver;
+        DynamicMappingResolver resolver2 = new DynamicMappingResolver();
+        resolver2.registerRootMapper("STA", new StaMapper());
+        this.resolver = resolver2;
     }
 
 
@@ -85,7 +85,8 @@ class FisaProjectToBundleConverterTest {
         SensorThingsApiBundle bundle = converter.convertObjectsToBundle();
         EntityWrapper<Thing> expectedThing = new EntityWrapper<>(new Thing(), project.getFisaObjects().get(0));
         expectedThing.getEntity().setName("MyThing");
-        EntityWrapper<Datastream> expectedDatastream = new EntityWrapper<>(new Datastream(), project.getFisaObjects().get(1));
+        EntityWrapper<Datastream> expectedDatastream = new EntityWrapper<>(new Datastream(),
+                project.getFisaObjects().get(1));
         expectedDatastream.getEntity().setName("MyDatastream");
         assertIterableEquals(List.of(expectedThing), bundle.getThings());
         assertIterableEquals(List.of(expectedDatastream), bundle.getDatastreams());
