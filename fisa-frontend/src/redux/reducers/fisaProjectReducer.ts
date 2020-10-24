@@ -74,7 +74,7 @@ export default function fisaProjectReducer(
     localStorage.setItem(LATEST_ID, JSON.stringify(newState.latestId));
     localStorage.setItem(
       CONNECTED_FROST_URL,
-      JSON.stringify(newState.connectedFrostServer)
+      JSON.stringify(newState.connectedFrostServer || "")
     );
   }
   return newState;
@@ -591,7 +591,6 @@ function extractProjectFromLocaleStorage(): ProjectStateI {
   const objects = localStorage.getItem(FISA_OBJECTS);
   const latestId = localStorage.getItem(LATEST_ID);
   const connectedFrostServer = localStorage.getItem(CONNECTED_FROST_URL);
-  console.log(connectedFrostServer);
 
 
   if (!constantParts || !objects || !latestId || !connectedFrostServer) {
@@ -599,7 +598,8 @@ function extractProjectFromLocaleStorage(): ProjectStateI {
   }
   return {
     ...defaultState(),
-    connectedFrostServer: JSON.parse(connectedFrostServer),
+    connectedFrostServer: connectedFrostServer && JSON.parse(connectedFrostServer) ?
+      JSON.parse(connectedFrostServer) : undefined,
     objects: JSON.parse(objects),
     constantParts: JSON.parse(constantParts),
     latestId: JSON.parse(latestId),

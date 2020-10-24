@@ -309,6 +309,7 @@ describe('axios tests success', () => {
         payload: { data: datastreamConnectionData },
       },
       { type: actionTypes.SET_FROST_URL, payload: { frostUrl } },
+      { type: actionTypes.CLEAR_REMOVED_OBJECTS, payload: undefined },
       { type: actionTypes.STOP_COMMUNICATION_PENDING, payload: undefined },
     ];
 
