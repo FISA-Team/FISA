@@ -14,7 +14,7 @@ import {
   LATEST_ID,
 } from '../../../variables/variables';
 import { fisaProject } from '../mockups/fakeFisaProject';
-import { ProjectStateI, FrontendReduxStateI } from '../../../redux/interfaces';
+import { ProjectStateI, FrontendReduxStateI, NecessaryProjectStateI } from '../../../redux/interfaces';
 import { csvData } from '../mockups/csvData';
 
 describe('fetchProject', () => {
@@ -223,6 +223,44 @@ describe('goToObject', () => {
       expected
     );
   });
+  it('change without payload', () => {
+    const action = {
+      type: actionTypes.GO_TO_OBJECT,
+      payload: {
+        objectId: undefined
+      },
+    };
+    expect(fisaProjectReducer(
+      testState().fisaProject,
+      action))
+      .toEqual(testState().fisaProject);
+  });
+  it('Change to already active Object', () => {
+    const action = {
+      type: actionTypes.GO_TO_OBJECT,
+      payload: {
+        objectId: testState().fisaProject.activeObject
+      },
+    };
+    expect(fisaProjectReducer(
+      testState().fisaProject,
+      action)).toEqual(testState().fisaProject);
+  });
+  it('change active object to already active parent object of 3 because object 3 cant have children', () => {
+    const action = {
+      type: actionTypes.GO_TO_OBJECT,
+      payload: {
+        objectId: 3,
+      },
+    };
+    const updatedTestState = {
+      ...testState().fisaProject,
+      activeObject: 1
+    };
+    expect(fisaProjectReducer(updatedTestState, action)).toEqual(
+      updatedTestState
+    );
+  });
 });
 
 describe('removeObject', () => {
@@ -343,81 +381,20 @@ describe('linkObject', () => {
   });
 });
 
-describe('undo', () => {
-  it('tests undo changed activeObject', () => {
-    const customState = {
-      ...testState().fisaProject,
-      activeObject: 6,
-      undoHistory: [
-        {
-          objects: testState().fisaProject.objects,
-          activeObject: testState().fisaProject.activeObject,
-        },
-      ],
+describe('setFrostURL', () => {
+  it('test to set the FROST-Url', () => {
+    const frostUrl = 'http://localhost:8080/FROST-Server/v1.1';
+    const action = {
+      type: actionTypes.SET_FROST_URL,
+      payload: {
+        frostUrl
+      }
     };
     const expected = {
       ...testState().fisaProject,
-      activeObject: 0,
-      redoHistory: [
-        {
-          objects: testState().fisaProject.objects,
-          activeObject: 6,
-        },
-      ],
+      connectedFrostServer: frostUrl
     };
-    const action = {
-      type: actionTypes.UNDO,
-      payload: undefined,
-    };
-    expect(fisaProjectReducer(customState, action)).toEqual(expected);
-  });
-  it('tests undo without undo history', () => {
-    const action = {
-      type: actionTypes.UNDO,
-      payload: undefined,
-    };
-    expect(fisaProjectReducer(testState().fisaProject, action)).toEqual(
-      testState().fisaProject
-    );
-  });
-});
-
-describe('redo', () => {
-  it('tests redo changed activeObject', () => {
-    const customState = {
-      ...testState().fisaProject,
-      activeObject: 6,
-      redoHistory: [
-        {
-          objects: testState().fisaProject.objects,
-          activeObject: testState().fisaProject.activeObject,
-        },
-      ],
-    };
-    const expected = {
-      ...testState().fisaProject,
-      activeObject: 0,
-      undoHistory: [
-        {
-          objects: testState().fisaProject.objects,
-          activeObject: 6,
-        },
-      ],
-    };
-    const action = {
-      type: actionTypes.REDO,
-      payload: undefined,
-    };
-    expect(fisaProjectReducer(customState, action)).toEqual(expected);
-  });
-  it('tests redo without redo history', () => {
-    const action = {
-      type: actionTypes.REDO,
-      payload: undefined,
-    };
-    expect(fisaProjectReducer(testState().fisaProject, action)).toEqual(
-      testState().fisaProject
-    );
+    expect(fisaProjectReducer(testState().fisaProject, action)).toEqual(expected);
   });
 });
 
@@ -730,6 +707,164 @@ describe('changeProjectName', () => {
     );
   });
 });
+
+describe('testRedoUndo', () => {
+  it('tests undo changed activeObject', () => {
+    const customState = {
+      ...testState().fisaProject,
+      activeObject: 6,
+      undoHistory: [
+        {
+          objects: testState().fisaProject.objects,
+          activeObject: testState().fisaProject.activeObject,
+        },
+      ],
+    };
+    const expected = {
+      ...testState().fisaProject,
+      activeObject: 0,
+      redoHistory: [
+        {
+          objects: testState().fisaProject.objects,
+          activeObject: 6,
+        },
+      ],
+    };
+    const action = {
+      type: actionTypes.UNDO,
+      payload: undefined,
+    };
+    expect(fisaProjectReducer(customState, action)).toEqual(expected);
+  });
+  it('tests undo without undo history', () => {
+    const action = {
+      type: actionTypes.UNDO,
+      payload: undefined,
+    };
+    expect(fisaProjectReducer(testState().fisaProject, action)).toEqual(
+      testState().fisaProject
+    );
+  });
+  it('tests redo changed activeObject', () => {
+    const customState = {
+      ...testState().fisaProject,
+      activeObject: 6,
+      redoHistory: [
+        {
+          objects: testState().fisaProject.objects,
+          activeObject: testState().fisaProject.activeObject,
+        },
+      ],
+    };
+    const expected = {
+      ...testState().fisaProject,
+      activeObject: 0,
+      undoHistory: [
+        {
+          objects: testState().fisaProject.objects,
+          activeObject: 6,
+        },
+      ],
+    };
+    const action = {
+      type: actionTypes.REDO,
+      payload: undefined,
+    };
+    expect(fisaProjectReducer(customState, action)).toEqual(expected);
+  });
+  it('tests redo without redo history', () => {
+    const action = {
+      type: actionTypes.REDO,
+      payload: undefined,
+    };
+    expect(fisaProjectReducer(testState().fisaProject, action)).toEqual(
+      testState().fisaProject
+    );
+  });
+  it('test remove last undo-history if longer than MAX_HISTORY_LENGTH', () => {
+    const action = {
+      type: actionTypes.LINK_OBJECT,
+      payload: {
+        objectId: 2,
+      },
+    };
+
+    const undoHistory: NecessaryProjectStateI[] = [];
+
+    for (let i = 0; i < 19; i++) {
+      undoHistory.push({
+        activeObject: baseState().fisaProject.activeObject,
+        objects: testState().fisaProject.objects
+      });
+    }
+    const updatedState = {
+      ...testState().fisaProject,
+      activeObject: 7,
+      undoHistory: [
+        {
+          activeObject: 0,
+          objects: testState().fisaProject.objects,
+        },
+        ...undoHistory,
+      ]
+    };
+
+    const expected = {
+      ...testState().fisaProject,
+      activeObject: 7,
+      objects: {
+        active: testState().fisaProject.objects.active.map((object) => {
+          if (object.id === 7) {
+            return {
+              ...object,
+              children: [...object.children, { id: 2, isLinked: true }],
+            };
+          }
+          return object;
+        }),
+        removed: [],
+      },
+      undoHistory: [
+        ...undoHistory,
+        {
+          activeObject: 7,
+          objects: testState().fisaProject.objects,
+        },
+      ],
+    };
+
+
+
+    const response = fisaProjectReducer(updatedState, action);
+
+    expect(response).toEqual(expected);
+    expect(response.undoHistory.length).toBe(updatedState.undoHistory.length);
+
+  });
+
+});
+
+describe('clearRemovedObjects', () => {
+  it('test to clear removed Objects', () => {
+    const updatedState = {
+      ...testState().fisaProject,
+      objects: {
+        active: testState().fisaProject.objects.active,
+        removed: baseState().fisaProject.objects.active
+      }
+    };
+    const expectedOutput = {
+      ...testState().fisaProject,
+      undoHistory: []
+    };
+    const action = {
+      type: actionTypes.CLEAR_REMOVED_OBJECTS,
+      payload: undefined
+    };
+    expect(fisaProjectReducer(updatedState, action)).toEqual(expectedOutput);
+  });
+});
+
 
 function createUndoHistory(state: FrontendReduxStateI) {
   return [
