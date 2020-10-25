@@ -6,6 +6,7 @@ export const fakeFisaDoc: () => FisaDocumentI = () => ({
   objectDefinitions: objectDefinitionsWithoutRoot(),
   fisaTemplate: [
     {
+      frostId: undefined,
       id: 1,
       definitionName: 'Raum',
       attributes: [
@@ -21,6 +22,7 @@ export const fakeFisaDoc: () => FisaDocumentI = () => ({
       children: [2, 3],
     },
     {
+      frostId: undefined,
       id: 2,
       definitionName: 'Datenstrom',
       attributes: [
@@ -41,6 +43,7 @@ export const fakeFisaDoc: () => FisaDocumentI = () => ({
       children: [5, 6],
     },
     {
+      frostId: undefined,
       id: 3,
       definitionName: 'Ort',
       attributes: [
@@ -64,6 +67,7 @@ export const fakeFisaDoc: () => FisaDocumentI = () => ({
       children: [],
     },
     {
+      frostId: undefined,
       id: 5,
       definitionName: 'Sensor',
       attributes: [
@@ -84,6 +88,7 @@ export const fakeFisaDoc: () => FisaDocumentI = () => ({
       children: [],
     },
     {
+      frostId: undefined,
       id: 6,
       definitionName: 'Sensortyp',
       attributes: [

@@ -17,7 +17,7 @@ export interface AttributeProps {
 
 export interface ObjectBoxBaseProps {
   object: ObjectWithNameI;
-  removeObject: (objectId: number) => void;
+  removeObject: (objectId: number, removeFromFrost: boolean) => void;
   changeObjectProperty: (objectId: number, key: string, value: string) => void;
   goToObject: (objectId: number) => void;
 }
@@ -27,6 +27,7 @@ export interface ObjectBoxProps extends ObjectBoxBaseProps {
   positionData: PointI;
   dontShowWarning: boolean;
   highlightedObject: number;
+  ogcType: string;
 }
 
 export interface ObjectBoxCategoryProps {
@@ -53,6 +54,7 @@ interface ScrollOptions {
 export interface ObjectGridProps {
   dispatch: Dispatch<ActionI>;
   objects: ObjectWithNameI[];
+  ogcType: string;
   definitionName: string;
   withAddIcon: boolean;
   scroll: (options?: ScrollOptions) => void;
@@ -62,6 +64,7 @@ export interface ObjectGridProps {
 export interface ObjectBoxFrameProps {
   scroll: (options?: ScrollOptions) => void;
   dispatch: Dispatch<ActionI>;
+  ogcType: string;
   object: ObjectWithNameI;
   highlightedObject: number;
   parentRef: RefObject<HTMLDivElement>;

@@ -6,13 +6,15 @@ import {
   ActionI,
   ProjectStateI,
   FisaObjectI,
-  BackendFisaProjectI,
   ErrorMessageI,
   AttributesDefinitionI,
+  FisaProjectI,
+  ObjectReducerI,
 } from '../interfaces';
 import {
   CONSTANT_PARTS,
   FISA_OBJECTS,
+  CONNECTED_FROST_URL,
   LATEST_ID,
   CSV_COL_SEPARATOR,
   CSV_ROW_SEPARATOR,
@@ -23,10 +25,14 @@ import { PROJECT_SAVED } from '../actionTypes';
 const MAX_HISTORY_LENGTH = 20;
 
 const defaultState: () => ProjectStateI = () => ({
+  connectedFrostServer: undefined,
   csvExtractionError: undefined,
   activeObject: 0,
   latestId: 0,
-  objects: [],
+  objects: {
+    active: [],
+    removed: []
+  },
   constantParts: {
     objectDefinitions: [],
     fisaDocumentName: '',
@@ -66,6 +72,10 @@ export default function fisaProjectReducer(
   ) {
     localStorage.setItem(FISA_OBJECTS, JSON.stringify(newState.objects));
     localStorage.setItem(LATEST_ID, JSON.stringify(newState.latestId));
+    localStorage.setItem(
+      CONNECTED_FROST_URL,
+      JSON.stringify(newState.connectedFrostServer || '')
+    );
   }
   return newState;
 }
@@ -191,14 +201,6 @@ function realFisaProjectReducer(
         workingState.activeObject
       );
     /**
-     * changes the value of the given object and key to the given value
-     */
-    case actionTypes.CHANGE_OBJECT_VALUE:
-      return {
-        ...workingState,
-        objects: objectReducer(workingState.objects, action),
-      };
-    /**
      * sets the given Object as active
      */
     case actionTypes.GO_TO_OBJECT:
@@ -208,14 +210,14 @@ function realFisaProjectReducer(
       if (cantHaveChildren(workingState, action.payload.objectId)) {
         if (
           state.activeObject ===
-          getParentId(state.objects, action.payload.objectId)
+          getParentId(state.objects.active, action.payload.objectId)
         ) {
           return state;
         }
         return {
           ...workingState,
           activeObject: getParentId(
-            workingState.objects,
+            workingState.objects.active,
             action.payload.objectId
           ),
         };
@@ -237,7 +239,7 @@ function realFisaProjectReducer(
           workingState.objects,
           action.payload.objectId,
           workingState.activeObject,
-          workingState.objects
+          workingState.objects.active
             .find((object) => object.id === workingState.activeObject)
             ?.children.find((child) => child.id === action.payload.objectId)
             ?.isLinked
@@ -257,7 +259,7 @@ function realFisaProjectReducer(
     case actionTypes.LINK_OBJECT:
       if (
         isAlreadyLinked(
-          workingState.objects.find(
+          workingState.objects.active.find(
             (object) => object.id === workingState.activeObject
           ),
           action.payload.objectId
@@ -303,11 +305,36 @@ function realFisaProjectReducer(
         }),
       };
 
+    case actionTypes.SET_FROST_URL:
+      return {
+        ...state,
+        connectedFrostServer: action.payload.frostUrl,
+      };
+
     /**
-     * returns the default state
-     */
+    * Stuff just for the objectReducer
+    */
+    case actionTypes.CHANGE_OBJECT_VALUE:
+    case actionTypes.SET_FROST_IDS_OF_OBJECTS:
+      return {
+        ...workingState,
+        objects: objectReducer(workingState.objects, action),
+      };
+
+    case actionTypes.CLEAR_REMOVED_OBJECTS:
+      return {
+        ...workingState,
+        undoHistory: [],
+        redoHistory: [],
+        objects: objectReducer(workingState.objects, action),
+      };
+
+    /**
+    * returns the default state
+    */
     case actionTypes.RESET_STATE:
       return defaultState();
+
     /**
      * if nothing matches return the old state (without updated history)
      */
@@ -321,12 +348,12 @@ function realFisaProjectReducer(
  *
  * @param fisaProject A fisaProject as BackendFisaDoc
  */
-function loadSavedProject(fisaProject: BackendFisaProjectI): ProjectStateI {
+function loadSavedProject(fisaProject: FisaProjectI): ProjectStateI {
   const baseDefinition = getBaseObjectDefinition(
     fisaProject.name,
     fisaProject.fisaDocument.objectDefinitions
   );
-  const objects = objectReducer([], {
+  const objects = objectReducer(defaultState().objects, {
     type: actionTypes.LOAD_SAVED_PROJECT,
     payload: {
       definitions: fisaProject.fisaDocument.objectDefinitions,
@@ -337,7 +364,8 @@ function loadSavedProject(fisaProject: BackendFisaProjectI): ProjectStateI {
 
   return {
     ...defaultState(),
-    latestId: getHighestId(objects),
+    connectedFrostServer: fisaProject.connectedFrostServer,
+    latestId: getHighestId(objects.active),
     constantParts: {
       objectDefinitions: [
         baseDefinition,
@@ -346,7 +374,7 @@ function loadSavedProject(fisaProject: BackendFisaProjectI): ProjectStateI {
       fisaDocumentName: fisaProject.fisaDocument.name,
       fisaProjectName: fisaProject.name,
     },
-    objects: [...objects],
+    objects: { ...objects },
   };
 }
 
@@ -365,7 +393,7 @@ function fetchSuccessAction(
     fisaDocument.objectDefinitions
   );
 
-  const project = objectReducer([], {
+  const objects = objectReducer(defaultState().objects, {
     type: actionTypes.LOAD_PROJECT_FROM_FISA,
     payload: {
       definitions: fisaDocument.objectDefinitions,
@@ -375,13 +403,13 @@ function fetchSuccessAction(
   });
   return {
     ...state,
-    latestId: getHighestId(project),
+    latestId: getHighestId(objects.active),
     constantParts: {
       objectDefinitions: [baseDefinition, ...fisaDocument.objectDefinitions],
       fisaDocumentName: fisaDocument.name,
       fisaProjectName: state.constantParts.fisaProjectName,
     },
-    objects: project,
+    objects,
   };
 }
 
@@ -420,7 +448,7 @@ function getBaseObjectDefinition(
  * @param objectId - the id to check on
  */
 function cantHaveChildren(state: ProjectStateI, objectId: number): boolean {
-  const objectOfId = state.objects.find((object) => object.id === objectId);
+  const objectOfId = state.objects.active.find((object) => object.id === objectId);
   if (!objectOfId) {
     return true;
   }
@@ -479,7 +507,7 @@ function deepClone(
   idToClone: number,
   newParentId: number
 ): ProjectStateI {
-  const childsToClone = state.objects.find((object) => object.id === idToClone);
+  const childsToClone = state.objects.active.find((object) => object.id === idToClone);
   if (!childsToClone) {
     return state;
   }
@@ -515,16 +543,16 @@ function deepClone(
  * @param isLinked - if the object is linked
  */
 function deleteObject(
-  objects: FisaObjectI[],
+  objects: ObjectReducerI,
   toDelete: number,
   removeFrom: number,
   isLinked: boolean | undefined
-): FisaObjectI[] {
-  const objectToDelete = objects.find((object) => object.id === toDelete);
+): ObjectReducerI {
+  const objectToDelete = objects.active.find((object) => object.id === toDelete);
   if (!objectToDelete) {
     return objects;
   }
-  let newState: FisaObjectI[] = [...objects];
+  let newState: ObjectReducerI = { ...objects };
 
   // Remove children if it is not linked
   if (!isLinked) {
@@ -557,8 +585,8 @@ function isAlreadyLinked(
 ): boolean {
   return Boolean(
     !objectToCheck ||
-      !objectToCheck.children ||
-      objectToCheck.children.find((child) => child.id === idToLink)
+    !objectToCheck.children ||
+    objectToCheck.children.find((child) => child.id === idToLink)
   );
 }
 
@@ -569,12 +597,16 @@ function extractProjectFromLocaleStorage(): ProjectStateI {
   const constantParts = localStorage.getItem(CONSTANT_PARTS);
   const objects = localStorage.getItem(FISA_OBJECTS);
   const latestId = localStorage.getItem(LATEST_ID);
+  const connectedFrostServer = localStorage.getItem(CONNECTED_FROST_URL);
 
-  if (!constantParts || !objects || !latestId) {
+
+  if (!constantParts || !objects || !latestId || !connectedFrostServer) {
     return defaultState();
   }
   return {
     ...defaultState(),
+    connectedFrostServer: connectedFrostServer && JSON.parse(connectedFrostServer) ?
+      JSON.parse(connectedFrostServer) : undefined,
     objects: JSON.parse(objects),
     constantParts: JSON.parse(constantParts),
     latestId: JSON.parse(latestId),

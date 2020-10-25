@@ -6,9 +6,12 @@
   "linkButton": "Link Object",
   "doYouWantToRemove1": "Do you really want to delete",
   "doYouWantToRemove2": "?",
+  "removeFromFrost": "Delete also from FROST-Server",
   "goToObject": "Go to object",
   "getPositionFromCard": "Position from Card",
   "getPositionsFromCard": "get Positions from Card",
   "contendDowntMatch": "The content doesn't match",
-  "notPossibleToAddMoreMessage": "It is not possible to add more of these objects"
+  "notPossibleToAddMoreMessage": "It is not possible to add more of these objects",
+  "removeFrostLinkedObjectMessage": "This Object is linked to an Entity on a FROST-Server!",
+  "goToFrostLocation": "Go to FROST-Server"
 }

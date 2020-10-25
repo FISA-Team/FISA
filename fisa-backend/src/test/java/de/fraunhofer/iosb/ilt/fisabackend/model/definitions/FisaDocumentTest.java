@@ -12,6 +12,9 @@ import static org.junit.jupiter.api.Assertions.assertIterableEquals;
 
 public class FisaDocumentTest {
 
+    private static final int MOST_SIG_BIT = 2;
+    private static final int LEAST_DIG_BIT = 4;
+
     private String expectedName;
     private UUID expectedUuid;
     private List<FisaObjectDefinition> expectedObjectDefinitions;
@@ -22,7 +25,7 @@ public class FisaDocumentTest {
     @BeforeEach
     void setUp() {
         this.expectedName = "Smart Home";
-        this.expectedUuid = new UUID(2, 4);
+        this.expectedUuid = new UUID(MOST_SIG_BIT, LEAST_DIG_BIT);
         this.expectedObjectDefinitions = new ArrayList<>();
         this.expectedFisaTemplate = new ArrayList<>();
 

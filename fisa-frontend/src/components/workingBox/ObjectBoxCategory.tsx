@@ -102,6 +102,7 @@ function ObjectBoxCategory(props: ObjectBoxCategoryProps) {
       <AccordionDetails>
         <ObjectGrid
           objects={props.objectCategory.objects}
+          ogcType={props.objectCategory.ogcType}
           withAddIcon={props.objectCategory.isAddable}
           dispatch={props.dispatch}
           definitionName={props.objectCategory.definitionName}
@@ -167,6 +168,7 @@ function ObjectGrid(props: ObjectGridProps) {
         <ObjectBoxFrame
           key={object.id}
           object={object}
+          ogcType={props.ogcType}
           scroll={props.scroll}
           parentRef={props.parentRef}
         />
@@ -235,9 +237,9 @@ function ObjectBoxFrameUpdated(props: ObjectBoxFrameProps) {
     setLastHighlighted(props.highlightedObject);
   }
 
-  const handleRemove = (objectId: number) => {
+  const handleRemove = (objectId: number, removeFromFrost: boolean) => {
     setChecked((prev) => !prev);
-    setTimeout(() => props.dispatch(removeObject(objectId)), 200);
+    setTimeout(() => props.dispatch(removeObject(objectId, removeFromFrost)), 200);
   };
 
   return (
@@ -245,11 +247,14 @@ function ObjectBoxFrameUpdated(props: ObjectBoxFrameProps) {
       <Grow in={checked} key={props.object.id}>
         <div ref={ref}>
           <ObjectBox
+            ogcType={props.ogcType}
             object={props.object}
             goToObject={(objectId) => props.dispatch(setObjectActive(objectId))}
             changeObjectProperty={(id, key, value) =>
               props.dispatch(changeObjectProperty(id, key, value))}
-            removeObject={(objectId) => handleRemove(objectId)}
+            removeObject={
+              (objectId, removeFromFrost) => handleRemove(objectId, removeFromFrost)
+            }
           />
         </div>
       </Grow>

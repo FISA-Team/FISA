@@ -28,5 +28,11 @@
   "cancel": "Abbrechen",
   "save": "Speichern",
   "yes": "Ja",
-  "no": "Nein"
+  "no": "Nein",
+  "back": "Zurück",
+  "update": "Aktualisieren",
+  "uploadToDifferentURLTooltip": "Dieses Projekt auf einen anderen FROST-Server laden",
+  "uploadToDifferentURLLabel": "Auf anderen FROST-Server laden",
+  "areYouShureToUploadTitle": "Warnung",
+  "areYouShureToUploadContent": "Beim hochladen auf einen anderen Server werden die Verbindungen der Entitäten mit dem alten Server überschrieben!"
 }

@@ -12,7 +12,13 @@ import {
   ErrorMessageI,
 } from '../interfaces';
 
-import { loadSavedProject, setFromBackend } from './projectActions';
+import {
+  clearRemovedObjects,
+  loadSavedProject,
+  setConnectedFrostUrl,
+  setFromBackend,
+  setFrostIdsOfObjects,
+} from './projectActions';
 import { OVERRIDE_ERROR_CODE } from '../../variables/variables';
 import { setSaved, setDatastreamConnectionData } from './pageActions';
 
@@ -204,7 +210,42 @@ export const uploadProjectToFrost = (
     )
     .then((response) => {
       dispatch(setCommunicationSuccess());
-      dispatch(setDatastreamConnectionData(response.data));
+      dispatch(setFrostIdsOfObjects(response.data.updatedObjects));
+      dispatch(
+        setDatastreamConnectionData(response.data.datastreamConnectionData)
+      );
+      dispatch(setConnectedFrostUrl(frostUrl));
+      dispatch(clearRemovedObjects());
+    })
+    .catch((error) => {
+      dispatch(setErrorToShow(createErrorMessage(error)));
+    })
+    .finally(() => {
+      dispatch(stopCommunicationPending());
+    });
+};
+
+export const updateProjectOnFrost = (
+  project: FisaProjectI
+) => (dispatch: Dispatch<ActionI>) => {
+  dispatch(setCommunicationPending());
+  return axios
+    .put(
+      `${BackendUrl}/frostServer/update/`,
+      JSON.stringify(project),
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    )
+    .then((response) => {
+      dispatch(setCommunicationSuccess());
+      dispatch(setFrostIdsOfObjects(response.data.updatedObjects));
+      dispatch(
+        setDatastreamConnectionData(response.data.datastreamConnectionData)
+      );
+      dispatch(clearRemovedObjects());
     })
     .catch((error) => {
       dispatch(setErrorToShow(createErrorMessage(error)));
@@ -280,4 +321,15 @@ export const loadFromPC = (project: FisaProjectI) => (
 ) => {
   // Check Document in backend
   dispatch(loadSavedProject(project));
+};
+
+export const deleteProjectFromBackendAndServer = (uuid: string) => (dispatch: any) => {
+  dispatch(setCommunicationPending());
+  return axios.delete(`${BackendUrl}/frostServer/${uuid}`)
+    .then(() => {
+      dispatch(setCommunicationSuccess());
+      dispatch(fetchAvailableProjects());
+    }).catch((e) => {
+      dispatch(setErrorToShow(createErrorMessage(e)));
+    }).finally(() => dispatch(stopCommunicationPending()));
 };

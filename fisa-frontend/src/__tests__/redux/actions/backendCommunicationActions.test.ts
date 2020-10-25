@@ -4,7 +4,7 @@ import thunk from 'redux-thunk';
 import * as actions from '../../../redux/actions/backendCommunicationActions';
 import * as actionTypes from '../../../redux/actionTypes';
 import { fakeFisaDoc } from '../mockups/fakeFisaDoc';
-import { initState } from '../mockups/testState';
+import { initState, testState } from '../mockups/testState';
 import { BackendUrl } from '../../../environment';
 
 const middlewares = [thunk];
@@ -286,13 +286,14 @@ describe('axios tests success', () => {
   });
 
   it('uploadProjectToFrost', async () => {
-    const frostUri = 'https://frost-server.de';
-    const datastreamData = [{ id: 1, name: 'Room' }];
+    const frostUrl = 'https://frost-server.de';
+    const datastreamConnectionData = [{ id: 1, name: 'Room' }];
+    const updatedObjects = [{ id: 1, frostId: 1 }];
 
     // @ts-ignore
     mockAxios.post.mockImplementation(() =>
       Promise.resolve({
-        data: datastreamData,
+        data: { updatedObjects, datastreamConnectionData },
       })
     );
 
@@ -300,9 +301,15 @@ describe('axios tests success', () => {
       { type: actionTypes.COMMUNICATION_PENDING, payload: undefined },
       { type: actionTypes.COMMUNICATION_SUCCESS, payload: undefined },
       {
-        type: actionTypes.ADD_DATASTREAM_DATA,
-        payload: { data: datastreamData },
+        type: actionTypes.SET_FROST_IDS_OF_OBJECTS,
+        payload: { fisaObjects: updatedObjects },
       },
+      {
+        type: actionTypes.ADD_DATASTREAM_DATA,
+        payload: { data: datastreamConnectionData },
+      },
+      { type: actionTypes.SET_FROST_URL, payload: { frostUrl } },
+      { type: actionTypes.CLEAR_REMOVED_OBJECTS, payload: undefined },
       { type: actionTypes.STOP_COMMUNICATION_PENDING, payload: undefined },
     ];
 
@@ -312,7 +319,7 @@ describe('axios tests success', () => {
     };
 
     // @ts-ignore
-    await store.dispatch(actions.uploadProjectToFrost(project, frostUri));
+    await store.dispatch(actions.uploadProjectToFrost(project, frostUrl));
     expect(store.getActions()).toEqual(expectedActions);
     expect(mockAxios.post).toHaveBeenCalledTimes(1);
     expect(
@@ -362,6 +369,44 @@ describe('axios tests success', () => {
     );
   });
 
+  it('deleteProjectFromBackendAndServer', async () => {
+    const uuid = '1234';
+
+    const responseData = [{ name: 'My Document', uuid: '1234' }];
+    // @ts-ignore
+    mockAxios.get.mockImplementation(() =>
+      Promise.resolve({
+        data: responseData,
+      })
+    );
+
+    const expectedActions = [
+      { type: actionTypes.COMMUNICATION_PENDING, payload: undefined },
+      { type: actionTypes.COMMUNICATION_SUCCESS, payload: undefined },
+
+      { type: actionTypes.COMMUNICATION_PENDING, payload: undefined },
+      {
+        type: actionTypes.ADD_PROJECTS_FROM_SERVER,
+        payload: { availableProjects: responseData },
+      },
+      { type: actionTypes.COMMUNICATION_SUCCESS, payload: undefined },
+      { type: actionTypes.STOP_COMMUNICATION_PENDING, payload: undefined },
+
+      { type: actionTypes.STOP_COMMUNICATION_PENDING, payload: undefined },
+    ];
+
+    const store = mockStore(initState());
+
+    // @ts-ignore
+    await store.dispatch(actions.deleteProjectFromBackendAndServer(uuid));
+
+    expect(store.getActions()).toEqual(expectedActions);
+    expect(mockAxios.delete).toHaveBeenCalledTimes(1);
+    expect(mockAxios.delete).toHaveBeenCalledWith(
+      `${BackendUrl}/frostServer/${uuid}`
+    );
+  });
+
   it('fetchProject', async () => {
     const uuid = '1234';
 
@@ -398,6 +443,51 @@ describe('axios tests success', () => {
       `${BackendUrl}/documents/${uuid}`
     );
   });
+
+  it('updateProjectOnFrost', async () => {
+    const responseData = {
+      datastreamConnectionData: [{ name: 'Datastream', id: '1234' }],
+      updatedObjects: testState().fisaProject.objects.active
+    };
+    // @ts-ignore
+    mockAxios.put.mockImplementation(() =>
+      Promise.resolve({ data: responseData })
+    );
+
+    const expectedActions = [
+      { type: actionTypes.COMMUNICATION_PENDING, payload: undefined },
+      { type: actionTypes.COMMUNICATION_SUCCESS, payload: undefined },
+
+      {
+        type: actionTypes.SET_FROST_IDS_OF_OBJECTS, payload: {
+          fisaObjects: responseData.updatedObjects
+        }
+      },
+      {
+        type: actionTypes.ADD_DATASTREAM_DATA, payload: {
+          data: responseData.datastreamConnectionData
+        }
+      },
+      { type: actionTypes.CLEAR_REMOVED_OBJECTS, payload: undefined },
+      { type: actionTypes.STOP_COMMUNICATION_PENDING, payload: undefined },
+    ];
+
+    const store = mockStore(initState());
+    const project = {
+      something: 'irrelevant',
+    };
+
+    // @ts-ignore
+    await store.dispatch(actions.updateProjectOnFrost(project));
+    expect(store.getActions()).toEqual(expectedActions);
+    expect(mockAxios.put).toHaveBeenCalledTimes(1);
+    expect(mockAxios.put).toHaveBeenCalledWith(
+      `${BackendUrl}/frostServer/update/`,
+      JSON.stringify(project),
+      { headers: { 'Content-Type': 'application/json' } }
+    );
+  });
+
 });
 
 describe('axios tests error', () => {
@@ -597,7 +687,33 @@ describe('axios tests error', () => {
     );
   });
 
-  it('addProject', async () => {
+  it('updateProjectOnFrost', async () => {
+
+    const expectedActions = [
+      { type: actionTypes.COMMUNICATION_PENDING, payload: undefined },
+      { type: actionTypes.SET_ERROR_MESSAGE, payload: { error: errorMessage } },
+      { type: actionTypes.STOP_COMMUNICATION_PENDING, payload: undefined },
+    ];
+
+    const store = mockStore(initState());
+    const project = {
+      something: 'irrelevant',
+    };
+
+    // @ts-ignore
+    await store.dispatch(actions.updateProjectOnFrost(project));
+    expect(store.getActions()).toEqual(expectedActions);
+    expect(mockAxios.put).toHaveBeenCalledTimes(1);
+    expect(
+      mockAxios.put
+    ).toHaveBeenCalledWith(
+      `${BackendUrl}/frostServer/update/`,
+      JSON.stringify(project),
+      { headers: { 'Content-Type': 'application/json' } }
+    );
+  });
+
+  it('deleteProjectFromBackend', async () => {
     const uuid = '1234';
 
     const expectedActions = [
@@ -615,6 +731,27 @@ describe('axios tests error', () => {
     expect(mockAxios.delete).toHaveBeenCalledTimes(1);
     expect(mockAxios.delete).toHaveBeenCalledWith(
       `${BackendUrl}/projects/${uuid}`
+    );
+  });
+
+  it('deleteProjectFromBackendAndFrost', async () => {
+    const uuid = '1234';
+
+    const expectedActions = [
+      { type: actionTypes.COMMUNICATION_PENDING, payload: undefined },
+      { type: actionTypes.SET_ERROR_MESSAGE, payload: { error: errorMessage } },
+      { type: actionTypes.STOP_COMMUNICATION_PENDING, payload: undefined },
+    ];
+
+    const store = mockStore(initState());
+
+    // @ts-ignore
+    await store.dispatch(actions.deleteProjectFromBackendAndServer(uuid));
+
+    expect(store.getActions()).toEqual(expectedActions);
+    expect(mockAxios.delete).toHaveBeenCalledTimes(1);
+    expect(mockAxios.delete).toHaveBeenCalledWith(
+      `${BackendUrl}/frostServer/${uuid}`
     );
   });
 

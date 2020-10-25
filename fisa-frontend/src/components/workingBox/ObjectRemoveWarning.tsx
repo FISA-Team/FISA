@@ -1,43 +1,69 @@
 import React from 'react';
-import { Checkbox, FormControlLabel } from '@material-ui/core';
+import { Checkbox, DialogContent, FormControlLabel, Typography } from '@material-ui/core';
 import { connect } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 import { dontShowObjectRemoveWarning } from '../../redux/actions/pageActions';
 import RemoveWarning from '../errorMessages/RemoveWarning';
+import { ObjectWithNameI } from '../../redux/interfaces';
 
 interface RemoveWarningProps {
   warningOpen: boolean;
   closeWarning: () => void;
-  deleteObject: () => void;
+  deleteObject: (removeFromFrost: boolean) => void;
   dontShowObjectRemoveWarning: () => void;
-  nameToShow: string;
+  object: ObjectWithNameI;
 }
 
 function ObjectRemoveWarning(props: RemoveWarningProps) {
   const [dontWarn, setDontWarn] = React.useState(false);
+  const [removeFromFrost, setRemoveFromFrost] = React.useState(true);
+  const { t } = useTranslation('projectPage');
 
-  const handleEvent = (toDo: () => void) => {
-    if (dontWarn) {
-      props.dontShowObjectRemoveWarning();
+  const warningIsOpen = props.warningOpen;
+  const downtShowRemoveWarning = props.dontShowObjectRemoveWarning;
+  React.useEffect(() => {
+    if (!warningIsOpen && dontWarn) {
+      downtShowRemoveWarning();
     }
-    toDo();
-  };
+  }, [dontWarn, warningIsOpen, downtShowRemoveWarning]);
+
   return (
     <RemoveWarning
       open={props.warningOpen}
-      onNo={() => handleEvent(props.closeWarning)}
-      onYes={() => handleEvent(props.deleteObject)}
-      nameToRemove={props.nameToShow}
+      onNo={() => props.closeWarning()}
+      onYes={() => props.deleteObject(removeFromFrost)}
+      nameToRemove={props.object.nameToShow}
     >
-      <FormControlLabel
-        style={{ marginRight: 'auto' }}
-        control={
-          <Checkbox
-            checked={dontWarn}
-            onChange={() => setDontWarn(!dontWarn)}
-          />
-        }
-        label="Do not warn again"
-      />
+      {!props.object.frostId && (
+        <FormControlLabel
+          style={{ marginRight: 'auto' }}
+          control={
+            <Checkbox
+              checked={dontWarn}
+              onChange={() => setDontWarn(!dontWarn)}
+            />
+          }
+          label="Do not warn again"
+        />
+      )}
+      {props.object.frostId && (
+        <>
+          <Typography>{t('removeFrostLinkedObjectMessage')}</Typography>
+          <DialogContent>
+            <FormControlLabel
+              style={{ marginRight: 'auto' }}
+              control={
+                <Checkbox
+                  checked={removeFromFrost}
+                  onChange={() => setRemoveFromFrost((oldData) => !oldData)}
+                />
+              }
+              label={t('removeFromFrost')}
+            />
+          </DialogContent>
+        </>
+
+      )}
     </RemoveWarning>
   );
 }

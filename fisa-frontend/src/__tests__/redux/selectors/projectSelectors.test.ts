@@ -2,6 +2,7 @@ import * as selectors from '../../../redux/selectors/projectSelectors';
 import { testState, baseState } from '../mockups/testState';
 import { fakeFisaDoc } from '../mockups/fakeFisaDoc';
 import { getFisaProjectFromState } from '../../../redux/selectors';
+import { FisaProjectI } from '../../../redux/interfaces';
 
 describe('getAllActiveTemplates', () => {
   it('get active templates from testState', () => {
@@ -322,7 +323,7 @@ describe('getAttribute', () => {
     const objectId = 1;
     const attributeName = 'Name';
     const expected = testState()
-      .fisaProject.objects.find((object) => object.id === objectId)
+      .fisaProject.objects.active.find((object) => object.id === objectId)
       ?.attributes.find(
         (attribute) => attribute.definitionName === attributeName
       );
@@ -367,7 +368,7 @@ describe('getPositionAttributesOfObject', () => {
 
 describe('getBackendDocument', () => {
   it('get the backend document from the default test state', () => {
-    const expected = {
+    const expected: FisaProjectI = {
       fisaObjects: fakeFisaDoc().fisaTemplate.map((object) => {
         if (object.definitionName === 'Ort') {
           return {
@@ -405,7 +406,9 @@ describe('getBackendDocument', () => {
         ...fakeFisaDoc(),
         fisaTemplate: [],
       },
+      removedFisaObjects: [],
+      connectedFrostServer: undefined
     };
-    expect(getFisaProjectFromState(baseState(), false)).toEqual(expected);
+    expect(getFisaProjectFromState(baseState(), false, false)).toEqual(expected);
   });
 });

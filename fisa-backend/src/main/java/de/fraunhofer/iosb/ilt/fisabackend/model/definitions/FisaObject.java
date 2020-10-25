@@ -1,5 +1,7 @@
 package de.fraunhofer.iosb.ilt.fisabackend.model.definitions;
 
+import de.fraunhofer.iosb.ilt.sta.model.Id;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,6 +10,7 @@ import java.util.List;
  */
 public class FisaObject {
 
+    private Id frostId;
     private long id;
     private String definitionName;
     private List<Long> children;
@@ -76,6 +79,15 @@ public class FisaObject {
     }
 
     /**
+     * Returns the Frost-Id
+     *
+     * @return The Frost-Id
+     */
+    public Id getFrostId() {
+        return frostId;
+    }
+
+    /**
      * Sets the ID of a FisaObject.
      *
      * @param id long representing the ID
@@ -109,6 +121,17 @@ public class FisaObject {
      */
     public void setAttributes(List<FisaObjectAttribute> attributes) {
         this.attributes = attributes;
+    }
+
+    /**
+     * Sets the frost-id of a FisaObject
+     *
+     * @param frostId The Id of this FisaObject on FROST
+     */
+    public void setFrostId(String frostId) {
+        if (frostId != null && !frostId.isEmpty()) {
+            this.frostId = Id.tryToParse(frostId);
+        }
     }
 
     @Override

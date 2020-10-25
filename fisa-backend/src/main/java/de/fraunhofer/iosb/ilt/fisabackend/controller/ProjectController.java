@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -187,6 +188,64 @@ public class ProjectController {
             LOGGER.error("Communication with SensorThingsApi-Server failed", e);
             return ResponseEntity.status(HttpStatus.BAD_GATEWAY)
                     .body("Communication with SensorThingsApi-Server failed: " + e.getMessage());
+        } catch (Exception e) {
+            LOGGER.error("Failed to fulfill request", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Failed to fulfill request: " + e.getMessage());
+        }
+    }
+
+
+    /**
+     * Updates an existing Project on a FROST-Server
+     *
+     * @param project the project that has to be converted and uploaded
+     * @return Response of the backend operation
+     */
+    @CrossOrigin(origins = "*")
+    @PutMapping("/frostServer/update")
+    public ResponseEntity updateFrostServer(@RequestBody FisaProject project) {
+        LOGGER.info("Received project, updating...");
+        try {
+            return ResponseEntity.ok(this.frostService.updateFrostServer(project));
+        } catch (EntityTransferException e) {
+            LOGGER.error("Communication with SensorThingsApi-Server failed", e);
+            return ResponseEntity.status(e.getStatusCode())
+                    .body(e.getReturnedContent());
+        } catch (ServiceFailureException e) {
+            LOGGER.error("Communication with SensorThingsApi-Server failed", e);
+            return ResponseEntity.status(HttpStatus.BAD_GATEWAY)
+                    .body("Communication with SensorThingsApi-Server failed: " + e.getMessage());
+        } catch (Exception e) {
+            LOGGER.error("Failed to fulfill request", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Failed to fulfill request: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Removes the given Fisa-Project saved under the uuid from the FROST-Server
+     *
+     * @param uuidString the uuid of the project to remove
+     * @return Response of the backend operation
+     */
+    @CrossOrigin(origins = "*")
+    @DeleteMapping("/frostServer/{projectUuid}")
+    public ResponseEntity removeFromFrostAndBackend(@PathVariable(value = "projectUuid")String uuidString) {
+        LOGGER.info("Received project, removing from FROST-Server...");
+        try {
+            FisaProject project = projectService.getProject(UUID.fromString(uuidString));
+            this.frostService.removeProjectFromFrostServer(project);
+            projectService.deleteProject(UUID.fromString(uuidString));
+            return ResponseEntity.ok("Successfully removed");
+        } catch (MalformedURLException e) {
+            LOGGER.error("Communication with SensorThingsApi-Server failed", e);
+            return ResponseEntity.status(HttpStatus.BAD_GATEWAY)
+                    .body("Communication with SensorThingsApi-Server failed: " + e.getMessage());
+        } catch (ClientRequestException e) {
+            LOGGER.error("Failed to fulfill request", e);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(e.getMessage());
         } catch (Exception e) {
             LOGGER.error("Failed to fulfill request", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)

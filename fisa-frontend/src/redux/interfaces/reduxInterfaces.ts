@@ -28,17 +28,23 @@ export interface ProjectPageStateI {
 
 export interface NecessaryProjectStateI {
   activeObject: number;
-  objects: FisaObjectI[];
+  objects: ObjectReducerI;
 }
 
 export interface ProjectStateI {
+  connectedFrostServer: string | undefined;
   csvExtractionError: ErrorMessageI | undefined;
   activeObject: number;
   latestId: number;
-  objects: FisaObjectI[];
+  objects: ObjectReducerI;
   constantParts: ConstantPartsI;
   undoHistory: NecessaryProjectStateI[];
   redoHistory: NecessaryProjectStateI[];
+}
+
+export interface ObjectReducerI {
+  active: FisaObjectI[];
+  removed: FisaObjectI[];
 }
 
 export interface ConstantPartsI {

@@ -39,7 +39,7 @@ describe('fetchProject', () => {
       },
     };
     const expected = objectReducerDefaultState();
-    expect(objectReducer([], action)).toEqual(expected);
+    expect(objectReducer(baseState().fisaProject.objects, action)).toEqual(expected);
   });
 });
 
@@ -58,43 +58,46 @@ describe('newObjectFromTemplate', () => {
       },
     };
 
-    const expected = [
-      ...objectReducerTestState().map((object) => {
-        if (object.id === 0) {
-          return {
-            ...object,
-            children: [...object.children, { id: 7, isLinked: false }],
-          };
-        }
-        return object;
-      }),
-      {
-        id: 7,
-        parent: 0,
-        definitionName: 'Raum',
-        isNotReusable: false,
-        attributes: [
-          {
-            definitionName: 'Name',
-            ogcType: 'Thing.name',
-            valueType: 'string',
-            validationRule: '([A-Z][a-z])+',
-            value: '',
-            isName: true,
-            infoText: 'Der Name des Raums',
-          },
-          {
-            definitionName: 'Beschreibung',
-            ogcType: 'Thing.description',
-            infoText: 'Weitere Informationen',
-            valueType: 'string',
-            value: '',
-            isName: false,
-          },
-        ],
-        children: [],
-      },
-    ];
+    const expected = {
+      ...objectReducerTestState(),
+      active: [
+        ...objectReducerTestState().active.map((object) => {
+          if (object.id === 0) {
+            return {
+              ...object,
+              children: [...object.children, { id: 7, isLinked: false }],
+            };
+          }
+          return object;
+        }),
+        {
+          id: 7,
+          parent: 0,
+          definitionName: 'Raum',
+          isNotReusable: false,
+          attributes: [
+            {
+              definitionName: 'Name',
+              ogcType: 'Thing.name',
+              valueType: 'string',
+              validationRule: '([A-Z][a-z])+',
+              value: '',
+              isName: true,
+              infoText: 'Der Name des Raums',
+            },
+            {
+              definitionName: 'Beschreibung',
+              ogcType: 'Thing.description',
+              infoText: 'Weitere Informationen',
+              valueType: 'string',
+              value: '',
+              isName: false,
+            },
+          ],
+          children: [],
+        },
+      ]
+    };
     expect(objectReducer(objectReducerTestState(), action)).toEqual(expected);
   });
 
@@ -108,27 +111,30 @@ describe('newObjectFromTemplate', () => {
       },
     };
 
-    const expected = [
-      ...objectReducerTestState().map((object) => {
-        if (object.id === 7) {
-          return {
-            ...object,
-            children: [...object.children, { id: 8, isLinked: false }],
-          };
-        }
-        return object;
-      }),
-      ...objectReducerTestState()
-        .filter((object) => object.id === 3)
-        .map((object) => {
-          return {
-            ...object,
-            id: 8,
-            parent: 7,
-            children: [],
-          };
+    const expected = {
+      ...objectReducerTestState(),
+      active: [
+        ...objectReducerTestState().active.map((object) => {
+          if (object.id === 7) {
+            return {
+              ...object,
+              children: [...object.children, { id: 8, isLinked: false }],
+            };
+          }
+          return object;
         }),
-    ];
+        ...objectReducerTestState().active
+          .filter((object) => object.id === 3)
+          .map((object) => {
+            return {
+              ...object,
+              id: 8,
+              parent: 7,
+              children: [],
+            };
+          }),
+      ]
+    };
 
     expect(objectReducer(objectReducerTestState(), action)).toEqual(expected);
   });
@@ -145,27 +151,30 @@ describe('addObjectFromExisting', () => {
       },
     };
 
-    const expected = [
-      ...objectReducerTestState().map((object) => {
-        if (object.id === 7) {
-          return {
-            ...object,
-            children: [...object.children, { id: 8, isLinked: false }],
-          };
-        }
-        return object;
-      }),
-      ...objectReducerTestState()
-        .filter((object) => object.id === 3)
-        .map((object) => {
-          return {
-            ...object,
-            id: 8,
-            parent: 7,
-            children: [],
-          };
+    const expected = {
+      ...objectReducerTestState(),
+      active: [
+        ...objectReducerTestState().active.map((object) => {
+          if (object.id === 7) {
+            return {
+              ...object,
+              children: [...object.children, { id: 8, isLinked: false }],
+            };
+          }
+          return object;
         }),
-    ];
+        ...objectReducerTestState().active
+          .filter((object) => object.id === 3)
+          .map((object) => {
+            return {
+              ...object,
+              id: 8,
+              parent: 7,
+              children: [],
+            };
+          }),
+      ]
+    };
 
     expect(objectReducer(objectReducerTestState(), action)).toEqual(expected);
   });
@@ -181,19 +190,22 @@ describe('removeObject', () => {
       },
     };
 
-    const expected = [
-      ...objectReducerTestState()
-        .filter((object) => object.id !== 1)
-        .map((object) => {
-          if (object.id === 0) {
-            return {
-              ...object,
-              children: [{ id: 7, isLinked: false }],
-            };
-          }
-          return object;
-        }),
-    ];
+    const expected = {
+      ...objectReducerTestState(),
+      active: [
+        ...objectReducerTestState().active
+          .filter((object) => object.id !== 1)
+          .map((object) => {
+            if (object.id === 0) {
+              return {
+                ...object,
+                children: [{ id: 7, isLinked: false }],
+              };
+            }
+            return object;
+          }),
+      ]
+    };
 
     expect(objectReducer(objectReducerTestState(), action)).toEqual(expected);
   });
@@ -206,17 +218,20 @@ describe('removeObject', () => {
       },
     };
 
-    const expected = [
-      ...objectReducerTestState().map((object) => {
-        if (object.id === 7) {
-          return {
-            ...object,
-            children: [],
-          };
-        }
-        return object;
-      }),
-    ];
+    const expected = {
+      ...objectReducerTestState(),
+      active: [
+        ...objectReducerTestState().active.map((object) => {
+          if (object.id === 7) {
+            return {
+              ...object,
+              children: [],
+            };
+          }
+          return object;
+        }),
+      ]
+    };
     expect(objectReducer(objectReducerTestState(), action)).toEqual(expected);
   });
 
@@ -229,17 +244,20 @@ describe('removeObject', () => {
         removeFrom: 0,
       },
     };
-    const expected = objectReducerTestState()
-      .filter((object) => object.id !== toRemove)
-      .map((object) => {
-        if (object.id === 0) {
-          return {
-            ...object,
-            children: object.children.filter((child) => child.id !== toRemove),
-          };
-        }
-        return object;
-      });
+    const expected = {
+      ...objectReducerTestState(),
+      active: objectReducerTestState().active
+        .filter((object) => object.id !== toRemove)
+        .map((object) => {
+          if (object.id === 0) {
+            return {
+              ...object,
+              children: object.children.filter((child) => child.id !== toRemove),
+            };
+          }
+          return object;
+        })
+    };
     expect(objectReducer(objectReducerTestState(), action)).toEqual(expected);
   });
 });
@@ -263,15 +281,19 @@ describe('linkObject', () => {
         linkTo: 7,
       },
     };
-    const expected = objectReducerTestState().map((object) => {
-      if (object.id === 7) {
-        return {
-          ...object,
-          children: [...object.children, { id: 2, isLinked: true }],
-        };
-      }
-      return object;
-    });
+    const expected = {
+      ...objectReducerTestState(),
+      active:
+        objectReducerTestState().active.map((object) => {
+          if (object.id === 7) {
+            return {
+              ...object,
+              children: [...object.children, { id: 2, isLinked: true }],
+            };
+          }
+          return object;
+        })
+    };
     expect(objectReducer(objectReducerTestState(), action)).toEqual(expected);
   });
 });
@@ -287,23 +309,26 @@ describe('changeObjectValue', () => {
       },
     };
 
-    const expected = objectReducerTestState().map((object) => {
-      if (object.id === 7) {
-        return {
-          ...object,
-          attributes: object.attributes.map((attribute) => {
-            if (attribute.definitionName === 'Name') {
-              return {
-                ...attribute,
-                value: 'Ein Raum',
-              };
-            }
-            return attribute;
-          }),
-        };
-      }
-      return object;
-    });
+    const expected = {
+      ...objectReducerTestState(),
+      active: objectReducerTestState().active.map((object) => {
+        if (object.id === 7) {
+          return {
+            ...object,
+            attributes: object.attributes.map((attribute) => {
+              if (attribute.definitionName === 'Name') {
+                return {
+                  ...attribute,
+                  value: 'Ein Raum',
+                };
+              }
+              return attribute;
+            }),
+          };
+        }
+        return object;
+      })
+    };
     expect(objectReducer(objectReducerTestState(), action)).toEqual(expected);
   });
 });
@@ -319,15 +344,19 @@ describe('changeProjectName', () => {
         oldName: 'Mein Projekt',
       },
     };
-    const expectedOutput = testState().fisaProject.objects.map((object) => {
-      if (object.definitionName === oldName) {
-        return {
-          ...object,
-          definitionName: newName,
-        };
-      }
-      return object;
-    });
+    const expectedOutput = {
+      ...testState().fisaProject.objects,
+      active:
+        testState().fisaProject.objects.active.map((object) => {
+          if (object.definitionName === oldName) {
+            return {
+              ...object,
+              definitionName: newName,
+            };
+          }
+          return object;
+        })
+    };
     expect(objectReducer(testState().fisaProject.objects, action)).toEqual(
       expectedOutput
     );

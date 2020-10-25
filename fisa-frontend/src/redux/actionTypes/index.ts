@@ -7,6 +7,8 @@ import {
   LOAD_PROJECT_FROM_FISA,
   EXTRACT_FROM_CSV,
   CHANGE_PROJECT_NAME,
+  SET_FROST_IDS_OF_OBJECTS,
+  SET_FROST_URL,
 } from './projectAction';
 import { GO_TO_OBJECT } from './pageActions';
 
@@ -22,6 +24,8 @@ export const OBJECT_CHANGING_TYPES = [
   LOAD_PROJECT_FROM_FISA,
   EXTRACT_FROM_CSV,
   CHANGE_PROJECT_NAME,
+  SET_FROST_IDS_OF_OBJECTS,
+  SET_FROST_URL,
 ];
 
 export * from './communicationActions';

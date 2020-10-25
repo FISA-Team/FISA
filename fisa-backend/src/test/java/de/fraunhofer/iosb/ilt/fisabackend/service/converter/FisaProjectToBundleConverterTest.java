@@ -1,5 +1,6 @@
 package de.fraunhofer.iosb.ilt.fisabackend.service.converter;
 
+import de.fraunhofer.iosb.ilt.fisabackend.model.EntityWrapper;
 import de.fraunhofer.iosb.ilt.fisabackend.model.SensorThingsApiBundle;
 import de.fraunhofer.iosb.ilt.fisabackend.model.definitions.ChildDefinition;
 import de.fraunhofer.iosb.ilt.fisabackend.model.definitions.FisaDocument;
@@ -30,9 +31,9 @@ class FisaProjectToBundleConverterTest {
 
     @BeforeEach
     void setUp() {
-        var resolver = new DynamicMappingResolver();
-        resolver.registerRootMapper("STA", new StaMapper());
-        this.resolver = resolver;
+        DynamicMappingResolver resolver2 = new DynamicMappingResolver();
+        resolver2.registerRootMapper("STA", new StaMapper());
+        this.resolver = resolver2;
     }
 
 
@@ -40,9 +41,9 @@ class FisaProjectToBundleConverterTest {
     void testVerySimpleProjectConvert() {
         FisaProject project = getVerySimpleProject();
         FisaProjectToBundleConverter converter = new FisaProjectToBundleConverter(project, this.resolver);
-        SensorThingsApiBundle bundle = converter.convertToBundle();
-        Thing expected = new Thing();
-        expected.setName("MyThing");
+        SensorThingsApiBundle bundle = converter.convertObjectsToBundle();
+        EntityWrapper<Thing> expected = new EntityWrapper<>(new Thing(), project.getFisaObjects().get(0));
+        expected.getEntity().setName("MyThing");
         assertIterableEquals(List.of(expected), bundle.getThings());
     }
 
@@ -81,14 +82,15 @@ class FisaProjectToBundleConverterTest {
     void testSimpleProjectConvert() throws ServiceFailureException {
         FisaProject project = getSimpleProject();
         FisaProjectToBundleConverter converter = new FisaProjectToBundleConverter(project, this.resolver);
-        SensorThingsApiBundle bundle = converter.convertToBundle();
-        Thing expectedThing = new Thing();
-        expectedThing.setName("MyThing");
-        Datastream expectedDatastream = new Datastream();
-        expectedDatastream.setName("MyDatastream");
+        SensorThingsApiBundle bundle = converter.convertObjectsToBundle();
+        EntityWrapper<Thing> expectedThing = new EntityWrapper<>(new Thing(), project.getFisaObjects().get(0));
+        expectedThing.getEntity().setName("MyThing");
+        EntityWrapper<Datastream> expectedDatastream = new EntityWrapper<>(new Datastream(),
+                project.getFisaObjects().get(1));
+        expectedDatastream.getEntity().setName("MyDatastream");
         assertIterableEquals(List.of(expectedThing), bundle.getThings());
         assertIterableEquals(List.of(expectedDatastream), bundle.getDatastreams());
-        assertEquals(expectedThing, bundle.getDatastreams().get(0).getThing());
+        assertEquals(expectedThing.getEntity(), bundle.getDatastreams().get(0).getEntity().getThing());
     }
 
     FisaProject getSimpleProject() {

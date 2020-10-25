@@ -29,7 +29,7 @@ import { POLY_POSITION } from '../../variables/valueTypes';
 function getActiveObjectFromState(
   state: FrontendReduxStateI
 ): FisaObjectI | undefined {
-  return state.fisaProject.objects.find(
+  return state.fisaProject.objects.active.find(
     (object) => object.id === state.fisaProject.activeObject
   );
 }
@@ -147,17 +147,18 @@ export const getAllActiveObjectBundles = (
   state: FrontendReduxStateI
 ): ObjectBundleI[] => {
   const activeObject = getActiveObjectFromState(state);
-  const childsOfActiveObjectDefinition = state.fisaProject.constantParts.objectDefinitions.find(
-    (definition) => {
-      if (!activeObject) {
-        return false;
+  const childsOfActiveObjectDefinition = state.fisaProject.constantParts
+    .objectDefinitions.find(
+      (definition) => {
+        if (!activeObject) {
+          return false;
+        }
+        return definition.name === activeObject.definitionName;
       }
-      return definition.name === activeObject.definitionName;
-    }
-  )?.children;
+    )?.children;
 
-  const objectsInCategories: ObjectBundleI[] = state.fisaProject.constantParts.objectDefinitions
-    .filter(
+  const objectsInCategories: ObjectBundleI[] = state.fisaProject.constantParts
+    .objectDefinitions.filter(
       (definition) =>
         definition.name !== state.fisaProject.constantParts.fisaProjectName
     )
@@ -208,7 +209,7 @@ function createBundle(
   );
 
   // The object witch are build with the given definition
-  const objectsInObjectDefinition = state.fisaProject.objects
+  const objectsInObjectDefinition = state.fisaProject.objects.active
     .filter((object) => object.definitionName === definition.name)
     .map((object) => {
       const isNotInactiveChildren =
@@ -225,7 +226,7 @@ function createBundle(
 
   // the children of the object witch use the definition
   const objectChildsOfActiveObject = activeObject?.children.filter((child) => {
-    const objectOfChild = state.fisaProject.objects.find(
+    const objectOfChild = state.fisaProject.objects.active.find(
       (cObject) => cObject.id === child.id
     );
     if (!objectOfChild) {
@@ -293,7 +294,7 @@ export const getProjectTree = (
   const activeObject = getActiveObjectFromState(state);
 
   const tree = getAsTree(
-    state.fisaProject.objects,
+    state.fisaProject.objects.active,
     getObjectById(state, 0),
     false,
     nodeIdList,
@@ -412,7 +413,7 @@ export const getObjectsInActiveWithCategories = (
     .map((definition) => {
       const objectsOfCategory = activeObject.children
         .map((child) => {
-          const objectOfChild = state.fisaProject.objects.find(
+          const objectOfChild = state.fisaProject.objects.active.find(
             (object) => object.id === child.id
           );
           if (
@@ -441,7 +442,7 @@ export const getObjectsInActiveWithCategories = (
           : '<undefined>',
         isAddable: definition
           ? definition.quantity <= 0 ||
-            objectsOfCategory.length < definition.quantity
+          objectsOfCategory.length < definition.quantity
           : false,
         objects: objectsOfCategory,
       };
@@ -460,7 +461,7 @@ export const getPositionAttributesOfObject = (
   state: FrontendReduxStateI,
   objectId: number
 ): PointI => {
-  const objectOfId = state.fisaProject.objects.find(
+  const objectOfId = state.fisaProject.objects.active.find(
     (object) => object.id === objectId
   );
 
@@ -494,7 +495,7 @@ export const getAttribute = (
 export const getAllCardPositions = (
   state: FrontendReduxStateI
 ): CardPositionI[] => {
-  const objectsWithCard = state.fisaProject.objects.filter(
+  const objectsWithCard = state.fisaProject.objects.active.filter(
     (object) => object.positionAttributes
   );
   const cardPositions: CardPositionI[] = objectsWithCard.map((object) => ({
@@ -504,7 +505,7 @@ export const getAllCardPositions = (
     isPolygon: false,
   }));
 
-  state.fisaProject.objects.forEach((object) =>
+  state.fisaProject.objects.active.forEach((object) =>
     object.attributes.forEach((attribute) => {
       if (attribute.valueType === POLY_POSITION) {
         const value = attribute.value as PolygonI;
@@ -554,7 +555,7 @@ function getObjectById(
   state: FrontendReduxStateI,
   objectId: number
 ): FisaObjectI | undefined {
-  return state.fisaProject.objects.find((object) => object.id === objectId);
+  return state.fisaProject.objects.active.find((object) => object.id === objectId);
 }
 
 /**
@@ -571,5 +572,16 @@ export const getAvailableProjects = (state: FrontendReduxStateI) =>
 export const getAvailableFisaDocuments = (state: FrontendReduxStateI) =>
   state.availableFisaDocumentsProjects.documents;
 
+/**
+ * returns the csvExtraction Error
+ * @param state
+ */
 export const getExtractCSVErrorMessage = (state: FrontendReduxStateI) =>
   state.fisaProject.csvExtractionError;
+
+/**
+ * returns the connected Frost-Server url
+ * @param state
+ */
+export const getConnectedFrostServer = (state: FrontendReduxStateI) =>
+  state.fisaProject.connectedFrostServer;

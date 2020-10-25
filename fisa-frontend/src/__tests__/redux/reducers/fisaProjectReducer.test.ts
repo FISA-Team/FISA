@@ -8,12 +8,13 @@ import {
   emptyProjectState,
 } from '../mockups/testState';
 import {
+  CONNECTED_FROST_URL,
   CONSTANT_PARTS,
   FISA_OBJECTS,
   LATEST_ID,
 } from '../../../variables/variables';
 import { fisaProject } from '../mockups/fakeFisaProject';
-import { ProjectStateI, FrontendReduxStateI } from '../../../redux/interfaces';
+import { ProjectStateI, FrontendReduxStateI, NecessaryProjectStateI } from '../../../redux/interfaces';
 import { csvData } from '../mockups/csvData';
 
 describe('fetchProject', () => {
@@ -26,15 +27,18 @@ describe('fetchProject', () => {
     };
     const expected = {
       ...baseState().fisaProject,
-      objects: baseState().fisaProject.objects.map((object) => {
-        if (object.id === 0) {
-          return {
-            ...object,
-            definitionName: '',
-          };
-        }
-        return object;
-      }),
+      objects: {
+        active: baseState().fisaProject.objects.active.map((object) => {
+          if (object.id === 0) {
+            return {
+              ...object,
+              definitionName: '',
+            };
+          }
+          return object;
+        }),
+        removed: []
+      },
       constantParts: {
         ...baseState().fisaProject.constantParts,
         objectDefinitions: baseState().fisaProject.constantParts.objectDefinitions.map(
@@ -70,43 +74,46 @@ describe('newObjectFromTemplate', () => {
     const expected = {
       ...baseState().fisaProject,
       latestId: 7,
-      objects: [
-        ...baseState().fisaProject.objects.map((object) => {
-          if (object.id === 0) {
-            return {
-              ...object,
-              children: [...object.children, { id: 7, isLinked: false }],
-            };
-          }
-          return object;
-        }),
-        {
-          id: 7,
-          parent: 0,
-          definitionName: 'Raum',
-          isNotReusable: false,
-          attributes: [
-            {
-              definitionName: 'Name',
-              ogcType: 'Thing.name',
-              valueType: 'string',
-              validationRule: '([A-Z][a-z])+',
-              value: '',
-              isName: true,
-              infoText: 'Der Name des Raums',
-            },
-            {
-              definitionName: 'Beschreibung',
-              ogcType: 'Thing.description',
-              infoText: 'Weitere Informationen',
-              valueType: 'string',
-              value: '',
-              isName: false,
-            },
-          ],
-          children: [],
-        },
-      ],
+      objects: {
+        active: [
+          ...baseState().fisaProject.objects.active.map((object) => {
+            if (object.id === 0) {
+              return {
+                ...object,
+                children: [...object.children, { id: 7, isLinked: false }],
+              };
+            }
+            return object;
+          }),
+          {
+            id: 7,
+            parent: 0,
+            definitionName: 'Raum',
+            isNotReusable: false,
+            attributes: [
+              {
+                definitionName: 'Name',
+                ogcType: 'Thing.name',
+                valueType: 'string',
+                validationRule: '([A-Z][a-z])+',
+                value: '',
+                isName: true,
+                infoText: 'Der Name des Raums',
+              },
+              {
+                definitionName: 'Beschreibung',
+                ogcType: 'Thing.description',
+                infoText: 'Weitere Informationen',
+                valueType: 'string',
+                value: '',
+                isName: false,
+              },
+            ],
+            children: [],
+          },
+        ],
+        removed: []
+      },
       undoHistory: [
         {
           activeObject: baseState().fisaProject.activeObject,
@@ -137,27 +144,30 @@ describe('addObjectFromExisting', () => {
     const expected = {
       ...state(),
       latestId: 8,
-      objects: [
-        ...state().objects.map((object) => {
-          if (object.id === 7) {
-            return {
-              ...object,
-              children: [...object.children, { id: 8, isLinked: false }],
-            };
-          }
-          return object;
-        }),
-        ...state()
-          .objects.filter((object) => object.id === 3)
-          .map((object) => {
-            return {
-              ...object,
-              id: 8,
-              parent: 7,
-              children: [],
-            };
+      objects: {
+        active: [
+          ...state().objects.active.map((object) => {
+            if (object.id === 7) {
+              return {
+                ...object,
+                children: [...object.children, { id: 8, isLinked: false }],
+              };
+            }
+            return object;
           }),
-      ],
+          ...state()
+            .objects.active.filter((object) => object.id === 3)
+            .map((object) => {
+              return {
+                ...object,
+                id: 8,
+                parent: 7,
+                children: [],
+              };
+            }),
+        ],
+        removed: [],
+      },
       undoHistory: [
         {
           activeObject: state().activeObject,
@@ -213,6 +223,44 @@ describe('goToObject', () => {
       expected
     );
   });
+  it('change without payload', () => {
+    const action = {
+      type: actionTypes.GO_TO_OBJECT,
+      payload: {
+        objectId: undefined
+      },
+    };
+    expect(fisaProjectReducer(
+      testState().fisaProject,
+      action))
+      .toEqual(testState().fisaProject);
+  });
+  it('Change to already active Object', () => {
+    const action = {
+      type: actionTypes.GO_TO_OBJECT,
+      payload: {
+        objectId: testState().fisaProject.activeObject
+      },
+    };
+    expect(fisaProjectReducer(
+      testState().fisaProject,
+      action)).toEqual(testState().fisaProject);
+  });
+  it('change active object to already active parent object of 3 because object 3 cant have children', () => {
+    const action = {
+      type: actionTypes.GO_TO_OBJECT,
+      payload: {
+        objectId: 3,
+      },
+    };
+    const updatedTestState = {
+      ...testState().fisaProject,
+      activeObject: 1
+    };
+    expect(fisaProjectReducer(updatedTestState, action)).toEqual(
+      updatedTestState
+    );
+  });
 });
 
 describe('removeObject', () => {
@@ -226,12 +274,16 @@ describe('removeObject', () => {
 
     const expected = {
       ...baseState().fisaProject,
-      objects: [
-        {
-          ...baseState().fisaProject.objects.find((object) => object.id === 0),
-          children: [],
-        },
-      ],
+      objects:
+      {
+        active: [
+          {
+            ...baseState().fisaProject.objects.active.find((object) => object.id === 0),
+            children: [],
+          },
+        ],
+        removed: [],
+      },
       undoHistory: [
         {
           activeObject: baseState().fisaProject.activeObject,
@@ -256,15 +308,19 @@ describe('removeObject', () => {
 
     const expected = {
       ...modifiedTestSuit,
-      objects: modifiedTestSuit.objects.map((object) => {
-        if (object.id === 7) {
-          return {
-            ...object,
-            children: [],
-          };
-        }
-        return object;
-      }),
+      objects: {
+
+        active: modifiedTestSuit.objects.active.map((object) => {
+          if (object.id === 7) {
+            return {
+              ...object,
+              children: [],
+            };
+          }
+          return object;
+        }),
+        removed: [],
+      },
       undoHistory: [
         {
           activeObject: modifiedTestSuit.activeObject,
@@ -300,15 +356,18 @@ describe('linkObject', () => {
     const expected = {
       ...testState().fisaProject,
       activeObject: 7,
-      objects: testState().fisaProject.objects.map((object) => {
-        if (object.id === 7) {
-          return {
-            ...object,
-            children: [...object.children, { id: 2, isLinked: true }],
-          };
-        }
-        return object;
-      }),
+      objects: {
+        active: testState().fisaProject.objects.active.map((object) => {
+          if (object.id === 7) {
+            return {
+              ...object,
+              children: [...object.children, { id: 2, isLinked: true }],
+            };
+          }
+          return object;
+        }),
+        removed: [],
+      },
       undoHistory: [
         {
           activeObject: 7,
@@ -322,81 +381,20 @@ describe('linkObject', () => {
   });
 });
 
-describe('undo', () => {
-  it('tests undo changed activeObject', () => {
-    const customState = {
-      ...testState().fisaProject,
-      activeObject: 6,
-      undoHistory: [
-        {
-          objects: testState().fisaProject.objects,
-          activeObject: testState().fisaProject.activeObject,
-        },
-      ],
+describe('setFrostURL', () => {
+  it('test to set the FROST-Url', () => {
+    const frostUrl = 'http://localhost:8080/FROST-Server/v1.1';
+    const action = {
+      type: actionTypes.SET_FROST_URL,
+      payload: {
+        frostUrl
+      }
     };
     const expected = {
       ...testState().fisaProject,
-      activeObject: 0,
-      redoHistory: [
-        {
-          objects: testState().fisaProject.objects,
-          activeObject: 6,
-        },
-      ],
+      connectedFrostServer: frostUrl
     };
-    const action = {
-      type: actionTypes.UNDO,
-      payload: undefined,
-    };
-    expect(fisaProjectReducer(customState, action)).toEqual(expected);
-  });
-  it('tests undo without undo history', () => {
-    const action = {
-      type: actionTypes.UNDO,
-      payload: undefined,
-    };
-    expect(fisaProjectReducer(testState().fisaProject, action)).toEqual(
-      testState().fisaProject
-    );
-  });
-});
-
-describe('redo', () => {
-  it('tests redo changed activeObject', () => {
-    const customState = {
-      ...testState().fisaProject,
-      activeObject: 6,
-      redoHistory: [
-        {
-          objects: testState().fisaProject.objects,
-          activeObject: testState().fisaProject.activeObject,
-        },
-      ],
-    };
-    const expected = {
-      ...testState().fisaProject,
-      activeObject: 0,
-      undoHistory: [
-        {
-          objects: testState().fisaProject.objects,
-          activeObject: 6,
-        },
-      ],
-    };
-    const action = {
-      type: actionTypes.REDO,
-      payload: undefined,
-    };
-    expect(fisaProjectReducer(customState, action)).toEqual(expected);
-  });
-  it('tests redo without redo history', () => {
-    const action = {
-      type: actionTypes.REDO,
-      payload: undefined,
-    };
-    expect(fisaProjectReducer(testState().fisaProject, action)).toEqual(
-      testState().fisaProject
-    );
+    expect(fisaProjectReducer(testState().fisaProject, action)).toEqual(expected);
   });
 });
 
@@ -418,6 +416,7 @@ describe('loadAutoSave', () => {
       LATEST_ID,
       JSON.stringify(testState().fisaProject.latestId)
     );
+    localStorage.setItem(CONNECTED_FROST_URL, JSON.stringify(''));
     expect(fisaProjectReducer(emptyProjectState, action)).toEqual(
       testState().fisaProject
     );
@@ -440,10 +439,14 @@ describe('setFetchProjectName', () => {
     };
 
     const expected: ProjectStateI = {
+      connectedFrostServer: undefined,
       csvExtractionError: undefined,
       activeObject: 0,
       latestId: 0,
-      objects: [],
+      objects: {
+        active: [],
+        removed: []
+      },
       constantParts: {
         objectDefinitions: [],
         fisaDocumentName: '',
@@ -508,23 +511,26 @@ describe('changeObjectValue', () => {
 
     const expected = {
       ...testState().fisaProject,
-      objects: testState().fisaProject.objects.map((object) => {
-        if (object.id === 7) {
-          return {
-            ...object,
-            attributes: object.attributes.map((attribute) => {
-              if (attribute.definitionName === 'Name') {
-                return {
-                  ...attribute,
-                  value: 'Ein Raum',
-                };
-              }
-              return attribute;
-            }),
-          };
-        }
-        return object;
-      }),
+      objects: {
+        active: testState().fisaProject.objects.active.map((object) => {
+          if (object.id === 7) {
+            return {
+              ...object,
+              attributes: object.attributes.map((attribute) => {
+                if (attribute.definitionName === 'Name') {
+                  return {
+                    ...attribute,
+                    value: 'Ein Raum',
+                  };
+                }
+                return attribute;
+              }),
+            };
+          }
+          return object;
+        }),
+        removed: [],
+      },
       undoHistory: [
         {
           activeObject: testState().fisaProject.activeObject,
@@ -547,7 +553,7 @@ describe('extractFromCSV', () => {
         definitionName: 'Raum',
       },
     };
-    const baseObject = baseState().fisaProject.objects.find(
+    const baseObject = baseState().fisaProject.objects.active.find(
       (object) => object.definitionName === 'Raum'
     );
     const lastId = baseState().fisaProject.latestId;
@@ -561,65 +567,68 @@ describe('extractFromCSV', () => {
           objects: baseState().fisaProject.objects,
         },
       ],
-      objects: [
-        ...baseState().fisaProject.objects.map((object) => {
-          if (object.id === 0) {
-            return {
-              ...object,
-              children: [
-                ...object.children,
-                { id: lastId + 1, isLinked: false },
-                { id: lastId + 2, isLinked: false },
-              ],
-            };
-          }
-          return object;
-        }),
-        {
-          ...baseObject,
-          isNotReusable: false,
-          attributes: baseObject?.attributes.map((attr) => {
-            switch (attr.definitionName) {
-              case 'Name':
-                return {
-                  ...attr,
-                  value: 'Wohnzimmer',
-                };
-              case 'Beschreibung':
-                return {
-                  ...attr,
-                  value: 'Zimmer zum Wohnen',
-                };
-              default:
-                return { ...attr };
+      objects: {
+        active: [
+          ...baseState().fisaProject.objects.active.map((object) => {
+            if (object.id === 0) {
+              return {
+                ...object,
+                children: [
+                  ...object.children,
+                  { id: lastId + 1, isLinked: false },
+                  { id: lastId + 2, isLinked: false },
+                ],
+              };
             }
+            return object;
           }),
-          id: lastId + 1,
-          children: [],
-        },
-        {
-          ...baseObject,
-          isNotReusable: false,
-          attributes: baseObject?.attributes.map((attr) => {
-            switch (attr.definitionName) {
-              case 'Name':
-                return {
-                  ...attr,
-                  value: 'Kinderzimmer',
-                };
-              case 'Beschreibung':
-                return {
-                  ...attr,
-                  value: 'Zimmer fuer Kinder',
-                };
-              default:
-                return { ...attr };
-            }
-          }),
-          id: lastId + 2,
-          children: [],
-        },
-      ],
+          {
+            ...baseObject,
+            isNotReusable: false,
+            attributes: baseObject?.attributes.map((attr) => {
+              switch (attr.definitionName) {
+                case 'Name':
+                  return {
+                    ...attr,
+                    value: 'Wohnzimmer',
+                  };
+                case 'Beschreibung':
+                  return {
+                    ...attr,
+                    value: 'Zimmer zum Wohnen',
+                  };
+                default:
+                  return { ...attr };
+              }
+            }),
+            id: lastId + 1,
+            children: [],
+          },
+          {
+            ...baseObject,
+            isNotReusable: false,
+            attributes: baseObject?.attributes.map((attr) => {
+              switch (attr.definitionName) {
+                case 'Name':
+                  return {
+                    ...attr,
+                    value: 'Kinderzimmer',
+                  };
+                case 'Beschreibung':
+                  return {
+                    ...attr,
+                    value: 'Zimmer fuer Kinder',
+                  };
+                default:
+                  return { ...attr };
+              }
+            }),
+            id: lastId + 2,
+            children: [],
+          },
+        ],
+        removed: []
+      }
     };
 
     expect(fisaProjectReducer(baseState().fisaProject, action)).toEqual(
@@ -664,15 +673,18 @@ describe('changeProjectName', () => {
     };
     const expectedOutput = {
       ...testState().fisaProject,
-      objects: testState().fisaProject.objects.map((object) => {
-        if (object.definitionName === oldName) {
-          return {
-            ...object,
-            definitionName: newName,
-          };
-        }
-        return object;
-      }),
+      objects: {
+        active: testState().fisaProject.objects.active.map((object) => {
+          if (object.definitionName === oldName) {
+            return {
+              ...object,
+              definitionName: newName,
+            };
+          }
+          return object;
+        }),
+        removed: [],
+      },
       constantParts: {
         ...testState().fisaProject.constantParts,
         fisaProjectName: newName,
@@ -695,6 +707,164 @@ describe('changeProjectName', () => {
     );
   });
 });
+
+describe('testRedoUndo', () => {
+  it('tests undo changed activeObject', () => {
+    const customState = {
+      ...testState().fisaProject,
+      activeObject: 6,
+      undoHistory: [
+        {
+          objects: testState().fisaProject.objects,
+          activeObject: testState().fisaProject.activeObject,
+        },
+      ],
+    };
+    const expected = {
+      ...testState().fisaProject,
+      activeObject: 0,
+      redoHistory: [
+        {
+          objects: testState().fisaProject.objects,
+          activeObject: 6,
+        },
+      ],
+    };
+    const action = {
+      type: actionTypes.UNDO,
+      payload: undefined,
+    };
+    expect(fisaProjectReducer(customState, action)).toEqual(expected);
+  });
+  it('tests undo without undo history', () => {
+    const action = {
+      type: actionTypes.UNDO,
+      payload: undefined,
+    };
+    expect(fisaProjectReducer(testState().fisaProject, action)).toEqual(
+      testState().fisaProject
+    );
+  });
+  it('tests redo changed activeObject', () => {
+    const customState = {
+      ...testState().fisaProject,
+      activeObject: 6,
+      redoHistory: [
+        {
+          objects: testState().fisaProject.objects,
+          activeObject: testState().fisaProject.activeObject,
+        },
+      ],
+    };
+    const expected = {
+      ...testState().fisaProject,
+      activeObject: 0,
+      undoHistory: [
+        {
+          objects: testState().fisaProject.objects,
+          activeObject: 6,
+        },
+      ],
+    };
+    const action = {
+      type: actionTypes.REDO,
+      payload: undefined,
+    };
+    expect(fisaProjectReducer(customState, action)).toEqual(expected);
+  });
+  it('tests redo without redo history', () => {
+    const action = {
+      type: actionTypes.REDO,
+      payload: undefined,
+    };
+    expect(fisaProjectReducer(testState().fisaProject, action)).toEqual(
+      testState().fisaProject
+    );
+  });
+  it('test remove last undo-history if longer than MAX_HISTORY_LENGTH', () => {
+    const action = {
+      type: actionTypes.LINK_OBJECT,
+      payload: {
+        objectId: 2,
+      },
+    };
+
+    const undoHistory: NecessaryProjectStateI[] = [];
+
+    for (let i = 0; i < 19; i++) {
+      undoHistory.push({
+        activeObject: baseState().fisaProject.activeObject,
+        objects: testState().fisaProject.objects
+      });
+    }
+    const updatedState = {
+      ...testState().fisaProject,
+      activeObject: 7,
+      undoHistory: [
+        {
+          activeObject: 0,
+          objects: testState().fisaProject.objects,
+        },
+        ...undoHistory,
+      ]
+    };
+
+    const expected = {
+      ...testState().fisaProject,
+      activeObject: 7,
+      objects: {
+        active: testState().fisaProject.objects.active.map((object) => {
+          if (object.id === 7) {
+            return {
+              ...object,
+              children: [...object.children, { id: 2, isLinked: true }],
+            };
+          }
+          return object;
+        }),
+        removed: [],
+      },
+      undoHistory: [
+        ...undoHistory,
+        {
+          activeObject: 7,
+          objects: testState().fisaProject.objects,
+        },
+      ],
+    };
+
+
+
+    const response = fisaProjectReducer(updatedState, action);
+
+    expect(response).toEqual(expected);
+    expect(response.undoHistory.length).toBe(updatedState.undoHistory.length);
+
+  });
+
+});
+
+describe('clearRemovedObjects', () => {
+  it('test to clear removed Objects', () => {
+    const updatedState = {
+      ...testState().fisaProject,
+      objects: {
+        active: testState().fisaProject.objects.active,
+        removed: baseState().fisaProject.objects.active
+      }
+    };
+    const expectedOutput = {
+      ...testState().fisaProject,
+      undoHistory: []
+    };
+    const action = {
+      type: actionTypes.CLEAR_REMOVED_OBJECTS,
+      payload: undefined
+    };
+    expect(fisaProjectReducer(updatedState, action)).toEqual(expectedOutput);
+  });
+});
+
 
 function createUndoHistory(state: FrontendReduxStateI) {
   return [

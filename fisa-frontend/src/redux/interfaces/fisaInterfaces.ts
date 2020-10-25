@@ -9,16 +9,12 @@ export interface FisaProjectI {
   fisaDocument: FisaDocumentI;
   generateExampleData: boolean;
   fisaObjects: BackendFisaObjectI[];
-}
-
-export interface BackendFisaProjectI {
-  fisaDocument: FisaDocumentI;
-  name: string;
-  generateExampleData: boolean;
-  fisaObjects: BackendFisaObjectI[];
+  removedFisaObjects: BackendFisaObjectI[];
+  connectedFrostServer: string | undefined;
 }
 
 export interface FisaObjectI {
+  frostId: number | undefined;
   id: number;
   parent: number | undefined;
   definitionName: string;
@@ -29,6 +25,7 @@ export interface FisaObjectI {
 }
 
 export interface BackendFisaObjectI {
+  frostId: number | undefined;
   id: number;
   definitionName: string;
   children: number[];

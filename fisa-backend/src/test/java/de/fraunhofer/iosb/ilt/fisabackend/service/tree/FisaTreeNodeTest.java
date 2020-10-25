@@ -4,17 +4,19 @@ import de.fraunhofer.iosb.ilt.fisabackend.model.definitions.FisaObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 import java.util.function.Consumer;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertIterableEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.mockito.Mockito.mock;
 
 class FisaTreeNodeTest {
+    private static final int EXPECT_SIZE = 7;
 
     private FisaTreeNode tree;
     private FisaObject rootObject;
@@ -32,8 +34,8 @@ class FisaTreeNodeTest {
 
     @Test
     void sizeNested() {
-        mockChildren(2, this.tree, child -> mockChildren(2, child, c -> {}));
-        assertEquals(7, this.tree.size());
+        mockChildren(2, this.tree, child -> mockChildren(2, child, c -> { }));
+        assertEquals(EXPECT_SIZE, this.tree.size());
     }
 
     @Test

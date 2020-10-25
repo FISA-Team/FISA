@@ -12,6 +12,9 @@ import {
   Button,
   Backdrop,
   CircularProgress,
+  DialogContent,
+  FormControlLabel,
+  Checkbox,
 } from '@material-ui/core';
 import { connect } from 'react-redux';
 import AddIcon from '@material-ui/icons/Add';
@@ -29,6 +32,7 @@ import {
   loadProjectFromServer,
   deleteProjectFromBackend,
   clearErrorMessage,
+  deleteProjectFromBackendAndServer
 } from '../../redux/actions';
 
 import { BackendUrl, Routes } from '../../environment';
@@ -70,7 +74,8 @@ interface SavedProjectsOverviewProps {
   projectLoadet: boolean;
   communicationPending: boolean;
   communicationError: ErrorMessageI | undefined;
-  deleteProjectFromBackend: (uuid: string) => void;
+  deleteProjectFromBackend: (uuid: string) => Promise<void>;
+  deleteProjectFromBackendAndServer: (uuid: string) => Promise<void>;
   loadProjectFromServer: (uuid: string) => void;
   clearErrorMessage: () => void;
 }
@@ -84,6 +89,7 @@ function SavedProjectsOverview(props: SavedProjectsOverviewProps) {
   const [loadError, setLoadError] = React.useState<ErrorMessageI | undefined>(
     undefined
   );
+  const [removeFromFrostServer, setRemoveFromFrost] = React.useState(false);
 
   const [projectToRemove, setProjectToRemove] = React.useState<
   AvailableProjectI | undefined
@@ -166,6 +172,19 @@ function SavedProjectsOverview(props: SavedProjectsOverviewProps) {
           {t('doYouWantToRemove2')}
         </DialogTitle>
 
+        <DialogContent>
+          <FormControlLabel
+            style={{ marginRight: 'auto' }}
+            control={
+              <Checkbox
+                checked={removeFromFrostServer}
+                onChange={() => setRemoveFromFrost((oldData) => !oldData)}
+              />
+            }
+            label={t('removeFromFrost')}
+          />
+        </DialogContent>
+
         <DialogActions>
           <Button onClick={() => setProjectToRemove(undefined)} color="primary">
             {t('no')}
@@ -173,7 +192,11 @@ function SavedProjectsOverview(props: SavedProjectsOverviewProps) {
           <Button
             onClick={() => {
               if (projectToRemove) {
-                props.deleteProjectFromBackend(projectToRemove.uuid);
+                if (removeFromFrostServer) {
+                  props.deleteProjectFromBackendAndServer(projectToRemove.uuid);
+                } else {
+                  props.deleteProjectFromBackend(projectToRemove.uuid);
+                }
               }
               setProjectToRemove(undefined);
             }}
@@ -205,6 +228,7 @@ const mapDispatchToProps = {
   deleteProjectFromBackend,
   loadProjectFromServer,
   clearErrorMessage,
+  deleteProjectFromBackendAndServer
 };
 
 const mapStateToProps = (state: FrontendReduxStateI) => ({

@@ -7,10 +7,12 @@ import java.util.List;
  */
 public class FisaProject {
 
+    private String connectedFrostServer;
     private FisaDocument fisaDocument;
     private boolean generateExampleData;
     private String name;
     private List<FisaObject> fisaObjects;
+    private List<FisaObject> removedFisaObjects;
 
     /**
      * The default constructor of FisaProject.
@@ -75,6 +77,24 @@ public class FisaProject {
     }
 
     /**
+     * returns the url of the connected FROST-Server
+     *
+     * @return the url of the connected FROST-Server or null
+     */
+    public String getConnectedFrostServer() {
+        return connectedFrostServer;
+    }
+
+    /**
+     * returns the list of removed Fisa-Objects
+     *
+     * @return the list of removed Fisa-Objects
+     */
+    public List<FisaObject> getRemovedFisaObjects() {
+        return this.removedFisaObjects;
+    }
+
+    /**
      * Sets the underlying FisaDocument.
      *
      * @param fisaDocument FisaDocument to be placed
@@ -108,5 +128,23 @@ public class FisaProject {
      */
     public void setFisaObjects(List<FisaObject> fisaObjects) {
         this.fisaObjects = fisaObjects;
+    }
+
+    /**
+     * Sets the url of the connected FROST-Server
+     *
+     * @param connectedFrostServer The URL of the connected FROST-Server
+     */
+    public void setConnectedFrostServer(String connectedFrostServer) {
+        this.connectedFrostServer = connectedFrostServer;
+    }
+
+    /**
+     * Sets the list of removed FisaObject of the FisaProject.
+     *
+     * @param removedFisaObjects List of FisaObjects to remove
+     */
+    public void setRemovedFisaObjects(List<FisaObject> removedFisaObjects) {
+        this.removedFisaObjects = removedFisaObjects;
     }
 }

@@ -15,5 +15,7 @@
   "yes": "Yes",
   "close": "Close",
   "upload": "Upload",
-  "tryAgain": "Try again"
+  "tryAgain": "Try again",
+  "removeWarningStart": "Do you really want to delete",
+  "removeWarningEnd": "?"
 }

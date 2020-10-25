@@ -1,6 +1,6 @@
 // A collections of actions to change the Project Store
 
-import { ValueType, BackendFisaProjectI } from '../interfaces';
+import { ValueType, BackendFisaObjectI, FisaProjectI } from '../interfaces';
 import * as actionTypes from '../actionTypes';
 
 export const addObjectByObjectDefinition = (definitionName: string) => ({
@@ -21,9 +21,9 @@ export const changeObjectProperty = (
   },
 });
 
-export const removeObject = (objectId: number) => ({
+export const removeObject = (objectId: number, removeFromFrost: boolean) => ({
   type: actionTypes.REMOVE_OBJECT,
-  payload: { objectId },
+  payload: { objectId, removeFromFrost },
 });
 
 export const addObjectByExisting = (objectId: number) => ({
@@ -48,7 +48,7 @@ export const loadAutoSave = () => ({
   payload: undefined,
 });
 
-export const loadSavedProject = (project: BackendFisaProjectI) => ({
+export const loadSavedProject = (project: FisaProjectI) => ({
   type: actionTypes.LOAD_SAVED_PROJECT,
   payload: {
     project,
@@ -71,4 +71,19 @@ export const setFromBackend = () => ({
 export const changeProjectName = (newName: string) => ({
   type: actionTypes.CHANGE_PROJECT_NAME,
   payload: { newName },
+});
+
+export const setFrostIdsOfObjects = (fisaObjects: BackendFisaObjectI[]) => ({
+  type: actionTypes.SET_FROST_IDS_OF_OBJECTS,
+  payload: { fisaObjects },
+});
+
+export const setConnectedFrostUrl = (frostUrl: string) => ({
+  type: actionTypes.SET_FROST_URL,
+  payload: { frostUrl },
+});
+
+export const clearRemovedObjects = () => ({
+  type: actionTypes.CLEAR_REMOVED_OBJECTS,
+  payload: undefined
 });

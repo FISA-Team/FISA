@@ -15,5 +15,7 @@
   "yes": "Ja",
   "close": "Schließen",
   "upload": "Hochladen",
-  "tryAgain": "Erneut versuchen"
+  "tryAgain": "Erneut versuchen",
+  "removeWarningStart": "Möchten Sie wirklich",
+  "removeWarningEnd": "entfernen?"
 }
