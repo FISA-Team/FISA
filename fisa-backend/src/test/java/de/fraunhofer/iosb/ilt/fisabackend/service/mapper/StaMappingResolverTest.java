@@ -39,5 +39,4 @@ class StaMappingResolverTest {
         Mapper resolve = resolver.resolve("STA.Thing.properties[myKey]");
         assertSame(StaMapMapper.MapMapper.class, resolve.getClass());
     }
-
 }

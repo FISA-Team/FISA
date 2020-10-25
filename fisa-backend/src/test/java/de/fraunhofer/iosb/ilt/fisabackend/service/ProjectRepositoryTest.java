@@ -20,14 +20,14 @@ import static org.junit.jupiter.api.Assertions.*;
      * Testing of standard directory creation
      **/
     @Test
-    void CreateStandardDir(){
+    void createDefaultDirectory() {
 
         Path currentRelativePath = Paths.get("");
         String dir = currentRelativePath.toAbsolutePath().toString() + File.separator + "ProjectRepository";
 
         try {
             ProjectRepository repo = new ProjectRepository(dir);
-        } catch (Exception e){
+        } catch (Exception e) {
             fail("create repo failed");
         }
         File file = new File(dir);
@@ -55,7 +55,7 @@ import static org.junit.jupiter.api.Assertions.*;
             try {
                 repo = new ProjectRepository(repoDir);
                 repo.saveProject(fisaDoc);
-            }catch (Exception e) {
+            } catch (Exception e) {
                 System.out.print(e.toString());
                 fail("Should not have thrown any exception");
             }
@@ -78,7 +78,7 @@ import static org.junit.jupiter.api.Assertions.*;
                 scan.close();
 
                 testJSON = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(fisaDoc);
-            }catch (Exception e){
+            } catch (Exception e) {
                 //we checked for existence of both files so no error should be thrown here
                 System.out.print(e.toString());
                 fail();
@@ -93,7 +93,7 @@ import static org.junit.jupiter.api.Assertions.*;
      * name as a project that has already been saved inside the repository
      */
     @Test
-    void saveFisaProjectSameName(){
+    void saveFisaProjectSameName() {
         Path currentRelativePath = Paths.get("");
         String repoDir = currentRelativePath.toAbsolutePath().toString() + File.separator + "ProjectRepository";
 
@@ -159,7 +159,7 @@ import static org.junit.jupiter.api.Assertions.*;
      */
     @Test
     void getFisaProjectCorrectUuid() {
-        ProjectRepository repo = populatedTestRepoCreater();
+        ProjectRepository repo = populatedTestRepoCreator();
         FisaProject[] fisaList = getTestDocuments();
 
         for (FisaProject fisaDoc:fisaList) {
@@ -182,7 +182,7 @@ import static org.junit.jupiter.api.Assertions.*;
      */
     @Test
     void getFisaProjectUnmatchingUuid() {
-        ProjectRepository repo = populatedTestRepoCreater();
+        ProjectRepository repo = populatedTestRepoCreator();
         FisaProject[] fisaList = getTestDocuments();
 
 
@@ -205,7 +205,7 @@ import static org.junit.jupiter.api.Assertions.*;
      */
     @Test
     void getFisaDocumentListComplete() {
-        ProjectRepository repo = populatedTestRepoCreater();
+        ProjectRepository repo = populatedTestRepoCreator();
         FisaProject[] fisaDocs = getTestDocuments();
         Map<UUID,String> testmap = null;
 
@@ -228,7 +228,7 @@ import static org.junit.jupiter.api.Assertions.*;
      */
     @Test
     void deleteFisaDocDeletion() {
-        ProjectRepository repo = populatedTestRepoCreater();
+        ProjectRepository repo = populatedTestRepoCreator();
         FisaProject[] fisaDocs = getTestDocuments();
 
         for (FisaProject doc : fisaDocs) {
@@ -302,7 +302,7 @@ import static org.junit.jupiter.api.Assertions.*;
      * loads a list of test projects that can be saved in the project repository
      * @return list of projects
      */
-    FisaProject[] getTestDocuments() {
+    private isaProject[] getTestDocuments() {
         Path currentRelativePath = Paths.get("");
 
         // preparing testfolder path
@@ -326,7 +326,7 @@ import static org.junit.jupiter.api.Assertions.*;
             FisaProject fisaDoc = null;
             try {
                 fisaDoc = objectMapper.readValue(fisaJSON, FisaProject.class);
-            }catch (Exception e) {
+            } catch (Exception e) {
                 System.out.print(e.toString());
                 fail("Fisa doc json is not valid. jackson could not convert");
             }
@@ -339,9 +339,11 @@ import static org.junit.jupiter.api.Assertions.*;
     }
 
     /**
-     * creates a fresh repository at specified path and fills it with the test projects from resource folder
+     * Creates a fresh repository at specified path and fills it with the test projects from resource folder
+     *
+     * @return A ProjectRepository with tests-documents
      **/
-    ProjectRepository populatedTestRepoCreater() {
+    private ProjectRepository populatedTestRepoCreator() {
         Path currentRelativePath = Paths.get("");
         String repoDir = currentRelativePath.toAbsolutePath().toString() + File.separator + "ProjectRepository";
         ProjectRepository repo = null;
@@ -366,11 +368,13 @@ import static org.junit.jupiter.api.Assertions.*;
     /**
      * checks if two projects result in same java class instances. Will fail test if projects cannot be
      * parsed as java class instances
+     *
      * @param docA first project to be tested
      * @param docB second project to be tested
+     *
      * @return true if projects represent equal java class instances, otherwise false
      */
-    boolean checkEqualFisaDoc(FisaProject docA, FisaProject docB){
+    private boolean checkEqualFisaDoc(FisaProject docA, FisaProject docB) {
         String docAString = null, docBString = null;
         ObjectMapper objectMapper = new ObjectMapper();
         try {
